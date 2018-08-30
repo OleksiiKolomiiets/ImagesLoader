@@ -12,31 +12,25 @@ class ImageCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var pictureImageView: UIImageView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
-    var picture: UIImage? {
-        didSet {
-            spinner?.stopAnimating()
-            self.pictureImageView.image = picture
-        }
-    }
+    var picture: UIImage?
+    
+    // MARK: cell configuration
+    
     func configure(with data: ImageViewEntity) {
-        let url = data.imageUrl
+        pictureImageView.image = #imageLiteral(resourceName: "Placeholder")
         spinner.startAnimating()
-        DispatchQueue.global(qos: .userInitiated).async {
-            let image = try? UIImage(withContentsOfUrl: url)
-            DispatchQueue.main.async {
-                if url == data.imageUrl {
-                    self.picture = image!
-                }
-            }
-        }
+//        if data.image != nil {
+//            spinner.stopAnimating()
+//            pictureImageView.image = data.image
+//        }
     }
 }
 
 extension UIImage {
-    
     convenience init?(withContentsOfUrl url: URL) throws {
         let imageData = try Data(contentsOf: url)        
         self.init(data: imageData)
     }
     
 }
+
