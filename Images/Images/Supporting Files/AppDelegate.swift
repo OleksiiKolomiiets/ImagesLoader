@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FlickrKit.shared().initialize(withAPIKey: "60b5143bcc14e2d43ff380b7b26b2430", sharedSecret: "7f02ee698709cbaf")
-        let a = ImageService(tags: ["moon"])
+//        ImageLoadHelper.uploadImage(by: <#T##URL#>, completion: <#T##(UIImage, Error?) -> Void#>)
         // Override point for customization after application launch.
         return true
     }

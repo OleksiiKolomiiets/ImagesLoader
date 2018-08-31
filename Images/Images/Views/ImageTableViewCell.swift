@@ -13,19 +13,20 @@ class ImageTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var pictureImageView: UIImageView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
+    // MARK: cell reuse
+    
+    override func prepareForReuse() {
+        spinner.startAnimating()
+        pictureImageView.image = nil
+    }
 
     // MARK: cell configuration
     
-    func configure(with data: ImageViewEntity?) {
-        pictureImageView.image = #imageLiteral(resourceName: "Placeholder")
-        spinner.startAnimating()
-//        if let data = data {
-//            if data.image != nil {
-//                spinner.stopAnimating()
-//                pictureImageView.image = data.image
-//            }
-//        }
-        titleLabel.text = data?.title
+    func configure(with image: UIImage, title: String) {
+        spinner.stopAnimating()
+        pictureImageView.image = image
+        titleLabel.text = String(title.prefix(18))
     }    
 
 }

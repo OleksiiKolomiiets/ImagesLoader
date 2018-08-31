@@ -13,24 +13,24 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="CustomSectionHeaderView" customModule="Images" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Aj-QG-jEY">
-                    <rect key="frame" x="163" y="24" width="50.5" height="24"/>
+                    <rect key="frame" x="163" y="38" width="51" height="24"/>
                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
-                    <color key="textColor" red="0.37055522200000002" green="0.37056469920000001" blue="0.37055957319999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" white="0.0" alpha="0.89287243149999995" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R03-YX-wwm">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="16"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="24"/>
                     <color key="backgroundColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="16" id="aXM-kz-4TF"/>
+                        <constraint firstAttribute="height" constant="24" id="aXM-kz-4TF"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FCn-LQ-Vqg">
-                    <rect key="frame" x="0.0" y="59" width="375" height="1"/>
+                    <rect key="frame" x="0.0" y="79" width="375" height="1"/>
                     <color key="backgroundColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="Dph-L4-g2E"/>
@@ -40,13 +40,13 @@
             <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="R03-YX-wwm" secondAttribute="trailing" id="9jB-5e-KoR"/>
-                <constraint firstItem="6Aj-QG-jEY" firstAttribute="top" secondItem="R03-YX-wwm" secondAttribute="bottom" constant="8" id="FS6-jr-kjL"/>
+                <constraint firstItem="6Aj-QG-jEY" firstAttribute="top" secondItem="R03-YX-wwm" secondAttribute="bottom" constant="14" id="FS6-jr-kjL"/>
                 <constraint firstItem="FCn-LQ-Vqg" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="TAb-S9-qcr"/>
                 <constraint firstItem="FCn-LQ-Vqg" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="Tns-US-Rb3"/>
                 <constraint firstItem="R03-YX-wwm" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="UWF-8e-5QQ"/>
                 <constraint firstItem="FCn-LQ-Vqg" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="VM9-5Q-kNg"/>
                 <constraint firstItem="R03-YX-wwm" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="ae3-cZ-Yme"/>
-                <constraint firstItem="6Aj-QG-jEY" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" id="r8i-NT-0h0"/>
+                <constraint firstItem="6Aj-QG-jEY" firstAttribute="centerX" secondItem="vUN-kp-3ea" secondAttribute="centerX" constant="1" id="r8i-NT-0h0"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>

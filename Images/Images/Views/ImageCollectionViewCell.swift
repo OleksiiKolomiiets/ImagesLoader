@@ -14,23 +14,18 @@ class ImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     var picture: UIImage?
     
+    // MARK: cell reuse
+    
+    override func prepareForReuse() {
+        spinner.startAnimating()
+        pictureImageView.image = nil
+    }
+    
     // MARK: cell configuration
     
-    func configure(with data: ImageViewEntity) {
-        pictureImageView.image = #imageLiteral(resourceName: "Placeholder")
-        spinner.startAnimating()
-//        if data.image != nil {
-//            spinner.stopAnimating()
-//            pictureImageView.image = data.image
-//        }
+    func configure(with image: UIImage) {   
+        pictureImageView.image = image
+        spinner.stopAnimating()
     }
-}
-
-extension UIImage {
-    convenience init?(withContentsOfUrl url: URL) throws {
-        let imageData = try Data(contentsOf: url)        
-        self.init(data: imageData)
-    }
-    
 }
 
