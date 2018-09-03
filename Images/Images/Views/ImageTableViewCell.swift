@@ -10,23 +10,21 @@ import UIKit
 
 class ImageTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var pictureImageView: UIImageView!
-    @IBOutlet weak var spinner: UIActivityIndicatorView!
+    @IBOutlet private weak var titleLabel: UILabel!
+    @IBOutlet private weak var pictureImageView: UIImageView!
+    @IBOutlet private weak var spinner: UIActivityIndicatorView!    
     
-    // MARK: cell reuse
-    
-    override func prepareForReuse() {
-        spinner.startAnimating()
-        pictureImageView.image = nil
-    }
-
     // MARK: cell configuration
     
-    func configure(with image: UIImage, title: String) {
-        spinner.stopAnimating()
+    func configure(with image: UIImage?, title: String) {
+        titleLabel.text = title
         pictureImageView.image = image
-        titleLabel.text = String(title.prefix(18))
+        
+        if image == nil {
+            spinner.startAnimating()
+        } else {
+            spinner.stopAnimating()
+        }
     }    
 
 }

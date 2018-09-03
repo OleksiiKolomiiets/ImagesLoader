@@ -11,9 +11,10 @@ import FlickrKit
 
 class ImageService {
     
-    var tags: [String]
+    private var tags: [String]
     weak var delegate: ImageServiceDelegate?
     private var imageArray: [ImageViewEntity]?
+    private var images = [Images]()
     
     init(tags: [String]) {
         self.tags = tags
@@ -22,7 +23,7 @@ class ImageService {
     // MARK: start to upload images data
     
     func reload() {
-        let imagesQuantity = ImagesViewControllerSettings.cNumberOfUploadingImages
+        let imagesQuantity = ImagesViewControllerSettings.kNumberOfUploadingImages
         tags.forEach() { tag in
             self.getImagesData(imagesQuantity, by: tag)
         }
@@ -34,7 +35,7 @@ class ImageService {
     private func getImagesData(_ quantity: Int, by tag: String) {
         let images = Images(tag: tag, data: nil)
         OperationQueue().addOperation() {
-            DispatchQueue.global(qos: .userInitiated).async { () -> Void  in
+            DispatchQueue.global(qos: .utility).async { () -> Void  in
                 let quantity = String(quantity)
                 FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": quantity] ) { (response, error) -> Void in
                     if error == nil, (response != nil) {
@@ -50,6 +51,7 @@ class ImageService {
     }
     
     private func getImageEntities(from source: [[String: Any]], to images: Images) {
+        var images = images
         imageArray = [ImageViewEntity]()
         for photoDictionary in source {
             let title = photoDictionary["title"]! as! String
@@ -58,8 +60,11 @@ class ImageService {
             imageArray?.append(data)
         }
         images.data = self.imageArray
-        DispatchQueue.main.async { () -> Void  in
-            self.delegate!.onDataLoaded(service: self, data: images)
+        self.images.append(images)
+        if self.images.count == tags.count {
+            DispatchQueue.main.async { () -> Void  in
+                self.delegate!.onDataLoaded(service: self, data: self.images)
+            }
         }
     }
 }

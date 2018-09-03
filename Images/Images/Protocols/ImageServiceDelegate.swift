@@ -8,8 +8,3 @@
 
 import Foundation
 
-// MARK: delegate for service 
-
-protocol ImageServiceDelegate: class {
-    func onDataLoaded(service: ImageService, data: Images)
-}

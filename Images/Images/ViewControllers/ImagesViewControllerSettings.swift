@@ -9,10 +9,10 @@
 import UIKit
 
 class ImagesViewControllerSettings {
-    static let cHeightForRow: CGFloat = 91
-    static let cHeightForHeader: CGFloat = 80
-    static let cCellIdentifierForTableView: String = "imageCell"
-    static let cCellIdentifierForCollectionView: String = "imageCollectionView"
-    static let cNumberOfUploadingImages: Int = 120
+    static let kHeightForRow: CGFloat = 91
+    static let kHeightForHeader: CGFloat = 80
+    static let kCellIdentifierForTableView: String = "imageCell"
+    static let kCellIdentifierForCollectionView: String = "imageCollectionView"
+    static let kNumberOfUploadingImages: Int = 120
 }
 

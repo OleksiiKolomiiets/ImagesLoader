@@ -8,12 +8,7 @@
 
 import Foundation
 
-class Images {
+struct Images {
     let tag: String
     var data: [ImageViewEntity]?
-    
-    init(tag: String, data: [ImageViewEntity]?) {
-        self.tag = tag
-        self.data = data
-    }
 }
