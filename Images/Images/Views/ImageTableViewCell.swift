@@ -16,12 +16,12 @@ class ImageTableViewCell: UITableViewCell {
     
     // MARK: cell configuration
     
-    func configure(with image: UIImage?, title: String) {
-        titleLabel.text = title
+    func configure(with data: CellViewModel) {
+        titleLabel.text = data.title
         
-        if image != nil  {
+        if data.image != nil  {
             spinner.stopAnimating()            
-            pictureImageView.image = image
+            pictureImageView.image = data.image
         }
     }
     

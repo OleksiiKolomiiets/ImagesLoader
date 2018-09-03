@@ -117,16 +117,17 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
   
         ImageLoadHelper.get(by: url!, completion: { image in
             if url == self.dataSource?[section].data?[row].url {
-                self.setCell(by: indexPath, with: image, title: title!)
+                let data = CellViewModel(image: image, title: title!)
+                self.setCell(by: indexPath, with: data)
             }
         })
         
         return cell
     }
     
-    private func setCell(by indexPath: IndexPath, with image: UIImage?, title: String) {
+    private func setCell(by indexPath: IndexPath, with data: CellViewModel) {
         if let cell = tableView.cellForRow(at: indexPath) as? ImageTableViewCell {
-            cell.configure(with: image, title: title)
+            cell.configure(with: data)
         }
     }
     
