@@ -18,12 +18,12 @@ class ImageTableViewCell: UITableViewCell {
     
     func configure(with image: UIImage?, title: String) {
         titleLabel.text = title
-        pictureImageView.image = image
         
         if image == nil {
             spinner.startAnimating()
         } else {
-            spinner.stopAnimating()
+            spinner.stopAnimating()            
+            pictureImageView.image = image
         }
     }
 

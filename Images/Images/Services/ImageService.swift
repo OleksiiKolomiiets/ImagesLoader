@@ -13,7 +13,7 @@ class ImageService {
     
     private var tags: [String]
     weak var delegate: ImageServiceDelegate?
-    private var imageArray: [ImageViewEntity]?
+    private var imageArray =  [ImageViewEntity]()
     private var images = [Images]()
     
     init(tags: [String]) {
@@ -35,16 +35,14 @@ class ImageService {
     private func getImagesData(_ quantity: Int, by tag: String) {
         let images = Images(tag: tag, data: nil)
         OperationQueue().addOperation() {
-            DispatchQueue.global(qos: .utility).async { () -> Void  in
+            DispatchQueue.global().async { () -> Void  in
                 let quantity = String(quantity)
                 FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": quantity] ) { (response, error) -> Void in
-                    if error == nil, (response != nil) {
-                        let topPhotos = response!["photos"] as! [String: Any]
-                        let photoArray = topPhotos["photo"] as? [[String: Any]]
-                        self.getImageEntities(from: photoArray!, to: images)
-                    } else if error != nil {
-                        return
-                    }
+                    guard error == nil, (response != nil)  else { return }
+                    let topPhotos = response!["photos"] as! [String: Any]
+                    let photoArray = topPhotos["photo"] as? [[String: Any]]
+                    
+                    self.getImageEntities(from: photoArray!, to: images)
                 }
             }
         }
@@ -52,12 +50,11 @@ class ImageService {
     
     private func getImageEntities(from source: [[String: Any]], to images: Images) {
         var images = images
-        imageArray = [ImageViewEntity]()
         for photoDictionary in source {
             let title = photoDictionary["title"]! as! String
             let photoURL = FlickrKit.shared().photoURL(for: FKPhotoSize.small240, fromPhotoDictionary: photoDictionary)
             let data = ImageViewEntity(url: photoURL, title: title)
-            imageArray?.append(data)
+            imageArray.append(data)
         }
         images.data = self.imageArray
         self.images.append(images)

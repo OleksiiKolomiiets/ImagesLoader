@@ -29,28 +29,31 @@ class ImageLoadHelper {
         }
     }
     
-    var cacheP = [URL: UIImage]()
+    static var cacheP = [URL: UIImage]()
     
-    func get(by url: URL, completion: @escaping (UIImage?) -> Void) {
-        if let image = self.cacheP[url] {
+    static func get(by url: URL, completion: @escaping (UIImage?) -> Void) {
+        if let image = ImageLoadHelper.cacheP[url] {
             DispatchQueue.main.async {
-               completion(image)
+                print("get image from cache")
+                completion(image)
             }
         } else {
-            self.upload(by: url) { completion($0) }
-        }
-    }
-    
-    
-    func upload(by url: URL, completion: @escaping (UIImage?) -> Void) {
-        OperationQueue().addOperation() {
-            DispatchQueue.global(qos: .utility).async {
-                let imageData = try? Data(contentsOf: url)
-                let image = UIImage(data: imageData!)
-                self.cacheP[url] = image
-                OperationQueue.main.addOperation() {
+            OperationQueue().addOperation() {
+                self.upload(by: url) { image in
+                    print("load image from web")
                     completion(image)
                 }
+            }
+        }
+    }    
+    
+    static func upload(by url: URL, completion: @escaping (UIImage?) -> Void) {
+        OperationQueue().addOperation() {
+            let imageData = try? Data(contentsOf: url)
+            let image = UIImage(data: imageData!)
+            self.cacheP[url] = image
+            OperationQueue.main.addOperation() {
+                completion(image)
             }
         }
     }

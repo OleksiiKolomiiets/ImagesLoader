@@ -57,10 +57,11 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
         
         let section = indexPath.section
         let row = indexPath.row
-        let url = dataSource![section].data![row].url
         
-        helper.get(by: url) { image in
-            if let image = image, url == self.dataSource?[section].data?[row].url {
+        let url = dataSource?.first?.data![row].url
+        
+        ImageLoadHelper.get(by: url!) { image in
+            if url == self.dataSource?[section].data?[row].url {
                 self.setView(by: indexPath, with: image)
             }
         }
@@ -116,18 +117,16 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         let url = dataSource?[section].data?[row].url
         let title = dataSource?[section].data?[row].title
   
-        helper.get(by: url!, completion: { image in
-            if let image = image {
-                if url == self.dataSource?[section].data?[row].url {
-                    self.setCell(by: indexPath, with: image, title: title!)
-                }
+        ImageLoadHelper.get(by: url!, completion: { image in
+            if url == self.dataSource?[section].data?[row].url {
+                self.setCell(by: indexPath, with: image, title: title!)
             }
         })
         
         return cell
     }
     
-    private func setCell(by indexPath: IndexPath, with image: UIImage, title: String) {
+    private func setCell(by indexPath: IndexPath, with image: UIImage?, title: String) {
         if let cell = tableView.cellForRow(at: indexPath) as? ImageTableViewCell {
             cell.configure(with: image, title: title)
         }
