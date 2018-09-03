@@ -19,12 +19,15 @@ class ImageTableViewCell: UITableViewCell {
     func configure(with image: UIImage?, title: String) {
         titleLabel.text = title
         
-        if image == nil {
-            spinner.startAnimating()
-        } else {
+        if image != nil  {
             spinner.stopAnimating()            
             pictureImageView.image = image
         }
+    }
+    
+    override func prepareForReuse() {
+        pictureImageView.image = nil
+        spinner.startAnimating()
     }
 
 }

@@ -17,9 +17,6 @@ class ImageCollectionViewCell: UICollectionViewCell {
     // MARK: cell configuration
     
     func configure(with image: UIImage?) {
-        
-        spinner.startAnimating()
-        
         if image != nil {
             spinner.stopAnimating()
             pictureImageView.image = image
@@ -27,12 +24,8 @@ class ImageCollectionViewCell: UICollectionViewCell {
     }
     
     override func prepareForReuse() {
-        if pictureImageView.image == nil {
-             spinner.startAnimating()
-        } else {
-            spinner.stopAnimating()
-        }
-        
+        spinner.startAnimating()
+        pictureImageView.image = nil         
     }
 }
 

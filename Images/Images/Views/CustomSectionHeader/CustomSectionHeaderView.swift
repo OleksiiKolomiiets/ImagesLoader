@@ -10,6 +10,12 @@ import UIKit
 
 class CustomSectionHeaderView: UIView {
 
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet private weak var titleLabel: UILabel!
+    
+    func set(with title: String?) {
+        if let title = title {
+            titleLabel.text = title.uppercased()
+        }
+    }
     
 }

@@ -59,19 +59,20 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
         
         ImageLoadHelper.get(by: url!) { image in
             if url == self.dataSource?.first?.data?[indexPath.row].url {
-                self.setView(by: indexPath, with: image)
+                self.set(view, by: indexPath, with: image)
             }
         }
         
         return view ?? UICollectionViewCell()
     }
     
-    private func setView(by indexPath: IndexPath, with image: UIImage?) {
+    private func set(_ view: ImageCollectionViewCell?, by indexPath: IndexPath, with image: UIImage?) {
         if let view = self.collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell {
             view.configure(with: image)
+        } else {
+            view?.configure(with: image)
         }
-    }
-    
+    }    
     
 }
 
@@ -86,7 +87,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         let nibName = "CustomSectionHeaderView"
         let nib = UINib(nibName: nibName, bundle: bundle)
         let view = nib.instantiate(withOwner: self, options: nil).first as? CustomSectionHeaderView
-        view?.titleLabel.text = dataSource?[section].tag
+        view?.set(with: dataSource?[section].tag)
         return view
     }
     

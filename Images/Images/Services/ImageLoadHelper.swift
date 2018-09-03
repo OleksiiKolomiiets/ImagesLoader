@@ -33,13 +33,13 @@ class ImageLoadHelper {
     static func get(by url: URL, completion: @escaping (UIImage?) -> Void) {
         if let image = ImageLoadHelper.cache[url] {
             DispatchQueue.main.async {
-                print("get image from cache")
+//                print("get image from cache")
                 completion(image)
             }
         } else {
             OperationQueue().addOperation() {
                 self.upload(by: url) { image in
-                    print("load image from web")
+//                    print("load image from web")
                     completion(image)
                 }
             }
@@ -47,14 +47,14 @@ class ImageLoadHelper {
     }
     
     static private func upload(by url: URL, completion: @escaping (UIImage?) -> Void) {
-//        OperationQueue().addOperation() {
+        OperationQueue().addOperation() {
             let imageData = try? Data(contentsOf: url)
             let image = UIImage(data: imageData!)
             self.cache[url] = image
             OperationQueue.main.addOperation() {
                 completion(image)
             }
-//        }
+        }
     }
 }
 
