@@ -47,14 +47,14 @@ class ImageLoadHelper {
     }
     
     static private func upload(by url: URL, completion: @escaping (UIImage?) -> Void) {
-        OperationQueue().addOperation() {
+//        OperationQueue().addOperation() {
             let imageData = try? Data(contentsOf: url)
             let image = UIImage(data: imageData!)
             self.cache[url] = image
             OperationQueue.main.addOperation() {
                 completion(image)
             }
-        }
+//        }
     }
 }
 

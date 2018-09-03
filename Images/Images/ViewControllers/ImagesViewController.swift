@@ -55,13 +55,10 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
         let identifier = ImagesViewControllerSettings.kCellIdentifierForCollectionView
         let view = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? ImageCollectionViewCell
         
-        let section = indexPath.section
-        let row = indexPath.row
-        
-        let url = dataSource?.first?.data![row].url
+        let url = dataSource?.first?.data![indexPath.row].url
         
         ImageLoadHelper.get(by: url!) { image in
-            if url == self.dataSource?[section].data?[row].url {
+            if url == self.dataSource?.first?.data?[indexPath.row].url {
                 self.setView(by: indexPath, with: image)
             }
         }

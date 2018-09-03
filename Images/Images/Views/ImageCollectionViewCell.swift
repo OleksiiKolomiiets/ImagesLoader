@@ -18,16 +18,15 @@ class ImageCollectionViewCell: UICollectionViewCell {
     
     func configure(with image: UIImage?) {
         
-        if image == nil {
-            spinner.startAnimating()
-        } else {
+        spinner.startAnimating()
+        
+        if image != nil {
             spinner.stopAnimating()
             pictureImageView.image = image
         }
     }
     
     override func prepareForReuse() {
-        print(pictureImageView.image ?? "nil")
         if pictureImageView.image == nil {
              spinner.startAnimating()
         } else {
