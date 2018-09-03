@@ -25,6 +25,6 @@ class ImageTableViewCell: UITableViewCell {
         } else {
             spinner.stopAnimating()
         }
-    }    
+    }
 
 }

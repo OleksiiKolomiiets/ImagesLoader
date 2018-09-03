@@ -40,6 +40,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         self.collectionView.reloadData()
     }
     
+    let helper = ImageLoadHelper()
 }
 
 // MARK: Collection view delegate and data source
@@ -62,21 +63,24 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
             if let image = ImageLoadHelper.cache[url] {
                 view?.configure(with: image)
             } else {
-                ImageLoadHelper.uploadImage(by: url, completion: { image in                    
+//                ImageLoadHelper.uploadImage(by: url, completion: { image in                    
+//                    self.setView(by: indexPath, with: image)
+//                })
+                helper.get(by: url) { image in
                     self.setView(by: indexPath, with: image)
-                })
+                }
             }
         }
         return view ?? UICollectionViewCell()
     }
-    
-    
     
     private func setView(by indexPath: IndexPath, with image: UIImage?) {
         if let view = self.collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell {
             view.configure(with: image)
         }
     }
+    
+    
     
 }
 
@@ -113,17 +117,25 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         let identifier = ImagesViewControllerSettings.kCellIdentifierForTableView
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ImageTableViewCell
         
-        
         let section = indexPath.section
         let row = indexPath.row
         
         let url = dataSource?[section].data?[row].url
         let title = dataSource?[section].data?[row].title
         
-        if let image = ImageLoadHelper.cache[url!] {
-            cell.configure(with: image, title: title!)
-        } else {
-            ImageLoadHelper.uploadImage(by: url!, completion: { image in
+//        if let image = ImageLoadHelper.cache[url!] {
+//            cell.configure(with: image, title: title!)
+//        } else {
+//            ImageLoadHelper.uploadImage(by: url!, completion: { image in
+//                if let image = image {
+//                    DispatchQueue.main.async {
+//                        if url == self.dataSource?[section].data?[row].url {
+//                            cell.configure(with: image, title: title!)
+//                        }
+//                    }
+//                }
+//            })
+            helper.get(by: url!, completion: { image in
                 if let image = image {
                     DispatchQueue.main.async {
                         if url == self.dataSource?[section].data?[row].url {
@@ -132,7 +144,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
                     }
                 }
             })
-        }
+//        }
         
         return cell
     }

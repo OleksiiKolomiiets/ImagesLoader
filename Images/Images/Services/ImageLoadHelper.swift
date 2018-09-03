@@ -29,6 +29,27 @@ class ImageLoadHelper {
         }
     }
     
+    var cacheP = [URL: UIImage]()
+    
+    func get(by url: URL, completion: @escaping (UIImage?) -> Void) {
+        if let image = cacheP[url] {
+            completion(image)
+        } else {
+            upload(by: url) { completion($0) }
+        }
+    }
+    
+    func upload(by url: URL, completion: @escaping (UIImage?) -> Void) {
+        OperationQueue().addOperation() {
+            let imageData = try? Data(contentsOf: url)
+            let image = UIImage(data: imageData!)
+            self.cacheP[url] = image
+            OperationQueue.main.addOperation() {
+                completion(image)
+            }
+        }
+    }
+    
 }
 
 
