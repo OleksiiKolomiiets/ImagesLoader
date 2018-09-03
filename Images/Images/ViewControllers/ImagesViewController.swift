@@ -59,18 +59,12 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
         let row = indexPath.row
         let url = dataSource![section].data![row].url
         
-        if url == self.dataSource?[section].data?[row].url {
-            if let image = ImageLoadHelper.cache[url] {
-                view?.configure(with: image)
-            } else {
-//                ImageLoadHelper.uploadImage(by: url, completion: { image in                    
-//                    self.setView(by: indexPath, with: image)
-//                })
-                helper.get(by: url) { image in
-                    self.setView(by: indexPath, with: image)
-                }
+        helper.get(by: url) { image in
+            if let image = image, url == self.dataSource?[section].data?[row].url {
+                self.setView(by: indexPath, with: image)
             }
         }
+        
         return view ?? UICollectionViewCell()
     }
     
@@ -79,7 +73,6 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
             view.configure(with: image)
         }
     }
-    
     
     
 }
@@ -122,29 +115,14 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         
         let url = dataSource?[section].data?[row].url
         let title = dataSource?[section].data?[row].title
-        
-//        if let image = ImageLoadHelper.cache[url!] {
-//            cell.configure(with: image, title: title!)
-//        } else {
-//            ImageLoadHelper.uploadImage(by: url!, completion: { image in
-//                if let image = image {
-//                    DispatchQueue.main.async {
-//                        if url == self.dataSource?[section].data?[row].url {
-//                            cell.configure(with: image, title: title!)
-//                        }
-//                    }
-//                }
-//            })
-            helper.get(by: url!, completion: { image in
-                if let image = image {
-                    DispatchQueue.main.async {
-                        if url == self.dataSource?[section].data?[row].url {
-                            cell.configure(with: image, title: title!)
-                        }
-                    }
+  
+        helper.get(by: url!, completion: { image in
+            if let image = image {
+                if url == self.dataSource?[section].data?[row].url {
+                    self.setCell(by: indexPath, with: image, title: title!)
                 }
-            })
-//        }
+            }
+        })
         
         return cell
     }
