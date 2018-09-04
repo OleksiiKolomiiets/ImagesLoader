@@ -13,6 +13,6 @@ class ImagesViewControllerSettings {
     static let kHeightForHeader: CGFloat = 80
     static let kCellIdentifierForTableView: String = "imageCell"
     static let kCellIdentifierForCollectionView: String = "imageCollectionView"
-    static let kNumberOfUploadingImages: Int = 120
+    static let kNumberOfUploadingImages: Int = 2
 }
 

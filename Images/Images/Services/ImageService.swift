@@ -50,6 +50,7 @@ class ImageService {
     
     private func getImageEntities(from source: [[String: Any]], to images: Images) {
         var images = images
+        imageArray = []
         for photoDictionary in source {
             let title = photoDictionary["title"]! as! String
             let photoURL = FlickrKit.shared().photoURL(for: FKPhotoSize.small240, fromPhotoDictionary: photoDictionary)
