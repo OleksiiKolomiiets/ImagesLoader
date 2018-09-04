@@ -25,7 +25,8 @@ class ImageCollectionViewCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         spinner.startAnimating()
-        pictureImageView.image = nil         
+        pictureImageView.image = nil
+        super.prepareForReuse()
     }
 }
 

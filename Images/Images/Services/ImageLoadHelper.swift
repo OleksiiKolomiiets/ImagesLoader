@@ -12,50 +12,34 @@ import UIKit
 class ImageLoadHelper {
     
     // MARK: cache for uploaded images
+    static private var loaderQueue = DispatchQueue(label: "ImageLoadHelper")
     
+    // MARK: cache for uploaded images
+    static private var cache = [URL: UIImage]()
     
     
     // MARK: method for uploading the image by URL
-    
-    static func uploadImage(by url: URL, completion: @escaping (UIImage?) -> Void) {
-        OperationQueue().addOperation() {
-            let imageData = try? Data(contentsOf: url)
-            let image = UIImage(data: imageData!)
-            cache[url] = image
-            OperationQueue.main.addOperation() {
-                completion(image)
-            }            
-        }
-    }
-    
-    static private var cache = [URL: UIImage]()
-    
     static func get(by url: URL, completion: @escaping (UIImage?) -> Void) {
         if let image = ImageLoadHelper.cache[url] {
-            DispatchQueue.main.async {
-//                print("get image from cache")
-                completion(image)
-            }
+            completion(image)
         } else {
-            OperationQueue().addOperation() {
-                self.upload(by: url) { image in
-//                    print("load image from web")
+            loaderQueue.async {
+                let image = upload(by: url)
+                DispatchQueue.main.async {
                     completion(image)
                 }
             }
         }
     }
     
-    static private func upload(by url: URL, completion: @escaping (UIImage?) -> Void) {
-        OperationQueue().addOperation() {
-            let imageData = try? Data(contentsOf: url)
-            let image = UIImage(data: imageData!)
-            self.cache[url] = image
-            OperationQueue.main.addOperation() {
-                completion(image)
-            }
-        }
+    static private func upload(by url: URL) -> UIImage? {
+        let imageData = try? Data(contentsOf: url)
+        let image = UIImage(data: imageData!)
+        self.cache[url] = image
+        return image
     }
 }
+
+
 
 

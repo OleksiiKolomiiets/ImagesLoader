@@ -107,7 +107,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = ImagesViewControllerSettings.kCellIdentifierForTableView
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! ImageTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ImageTableViewCell
         
         let section = indexPath.section
         let row = indexPath.row
@@ -118,16 +118,18 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         ImageLoadHelper.get(by: url!, completion: { image in
             if url == self.dataSource?[section].data?[row].url {
                 let data = CellViewModel(image: image, title: title!)
-                self.setCell(by: indexPath, with: data)
+                self.set(cell, by: indexPath, with: data)
             }
         })
         
-        return cell
+        return cell ?? UITableViewCell()
     }
     
-    private func setCell(by indexPath: IndexPath, with data: CellViewModel) {
+    private func set(_ cell: ImageTableViewCell?, by indexPath: IndexPath, with data: CellViewModel) {
         if let cell = tableView.cellForRow(at: indexPath) as? ImageTableViewCell {
             cell.configure(with: data)
+        } else {
+            cell?.configure(with: data)
         }
     }
     

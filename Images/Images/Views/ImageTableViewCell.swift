@@ -26,8 +26,9 @@ class ImageTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        pictureImageView.image = nil
+        pictureImageView.image = #imageLiteral(resourceName: "Placeholder")
         spinner.startAnimating()
+        super.prepareForReuse()
     }
 
 }

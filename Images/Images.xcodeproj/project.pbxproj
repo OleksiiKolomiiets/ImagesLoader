@@ -60,6 +60,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		792348BD213E87D4007903E1 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				7926554A213D82350094DE50 /* CellViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		792388EB2136E7AF007E0948 /* CustomSectionHeader */ = {
 			isa = PBXGroup;
 			children = (
@@ -90,11 +98,11 @@
 		794C9D69212D53D40034E77F /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				7926554A213D82350094DE50 /* CellViewModel.swift */,
 				7967344E2133F13D008AC1DA /* Models */,
-				794C9D7D212D60D70034E77F /* ViewControllers */,
-				795B8B79212D804D00E18F16 /* Views */,
 				7967344F2133F145008AC1DA /* Services */,
+				794C9D7D212D60D70034E77F /* ViewControllers */,
+				792348BD213E87D4007903E1 /* ViewModels */,
+				795B8B79212D804D00E18F16 /* Views */,
 				794C9D6E212D53D40034E77F /* Main.storyboard */,
 				794C9D76212D53D50034E77F /* Info.plist */,
 				794C9D7C212D60C70034E77F /* Supporting Files */,

@@ -11,10 +11,13 @@ import FlickrKit
 
 class ImageService {
     
+    private let imageDataLoader = DispatchQueue(label: "ImageService")
+    
     private var tags: [String]
-    weak var delegate: ImageServiceDelegate?
     private var imageArray =  [ImageViewEntity]()
     private var images = [Images]()
+    
+    weak var delegate: ImageServiceDelegate?
     
     init(tags: [String]) {
         self.tags = tags
@@ -33,17 +36,15 @@ class ImageService {
     // MARK: getting images URL and title
     
     private func getImagesData(_ quantity: Int, by tag: String) {
-        let images = Images(tag: tag, data: nil)
-        OperationQueue().addOperation() {
-            DispatchQueue.global().async { () -> Void  in
-                let quantity = String(quantity)
-                FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": quantity] ) { (response, error) -> Void in
-                    guard error == nil, (response != nil)  else { return }
-                    let topPhotos = response!["photos"] as! [String: Any]
-                    let photoArray = topPhotos["photo"] as? [[String: Any]]
-                    
-                    self.getImageEntities(from: photoArray!, to: images)
-                }
+        let images = Images(tag: tag, data: nil)       
+        let quantity = String(quantity)
+        imageDataLoader.async {
+            FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": quantity] ) { (response, error) -> Void in
+                guard error == nil, (response != nil)  else { return }
+                let topPhotos = response!["photos"] as! [String: Any]
+                let photoArray = topPhotos["photo"] as? [[String: Any]]
+                
+                self.getImageEntities(from: photoArray!, to: images)
             }
         }
     }
