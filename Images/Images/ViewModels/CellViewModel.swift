@@ -9,12 +9,7 @@
 import Foundation
 import UIKit
 
-class CellViewModel {
+struct CellViewModel {
     let image: UIImage?
     let title: String
-    
-    init(image: UIImage?, title: String) {
-        self.image = image
-        self.title = title
-    }
 }

@@ -17,16 +17,18 @@ class ImageCollectionViewCell: UICollectionViewCell {
     // MARK: cell configuration
     
     func configure(with image: UIImage?) {
+        spinner.startAnimating()
         if image != nil {
             spinner.stopAnimating()
             pictureImageView.image = image
+        } else {            
+            pictureImageView.image = nil
         }
     }
     
     override func prepareForReuse() {
-        spinner.startAnimating()
-        pictureImageView.image = nil
         super.prepareForReuse()
+        pictureImageView.image = nil
     }
 }
 

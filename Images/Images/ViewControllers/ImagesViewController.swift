@@ -16,7 +16,10 @@ protocol ImageServiceDelegate: class {
 
 class ImagesViewController: UIViewController, ImageServiceDelegate {
    
-    // MARK: Outlets 
+    @IBAction func reload(_ sender: UIButton) {
+        service.reload()
+    }
+    // MARK: Outlets
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -56,21 +59,24 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
         let view = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? ImageCollectionViewCell
         
         let url = dataSource?.first?.data![indexPath.row].url
+        view?.configure(with: nil)
         
-        ImageLoadHelper.get(by: url!) { image in
-            if url == self.dataSource?.first?.data?[indexPath.row].url {
-                self.set(view, by: indexPath, with: image)
+        if let image = ImageLoadHelper.getImageFromCache(by: url!) {
+            view?.configure(with: image)
+        } else {
+            ImageLoadHelper.getImage(by: url!) { image in
+                if url == self.dataSource?.first?.data?[indexPath.row].url {
+                    self.setCellForCollectionView(by: indexPath, with: image)
+                }
             }
         }
         
         return view ?? UICollectionViewCell()
     }
     
-    private func set(_ view: ImageCollectionViewCell?, by indexPath: IndexPath, with image: UIImage?) {
+    private func setCellForCollectionView(by indexPath: IndexPath, with image: UIImage?) {
         if let view = self.collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell {
             view.configure(with: image)
-        } else {
-            view?.configure(with: image)
         }
     }    
     
@@ -114,22 +120,29 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         
         let url = dataSource?[section].data?[row].url
         let title = dataSource?[section].data?[row].title
-  
-        ImageLoadHelper.get(by: url!, completion: { image in
-            if url == self.dataSource?[section].data?[row].url {
-                let data = CellViewModel(image: image, title: title!)
-                self.set(cell, by: indexPath, with: data)
-            }
-        })
         
-        return cell ?? UITableViewCell()
+        let data = CellViewModel(image: nil, title: title!)
+        cell?.configure(with: data)
+        
+        if let image = ImageLoadHelper.getImageFromCache(by: url!) {
+            let data = CellViewModel(image: image, title: title!)
+            cell?.configure(with: data)
+        } else {
+            ImageLoadHelper.getImage(by: url!, completion: { image in
+                if url == self.dataSource?[section].data?[row].url {
+                    let data = CellViewModel(image: image, title: title!)
+                    self.setTableViewCell(by: indexPath, with: data)
+                }
+            })
+        }
+        // cell alway should be init  cel.imageView.image = nil
+        
+        return cell!
     }
     
-    private func set(_ cell: ImageTableViewCell?, by indexPath: IndexPath, with data: CellViewModel) {
+    private func setTableViewCell(by indexPath: IndexPath, with data: CellViewModel) {
         if let cell = tableView.cellForRow(at: indexPath) as? ImageTableViewCell {
             cell.configure(with: data)
-        } else {
-            cell?.configure(with: data)
         }
     }
     

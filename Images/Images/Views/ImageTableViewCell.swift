@@ -28,9 +28,7 @@ class ImageTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        pictureImageView.image = #imageLiteral(resourceName: "Placeholder")
-        self.layoutIfNeeded()
+        pictureImageView.image = nil
     }
-
     
 }
