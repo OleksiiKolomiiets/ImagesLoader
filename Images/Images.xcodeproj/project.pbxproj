@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		1FD230B41F723921EA3528C9 /* Pods_Images.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FB4E4296920BD7AF5821D8C /* Pods_Images.framework */; };
+		792348CB21402480007903E1 /* SequenceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792348CA21402480007903E1 /* SequenceExtension.swift */; };
+		792348CD214024C2007903E1 /* MutableCollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792348CC214024C2007903E1 /* MutableCollectionExtension.swift */; };
 		792388F021391929007E0948 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792388EF21391929007E0948 /* Images.swift */; };
 		7926554B213D82350094DE50 /* CellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7926554A213D82350094DE50 /* CellViewModel.swift */; };
 		794C9D6B212D53D40034E77F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C9D6A212D53D40034E77F /* AppDelegate.swift */; };
@@ -28,6 +30,8 @@
 /* Begin PBXFileReference section */
 		036CCFB8390B50C8A051E189 /* Pods-Images.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Images.release.xcconfig"; path = "Pods/Target Support Files/Pods-Images/Pods-Images.release.xcconfig"; sourceTree = "<group>"; };
 		1FB4E4296920BD7AF5821D8C /* Pods_Images.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Images.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		792348CA21402480007903E1 /* SequenceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SequenceExtension.swift; sourceTree = "<group>"; };
+		792348CC214024C2007903E1 /* MutableCollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableCollectionExtension.swift; sourceTree = "<group>"; };
 		792388EF21391929007E0948 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
 		7926554A213D82350094DE50 /* CellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewModel.swift; sourceTree = "<group>"; };
 		794C9D67212D53D40034E77F /* Images.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Images.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,6 +72,15 @@
 			path = ViewModels;
 			sourceTree = "<group>";
 		};
+		792348CE214024D0007903E1 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				792348CA21402480007903E1 /* SequenceExtension.swift */,
+				792348CC214024C2007903E1 /* MutableCollectionExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		792388EB2136E7AF007E0948 /* CustomSectionHeader */ = {
 			isa = PBXGroup;
 			children = (
@@ -103,6 +116,7 @@
 				794C9D7D212D60D70034E77F /* ViewControllers */,
 				792348BD213E87D4007903E1 /* ViewModels */,
 				795B8B79212D804D00E18F16 /* Views */,
+				792348CE214024D0007903E1 /* Extensions */,
 				794C9D6E212D53D40034E77F /* Main.storyboard */,
 				794C9D76212D53D50034E77F /* Info.plist */,
 				794C9D7C212D60C70034E77F /* Supporting Files */,
@@ -287,7 +301,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				792348CB21402480007903E1 /* SequenceExtension.swift in Sources */,
 				7967344D2133F120008AC1DA /* ImageViewEntity.swift in Sources */,
+				792348CD214024C2007903E1 /* MutableCollectionExtension.swift in Sources */,
 				7967F8892136721F00FF870E /* ImagesViewControllerSettings.swift in Sources */,
 				7926554B213D82350094DE50 /* CellViewModel.swift in Sources */,
 				794C9D7F212D61000034E77F /* ImageTableViewCell.swift in Sources */,
