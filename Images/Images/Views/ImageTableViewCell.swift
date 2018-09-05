@@ -19,6 +19,7 @@ class ImageTableViewCell: UITableViewCell {
     func configure(with data: CellViewModel) {
         titleLabel.text = data.title
         
+        spinner.startAnimating()
         if data.image != nil  {
             spinner.stopAnimating()            
             pictureImageView.image = data.image
@@ -26,9 +27,10 @@ class ImageTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
-        pictureImageView.image = #imageLiteral(resourceName: "Placeholder")
-        spinner.startAnimating()
         super.prepareForReuse()
+        pictureImageView.image = #imageLiteral(resourceName: "Placeholder")
+        self.layoutIfNeeded()
     }
 
+    
 }
