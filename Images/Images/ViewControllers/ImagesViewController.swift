@@ -14,6 +14,27 @@ protocol ImageServiceDelegate: class {
     func onDataLoaded(service: ImageService, data: [Images])
 }
 
+extension MutableCollection {
+    mutating func shuffle() {
+        let c = count
+        guard c > 1 else { return }
+        
+        for (firstUnshuffled, unshuffledCount) in zip(indices, stride(from: c, to: 1, by: -1)) {
+            let d: Int = numericCast(arc4random_uniform(numericCast(unshuffledCount)))
+            let i = index(firstUnshuffled, offsetBy: d)
+            swapAt(firstUnshuffled, i)
+        }
+    }
+}
+
+extension Sequence {
+    func shuffled() -> [Element] {
+        var result = Array(self)
+        result.shuffle()
+        return result
+    }
+}
+
 class ImagesViewController: UIViewController, ImageServiceDelegate {
    
     @IBAction func reload(_ sender: UIButton) {
@@ -24,7 +45,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private let imageTags = ["jupiter", "hockey", "rock"]
+    private let imageTags = Array(ImagesViewControllerSettings.kTags.shuffled().prefix(3))
     private var service: ImageService!
     private var dataSource: [Images]?
 

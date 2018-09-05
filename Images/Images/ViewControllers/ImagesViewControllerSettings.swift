@@ -20,10 +20,10 @@ class ImagesViewControllerSettings {
         "venus",
         "earth",
         "mars",
-        "rock",
-        "rock",
-        "rock",
-        "rock",
-        "rock"]
+        "jupiter",
+        "saturn",
+        "uranus",
+        "neptune",
+        "pluto"]
 }
 
