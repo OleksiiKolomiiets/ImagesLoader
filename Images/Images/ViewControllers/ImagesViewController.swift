@@ -41,9 +41,35 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     }
     
     private func getTags() -> [String] {
+        var result = [String]()
+        
         let tagsCount = ImagesViewControllerSettings.kNumberOfTagsInOneLoad
-        let randomTags = ImagesViewControllerSettings.kTags.shuffled()
-        return randomTags.getAmount(of: tagsCount)
+//        let randomTags = ImagesViewControllerSettings.kTags.shuffled()
+        let allTagsCount = ImagesViewControllerSettings.kTags.count
+        let tags = ImagesViewControllerSettings.kTags
+        let randomIndices = getRandomIndices(number: tagsCount, allTagsCount)
+        
+        randomIndices.forEach() { result.append(tags[$0]) }
+        
+        return result
+    }
+    
+    func getRandomIndices(number: Int,_ max: Int) -> [Int] {
+        var result = [Int]()
+    
+        for _ in 0 ..< number {
+            let index = getUniqueRand(result: result, max)
+            result.append(index)
+        }
+        
+        print(result)
+        
+        return result
+    }
+    
+    func getUniqueRand(result: [Int], _ max: Int) -> Int {
+        let randomIndex = Int(arc4random_uniform(UInt32(max)))
+        return result.contains(randomIndex) ? getUniqueRand(result: result, max) : randomIndex
     }
     
     deinit {
