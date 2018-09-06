@@ -13,7 +13,7 @@ class ImageService {
     
     private let imageDataLoader = DispatchQueue(label: "ImageService")
     
-    private var tags: [String]
+    var tags: [String]
     
     // MARK: dataSource for table and collection views
     
@@ -22,10 +22,6 @@ class ImageService {
     weak var delegate: ImageServiceDelegate?
     
     init(tags: [String]) {
-        self.tags = tags
-    }
-    
-    func reSetTags(_ tags: [String]) {        
         self.tags = tags
     }
         

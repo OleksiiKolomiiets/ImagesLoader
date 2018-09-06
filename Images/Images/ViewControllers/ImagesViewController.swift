@@ -23,11 +23,12 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     private var service: ImageService!
     private var dataSource: [Images]?
-    private var reloadingTimer: Timer!
+    private var reloadingTimer: Timer?
+    private var randomIndices = [Int]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        service = ImageService(tags: getTags())
+        service = ImageService(tags: getRandomTags())
         service.delegate = self
         service.reload()
     }
@@ -36,7 +37,8 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         // MARK: ending timer work when user go to anothe screen
-        reloadingTimer.invalidate()
+        reloadingTimer?.invalidate()
+        reloadingTimer = nil
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -47,11 +49,10 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         
     // MARK: getting random tags
     
-    private func getTags() -> [String] {
+    private func getRandomTags() -> [String] {
         var result = [String]()
         
         let tagsCount = ImagesViewControllerSettings.kNumberOfTagsInOneLoad
-//        let randomTags = ImagesViewControllerSettings.kTags.shuffled()
         let allTagsCount = ImagesViewControllerSettings.kTags.count
         let tags = ImagesViewControllerSettings.kTags
         let randomIndices = getRandomIndices(number: tagsCount, allTagsCount)
@@ -61,20 +62,29 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         return result
     }
     
-    private func getUniqueRand(result: [Int], _ max: Int) -> Int {
-        let randomIndex = Int(arc4random_uniform(UInt32(max)))
-        return result.contains(randomIndex) ? getUniqueRand(result: result, max) : randomIndex
+    private func getUniqueRand(_ max: Int) -> Int {
+        return Int(arc4random_uniform(UInt32(max)))
     }
     
-    private func getRandomIndices(number: Int,_ max: Int) -> [Int] {
+    private func getRandomIndices(number: Int, _ max: Int) -> [Int] {
         var result = [Int]()
     
         for _ in 0 ..< number {
-            let index = getUniqueRand(result: result, max)
+            var index = getUniqueRand(max)
+            if result.contains(index) {
+                for var i in (index + 1) ... max {
+                    if i == max {
+                        i = 0
+                        break
+                    }
+                    if !result.contains(i) {
+                        index = i
+                        break
+                    }
+                }
+            }
             result.append(index)
         }
-        
-        print(result)
         
         return result
     }
@@ -91,16 +101,18 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     private func startTimer() {
         let reloadTimeInterval = ImagesViewControllerSettings.kTimeLimit
-        reloadingTimer = Timer.scheduledTimer(timeInterval: reloadTimeInterval,
+        if reloadingTimer == nil {
+            reloadingTimer = Timer.scheduledTimer(timeInterval: reloadTimeInterval,
                                          target: self,
                                          selector: #selector(onTimerTick),
                                          userInfo: nil,
                                          repeats: true)
+        }
     }
     
     // MARK: reloading data source
     @objc private func onTimerTick() {
-        service.reSetTags(getTags())
+        service.tags = getRandomTags()
         service.reload()
     }
 }
