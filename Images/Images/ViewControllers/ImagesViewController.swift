@@ -62,30 +62,22 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         return result
     }
     
-    private func getUniqueRand(_ max: Int) -> Int {
-        return Int(arc4random_uniform(UInt32(max)))
-    }
-    
     private func getRandomIndices(number: Int, _ max: Int) -> [Int] {
         var result = [Int]()
     
         for _ in 0 ..< number {
-            var index = getUniqueRand(max)
-            if result.contains(index) {
-                for var i in (index + 1) ... max {
-                    if i == max {
-                        i = 0
-                        break
-                    }
-                    if !result.contains(i) {
-                        index = i
-                        break
-                    }
+            var index = Int(arc4random_uniform(UInt32(max)))
+            
+            while result.contains(index) {
+                index += 1
+                if index >= max - 1 {
+                    index = 0
                 }
             }
             result.append(index)
         }
         
+        print(result)
         return result
     }
     
