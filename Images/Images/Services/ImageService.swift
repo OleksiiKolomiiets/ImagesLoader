@@ -13,17 +13,21 @@ class ImageService {
     
     private let imageDataLoader = DispatchQueue(label: "ImageService")
     
-    private var tags: [String] {
-        let tagsCount = ImagesViewControllerSettings.kNumberOfTagsInOneLoad
-        let randomTags = ImagesViewControllerSettings.kTags.shuffled()
-        return randomTags.getAmount(of: tagsCount)
-    }
+    private var tags: [String]
     
     // MARK: dataSource for table and collection views
     
     private var imagesData = [Images]()
     
     weak var delegate: ImageServiceDelegate?
+    
+    init(tags: [String]) {
+        self.tags = tags
+    }
+    
+    func reSetTags(_ tags: [String]) {        
+        self.tags = tags
+    }
         
     // MARK: start to upload images data
     

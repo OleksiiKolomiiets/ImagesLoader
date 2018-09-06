@@ -17,8 +17,8 @@ class ImageTableViewCell: UITableViewCell {
     // MARK: cell configuration
     
     func configure(with data: CellViewModel) {
-        let title = TitleCellType(title: data.title)
-        titleLabel.text = title.description
+        let title = data.title.isEmpty ? ImagesViewControllerSettings.kDefultTitle : data.title
+        titleLabel.text = title
         
         spinner.startAnimating()
         if data.image != nil  {

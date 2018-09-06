@@ -21,15 +21,52 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private var service = ImageService()
+    private var service: ImageService!
     private var dataSource: [Images]?
     private var reloadingTimer: Timer!
+    
+    // MARK: background counting
+    
+    var backgroundTask: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        service = ImageService(tags: getTags())
         service.delegate = self
         service.reload()
+        
         startTimer()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(reinstateBackgroundTask), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+    }
+    
+    private func getTags() -> [String] {
+        let tagsCount = ImagesViewControllerSettings.kNumberOfTagsInOneLoad
+        let randomTags = ImagesViewControllerSettings.kTags.shuffled()
+        return randomTags.getAmount(of: tagsCount)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc func reinstateBackgroundTask() {
+        if backgroundTask == UIBackgroundTaskInvalid {
+            registerBackgroundTask()
+        }
+    }
+    
+    func registerBackgroundTask() {
+        backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
+            self?.endBackgroundTask()
+        }
+        assert(backgroundTask != UIBackgroundTaskInvalid)
+    }
+    
+    func endBackgroundTask() {
+        print("Background task ended.")
+        UIApplication.shared.endBackgroundTask(backgroundTask)
+        backgroundTask = UIBackgroundTaskInvalid
     }
     
     // MARK: setting datasource from delegate method
@@ -52,9 +89,17 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     }
     
     // MARK: reloading data source
-    
-    @objc func onTimerTick() {
+    @objc func onTimerTick() {        
+        service.reSetTags(getTags())
         service.reload()
+        switch UIApplication.shared.applicationState {
+        case .active:
+            print("active")
+        case .background:
+            print("background")
+        case .inactive:
+            break
+        }
     }
 }
 
@@ -68,22 +113,25 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let identifier = ImagesViewControllerSettings.kCellIdentifierForCollectionView
-        let view = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? ImageCollectionViewCell
+        guard let view = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? ImageCollectionViewCell else {
+            return UICollectionViewCell()
+        }
         
-        let url = dataSource?.first?.data![indexPath.row].url
-        view?.configure(with: nil)
+        var cellImage: UIImage?
         
-        if let image = ImageLoadHelper.getImageFromCache(by: url!) {
-            view?.configure(with: image)
-        } else {
-            ImageLoadHelper.getImage(by: url!) { image in
-                if url == self.dataSource?.first?.data?[indexPath.row].url {
+        if let url = dataSource?.first?.data![indexPath.row].url {
+            if let image = ImageLoadHelper.getImageFromCache(by: url) {
+                cellImage = image
+            } else {
+                ImageLoadHelper.getImage(by: url) { image in
                     self.setCellForCollectionView(by: indexPath, with: image)
                 }
             }
         }
         
-        return view ?? UICollectionViewCell()
+        view.configure(with: cellImage)
+        
+        return view
     }
     
     private func setCellForCollectionView(by indexPath: IndexPath, with image: UIImage?) {
@@ -125,31 +173,31 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = ImagesViewControllerSettings.kCellIdentifierForTableView
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ImageTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ImageTableViewCell else {
+            return UITableViewCell()
+        }
         
+        var cellImage: UIImage?
         let section = indexPath.section
         let row = indexPath.row
-        
-        let url = dataSource?[section].data?[row].url
         let title = dataSource?[section].data?[row].title
         
-        let data = CellViewModel(image: nil, title: title!)
-        cell?.configure(with: data)
-        
-        if let image = ImageLoadHelper.getImageFromCache(by: url!) {
-            let data = CellViewModel(image: image, title: title!)
-            cell?.configure(with: data)
-        } else {
-            ImageLoadHelper.getImage(by: url!, completion: { image in
-                if url == self.dataSource?[section].data?[row].url {
+        if let url = dataSource?[section].data?[row].url {
+            if let image = ImageLoadHelper.getImageFromCache(by: url) {
+                cellImage = image
+            } else {
+                ImageLoadHelper.getImage(by: url, completion: { image in
                     let data = CellViewModel(image: image, title: title!)
                     self.setTableViewCell(by: indexPath, with: data)
-                }
-            })
+                })
+            }
         }
+        
+        let data = CellViewModel(image: cellImage, title: title!)
+        cell.configure(with: data)
         // cell alway should be init  cel.imageView.image = nil
         
-        return cell!
+        return cell
     }
     
     private func setTableViewCell(by indexPath: IndexPath, with data: CellViewModel) {
