@@ -14,16 +14,7 @@ class ImagesViewControllerSettings {
     static let kCellIdentifierForTableView: String = "imageCell"
     static let kCellIdentifierForCollectionView: String = "imageCollectionView"
     static let kNumberOfUploadingImages: Int = 18
-    static let kTags = [
-        "sun",
-        "mercury",
-        "venus",
-        "earth",
-        "mars",
-        "jupiter",
-        "saturn",
-        "uranus",
-        "neptune",
-        "pluto"]
+    static let kTags = ["sun", "mercury", "venus", "earth", "mars", "jupiter","saturn", "uranus", "neptune", "pluto"]
+    static let kDefultTitle = "Title doesn't exist"
 }
 

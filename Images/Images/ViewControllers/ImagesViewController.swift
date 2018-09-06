@@ -93,7 +93,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         let nibName = "CustomSectionHeaderView"
         let nib = UINib(nibName: nibName, bundle: bundle)
         let view = nib.instantiate(withOwner: self, options: nil).first as? CustomSectionHeaderView
-        view?.set(with: dataSource?[section].tag)
+        view?.setTitle(dataSource?[section].tag)
         return view
     }
     

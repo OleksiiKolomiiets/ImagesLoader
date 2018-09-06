@@ -12,7 +12,7 @@ class CustomSectionHeaderView: UIView {
 
     @IBOutlet private weak var titleLabel: UILabel!
     
-    func set(with title: String?) {
+    func setTitle(_ title: String?) {
         titleLabel.text = title?.uppercased()
     }
     

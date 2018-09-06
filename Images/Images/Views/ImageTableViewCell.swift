@@ -17,7 +17,8 @@ class ImageTableViewCell: UITableViewCell {
     // MARK: cell configuration
     
     func configure(with data: CellViewModel) {
-        titleLabel.text = data.title
+        let title = TitleCellType(title: data.title)
+        titleLabel.text = title.description
         
         spinner.startAnimating()
         if data.image != nil  {
