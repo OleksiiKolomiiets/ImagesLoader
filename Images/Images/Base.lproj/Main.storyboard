@@ -93,14 +93,6 @@
                                             <outlet property="delegate" destination="ZxH-Md-4CK" id="tFG-MT-hXM"/>
                                         </connections>
                                     </collectionView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="76h-XB-POj">
-                                        <rect key="frame" x="229" y="30" width="46" height="30"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <state key="normal" title="Button"/>
-                                        <connections>
-                                            <action selector="reload:" destination="ZxH-Md-4CK" eventType="touchUpInside" id="lu5-ua-v8b"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="bYD-VU-KNK" firstAttribute="top" secondItem="Fau-QN-ojd" secondAttribute="top" id="EpS-TR-dTU"/>

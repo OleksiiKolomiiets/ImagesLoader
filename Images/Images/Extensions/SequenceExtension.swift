@@ -14,4 +14,10 @@ extension Sequence {
         result.shuffle()
         return result
     }
+    
+    func getAmount(of number: Int) -> [Element] {
+        let collection = Array(self)
+        let result = collection.prefix(number)
+        return Array(result)
+    }
 }

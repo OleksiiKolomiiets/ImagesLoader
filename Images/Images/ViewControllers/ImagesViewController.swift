@@ -16,22 +16,17 @@ protocol ImageServiceDelegate: class {
 
 class ImagesViewController: UIViewController, ImageServiceDelegate {
    
-    @IBAction func reload(_ sender: UIButton) {
-        service.reload()
-    }
     // MARK: Outlets
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private let imageTags = Array(ImagesViewControllerSettings.kTags.shuffled().prefix(3))
-    private var service: ImageService!
+    private var service = ImageService()
     private var dataSource: [Images]?
     private var reloadingTimer: Timer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        service = ImageService(tags: imageTags)
         service.delegate = self
         service.reload()
         startTimer()
