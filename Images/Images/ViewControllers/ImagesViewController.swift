@@ -27,12 +27,14 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     private let imageTags = Array(ImagesViewControllerSettings.kTags.shuffled().prefix(3))
     private var service: ImageService!
     private var dataSource: [Images]?
+    private var reloadingTimer: Timer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         service = ImageService(tags: imageTags)
         service.delegate = self
         service.reload()
+        startTimer()
     }
     
     // MARK: setting datasource from delegate method
@@ -43,7 +45,22 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         self.collectionView.reloadData()
     }
     
-    let helper = ImageLoadHelper()
+    // MARK: start to count time for reload
+    
+    func startTimer() {
+        let reloadTimeInterval = ImagesViewControllerSettings.kTimeLimit
+        reloadingTimer = Timer.scheduledTimer(timeInterval: reloadTimeInterval,
+                                         target: self,
+                                         selector: #selector(onTimerTick),
+                                         userInfo: nil,
+                                         repeats: true)
+    }
+    
+    // MARK: reloading data source
+    
+    @objc func onTimerTick() {
+        service.reload()
+    }
 }
 
 // MARK: Collection view delegate and data source
