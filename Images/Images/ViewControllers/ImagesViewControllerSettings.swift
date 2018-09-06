@@ -16,7 +16,7 @@ class ImagesViewControllerSettings {
     static let kNumberOfUploadingImages: Int = 18
     static let kTags = ["sun", "mercury", "venus", "earth", "mars", "jupiter","saturn", "uranus", "neptune", "pluto"]
     static let kDefultTitle = "Title doesn't exist"
-    static let kTimeLimit = 3.0
+    static let kTimeLimit = 30.0
     static let kNumberOfTagsInOneLoad = 3
 }
 

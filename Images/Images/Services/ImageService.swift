@@ -13,24 +13,20 @@ class ImageService {
     
     private let imageDataLoader = DispatchQueue(label: "ImageService")
     
-    var tags: [String]
+    var tags: [String]?
     
     // MARK: dataSource for table and collection views
     
     private var imagesData = [Images]()
     
     weak var delegate: ImageServiceDelegate?
-    
-    init(tags: [String]) {
-        self.tags = tags
-    }
-        
+      
     // MARK: start to upload images data
     
     func reload() {
         imagesData.removeAll()
         let imagesQuantity = ImagesViewControllerSettings.kNumberOfUploadingImages
-        tags.forEach() { tag in
+        tags?.forEach() { tag in
             self.getImagesData(imagesQuantity, by: tag)
         }
         
@@ -63,7 +59,7 @@ class ImageService {
         }
         images.data = imageArray
         self.imagesData.append(images)
-        if self.imagesData.count == tags.count {
+        if self.imagesData.count == tags?.count {
             DispatchQueue.main.async { () -> Void  in
                 self.delegate!.onDataLoaded(service: self, data: self.imagesData)
             }

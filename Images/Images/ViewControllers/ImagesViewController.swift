@@ -28,8 +28,9 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        service = ImageService(tags: getRandomTags())
-        service.delegate = self
+        service = ImageService()
+        service.delegate = self        
+        service.tags = getRandomTags()
         service.reload()
     }
     
@@ -74,10 +75,10 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
                     index = 0
                 }
             }
+            
             result.append(index)
         }
         
-        print(result)
         return result
     }
     
