@@ -53,12 +53,12 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     private func getRandomTags() -> [String] {
         var result = [String]()
         
-        let tagsCount = ImagesViewControllerSettings.kNumberOfTagsInOneLoad
-        let allTagsCount = ImagesViewControllerSettings.kTags.count
         let tags = ImagesViewControllerSettings.kTags
+        let tagsCount = ImagesViewControllerSettings.kNumberOfTagsInOneLoad
+        let allTagsCount = tags.count
         let randomIndices = getRandomIndices(number: tagsCount, allTagsCount)
         
-        randomIndices.forEach() { result.append(tags[$0]) }
+        randomIndices.forEach() { result.append(tags[$0]) }        
         
         return result
     }
