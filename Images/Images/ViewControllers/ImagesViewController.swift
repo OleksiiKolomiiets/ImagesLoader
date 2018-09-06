@@ -25,20 +25,27 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     private var dataSource: [Images]?
     private var reloadingTimer: Timer!
     
-    // MARK: background counting
-    
-    var backgroundTask: UIBackgroundTaskIdentifier = UIBackgroundTaskInvalid
-
     override func viewDidLoad() {
         super.viewDidLoad()
         service = ImageService(tags: getTags())
         service.delegate = self
         service.reload()
-        
-        startTimer()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(reinstateBackgroundTask), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
     }
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        // MARK: ending timer work when user go to anothe screen
+        reloadingTimer.invalidate()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // MARK: timer start to work
+        startTimer()
+    }
+        
+    // MARK: getting random tags
     
     private func getTags() -> [String] {
         var result = [String]()
@@ -54,7 +61,12 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         return result
     }
     
-    func getRandomIndices(number: Int,_ max: Int) -> [Int] {
+    private func getUniqueRand(result: [Int], _ max: Int) -> Int {
+        let randomIndex = Int(arc4random_uniform(UInt32(max)))
+        return result.contains(randomIndex) ? getUniqueRand(result: result, max) : randomIndex
+    }
+    
+    private func getRandomIndices(number: Int,_ max: Int) -> [Int] {
         var result = [Int]()
     
         for _ in 0 ..< number {
@@ -67,34 +79,6 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         return result
     }
     
-    func getUniqueRand(result: [Int], _ max: Int) -> Int {
-        let randomIndex = Int(arc4random_uniform(UInt32(max)))
-        return result.contains(randomIndex) ? getUniqueRand(result: result, max) : randomIndex
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    @objc func reinstateBackgroundTask() {
-        if backgroundTask == UIBackgroundTaskInvalid {
-            registerBackgroundTask()
-        }
-    }
-    
-    func registerBackgroundTask() {
-        backgroundTask = UIApplication.shared.beginBackgroundTask { [weak self] in
-            self?.endBackgroundTask()
-        }
-        assert(backgroundTask != UIBackgroundTaskInvalid)
-    }
-    
-    func endBackgroundTask() {
-        print("Background task ended.")
-        UIApplication.shared.endBackgroundTask(backgroundTask)
-        backgroundTask = UIBackgroundTaskInvalid
-    }
-    
     // MARK: setting datasource from delegate method
     
     func onDataLoaded(service: ImageService, data: [Images]) {
@@ -105,7 +89,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     // MARK: start to count time for reload
     
-    func startTimer() {
+    private func startTimer() {
         let reloadTimeInterval = ImagesViewControllerSettings.kTimeLimit
         reloadingTimer = Timer.scheduledTimer(timeInterval: reloadTimeInterval,
                                          target: self,
@@ -115,17 +99,9 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     }
     
     // MARK: reloading data source
-    @objc func onTimerTick() {        
+    @objc private func onTimerTick() {
         service.reSetTags(getTags())
         service.reload()
-        switch UIApplication.shared.applicationState {
-        case .active:
-            print("active")
-        case .background:
-            print("background")
-        case .inactive:
-            break
-        }
     }
 }
 
