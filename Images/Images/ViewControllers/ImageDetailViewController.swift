@@ -8,8 +8,9 @@
 
 import UIKit
 
-class ImageDetailViewController: UIViewController {
+class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
 
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var loadActivityIndicator: UIActivityIndicatorView!
     
@@ -21,6 +22,7 @@ class ImageDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        scrollView.delegate = self
         if imageView.image == nil {
             fetchImage()
         }

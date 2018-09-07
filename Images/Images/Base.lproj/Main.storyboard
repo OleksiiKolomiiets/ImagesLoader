@@ -224,9 +224,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rqI-08-eCS">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                            </imageView>
                             <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bZt-8i-xWV">
                                 <rect key="frame" x="16" y="36" width="60" height="34"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -241,27 +238,44 @@
                                 </connections>
                             </button>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="FaY-nN-ft6">
-                                <rect key="frame" x="189" y="349.66666666666669" width="37" height="37"/>
+                                <rect key="frame" x="189" y="359.66666666666669" width="37" height="37"/>
                                 <color key="color" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </activityIndicatorView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="736" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TEF-lI-IP6">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rqI-08-eCS">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="rqI-08-eCS" firstAttribute="leading" secondItem="TEF-lI-IP6" secondAttribute="leading" id="3TX-7l-U6Z"/>
+                                    <constraint firstAttribute="bottom" secondItem="rqI-08-eCS" secondAttribute="bottom" id="6e3-xX-Hey"/>
+                                    <constraint firstAttribute="trailing" secondItem="rqI-08-eCS" secondAttribute="trailing" id="gEa-0p-CSI"/>
+                                    <constraint firstItem="rqI-08-eCS" firstAttribute="top" secondItem="TEF-lI-IP6" secondAttribute="top" id="iW6-XR-qhc"/>
+                                </constraints>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="rqI-08-eCS" secondAttribute="bottom" id="6XB-nY-VP2"/>
-                            <constraint firstItem="rqI-08-eCS" firstAttribute="top" secondItem="DQ9-9l-9ub" secondAttribute="top" id="DhS-NM-aGh"/>
+                            <constraint firstItem="r0Q-X7-nNU" firstAttribute="trailing" secondItem="bZt-8i-xWV" secondAttribute="trailing" constant="338" id="APa-qT-LRi"/>
                             <constraint firstItem="bZt-8i-xWV" firstAttribute="top" secondItem="r0Q-X7-nNU" secondAttribute="top" constant="16" id="GJM-tG-GAM"/>
+                            <constraint firstItem="TEF-lI-IP6" firstAttribute="leading" secondItem="DQ9-9l-9ub" secondAttribute="leading" id="K0B-vs-hRe"/>
+                            <constraint firstItem="FaY-nN-ft6" firstAttribute="centerX" secondItem="r0Q-X7-nNU" secondAttribute="centerX" id="Kue-Pt-2Pq"/>
+                            <constraint firstItem="FaY-nN-ft6" firstAttribute="centerY" secondItem="r0Q-X7-nNU" secondAttribute="centerY" id="LGl-b1-sUQ"/>
+                            <constraint firstItem="r0Q-X7-nNU" firstAttribute="bottom" secondItem="bZt-8i-xWV" secondAttribute="bottom" constant="666" id="QpF-Sb-l1b"/>
                             <constraint firstItem="bZt-8i-xWV" firstAttribute="leading" secondItem="r0Q-X7-nNU" secondAttribute="leading" constant="16" id="VDk-je-Zwk"/>
-                            <constraint firstItem="FaY-nN-ft6" firstAttribute="centerX" secondItem="rqI-08-eCS" secondAttribute="centerX" id="XZO-41-eyU"/>
-                            <constraint firstItem="FaY-nN-ft6" firstAttribute="centerY" secondItem="rqI-08-eCS" secondAttribute="centerY" id="aEG-dC-Lwr"/>
+                            <constraint firstItem="TEF-lI-IP6" firstAttribute="bottom" secondItem="DQ9-9l-9ub" secondAttribute="bottom" id="ZYC-tO-vRX"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bZt-8i-xWV" secondAttribute="trailing" constant="20" symbolic="YES" id="dQW-at-8SV"/>
-                            <constraint firstItem="rqI-08-eCS" firstAttribute="leading" secondItem="DQ9-9l-9ub" secondAttribute="leading" id="tep-9Y-hq6"/>
-                            <constraint firstAttribute="trailing" secondItem="rqI-08-eCS" secondAttribute="trailing" id="uzb-R7-wvZ"/>
+                            <constraint firstItem="TEF-lI-IP6" firstAttribute="top" secondItem="DQ9-9l-9ub" secondAttribute="top" id="hpg-hP-wkD"/>
+                            <constraint firstItem="TEF-lI-IP6" firstAttribute="trailing" secondItem="DQ9-9l-9ub" secondAttribute="trailing" id="m60-Fd-KYV"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="r0Q-X7-nNU"/>
                     </view>
                     <connections>
                         <outlet property="imageView" destination="rqI-08-eCS" id="6dQ-Tr-6PN"/>
                         <outlet property="loadActivityIndicator" destination="FaY-nN-ft6" id="qTT-FW-S3u"/>
+                        <outlet property="scrollView" destination="TEF-lI-IP6" id="sfv-hF-OT4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TFd-od-yPs" userLabel="First Responder" sceneMemberID="firstResponder"/>
