@@ -17,7 +17,7 @@ class ImageService {
     
     // MARK: dataSource for table and collection views
     
-    private var imagesData = [ImagesDataSource]()
+    private var imagesData = [ImagesViewSource]()
     
     weak var delegate: ImageServiceDelegate?
       
@@ -34,7 +34,7 @@ class ImageService {
     // MARK: getting images URL and title
     
     private func getImagesData(_ quantity: Int, by tag: String) {
-        let images = ImagesDataSource(tag: tag, data: nil)
+        let images = ImagesViewSource(tag: tag, data: nil)
         let quantity = String(quantity)
         imageDataLoader.async {
             FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": quantity] ) { (response, error) -> Void in
@@ -43,20 +43,18 @@ class ImageService {
                     let topPhotos = response["photos"] as? [String: Any],
                     let photoArray = topPhotos["photo"] as? [[String: Any]]
                 else { return }
-                
                 self.getImageEntities(from: photoArray, to: images)
             }
         }
     }
     
-    private func getImageEntities(from source: [[String: Any]], to images: ImagesDataSource) {
+    private func getImageEntities(from source: [[String: Any]], to images: ImagesViewSource) {
         var images = images
         var imageArray =  [ImageViewEntity]()
         for photoDictionary in source {
-            guard let title = photoDictionary["title"] as? String else { return }
-            
             let photoURL = FlickrKit.shared().photoURL(for: FKPhotoSize.small240, fromPhotoDictionary: photoDictionary)
-            let data = ImageViewEntity(url: photoURL, title: title)
+            let data = ImageViewEntity(from: photoDictionary, with: photoURL)
+            
             imageArray.append(data)
         }
         images.data = imageArray
@@ -66,5 +64,9 @@ class ImageService {
                 self.delegate!.onDataLoaded(service: self, data: self.imagesData)
             }
         }
+    }
+    
+    static func getUrlForPhoto(using imageData: ImageViewEntity) -> URL {
+        return FlickrKit.shared().photoURL(for: FKPhotoSize.large1024, photoID: imageData.photoID, server: imageData.server, secret: imageData.secret, farm: String(imageData.farm))
     }
 }

@@ -20,11 +20,13 @@ class ImageTableViewCell: UITableViewCell {
         let title = data.title.isEmpty ? ImagesViewControllerSettings.kDefultTitle : data.title
         titleLabel.text = title
         
-        spinner.startAnimating()
+        
         if data.image != nil  {
-            spinner.stopAnimating()            
-            pictureImageView.image = data.image
+            spinner.stopAnimating()
+        } else {
+           spinner.startAnimating()
         }
+        pictureImageView.image = data.image
     }
     
     override func prepareForReuse() {

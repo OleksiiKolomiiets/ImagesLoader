@@ -11,7 +11,7 @@ import UIKit
 // MARK: delegate for service
 
 protocol ImageServiceDelegate: class {
-    func onDataLoaded(service: ImageService, data: [ImagesDataSource])
+    func onDataLoaded(service: ImageService, data: [ImagesViewSource])
 }
 
 class ImagesViewController: UIViewController, ImageServiceDelegate {
@@ -22,7 +22,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     
     private var service: ImageService!
-    private var dataSource: [ImagesDataSource]?
+    private var dataSource: [ImagesViewSource]?
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
     
@@ -47,6 +47,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         // MARK: timer start to work
         startTimer()
     }
+    
         
     // MARK: getting random tags
     
@@ -84,7 +85,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     // MARK: setting datasource from delegate method
     
-    func onDataLoaded(service: ImageService, data: [ImagesDataSource]) {
+    func onDataLoaded(service: ImageService, data: [ImagesViewSource]) {
         self.dataSource = data
         self.tableView.reloadData()
         self.collectionView.reloadData()
@@ -217,6 +218,13 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         return ImagesViewControllerSettings.kHeightForRow
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {            
+            detailVC.imageData = self.dataSource![indexPath.section].data![indexPath.row]
+            self.present(detailVC, animated: true)
+        }
+    }
 }
 
 

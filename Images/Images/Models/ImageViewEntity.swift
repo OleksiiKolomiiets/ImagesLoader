@@ -11,4 +11,18 @@ import UIKit
 struct ImageViewEntity {
     let url: URL
     let title: String
+    let photoID: String
+    let server: String
+    let secret: String
+    let farm: Int
+    
+    init(from dictionary: [String: Any], with url: URL) {
+        self.url = url
+        self.title = dictionary["title"] as! String
+        self.photoID = dictionary["id"] as! String
+        self.server = dictionary["server"] as! String
+        self.secret = dictionary["secret"] as! String
+        self.farm = dictionary["farm"] as! Int
+    }
 }
+

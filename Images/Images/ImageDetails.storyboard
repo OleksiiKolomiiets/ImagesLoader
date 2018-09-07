@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="oDI-hY-3jg">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Image Detail View Controller-->
+        <scene sceneID="kBi-hI-iS0">
+            <objects>
+                <viewController storyboardIdentifier="ImageDetailViewController" id="oDI-hY-3jg" customClass="ImageDetailViewController" customModule="Images" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="i5b-Oa-2fS">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HRJ-Sf-K4T">
+                                <rect key="frame" x="16" y="36" width="60" height="40"/>
+                                <color key="backgroundColor" red="0.22102877500000001" green="0.76200133560000005" blue="0.84233474730000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="NyR-ke-m8x"/>
+                                    <constraint firstAttribute="width" constant="60" id="eos-Kk-CgL"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Done"/>
+                            </button>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iwh-qa-lhU">
+                                <rect key="frame" x="0.0" y="92" width="375" height="575"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="HRJ-Sf-K4T" firstAttribute="top" secondItem="Jgf-8x-q64" secondAttribute="top" constant="16" id="4qe-0F-d03"/>
+                            <constraint firstItem="HRJ-Sf-K4T" firstAttribute="leading" secondItem="Jgf-8x-q64" secondAttribute="leading" constant="16" id="90T-Wn-b6s"/>
+                            <constraint firstAttribute="trailing" secondItem="iwh-qa-lhU" secondAttribute="trailing" id="9ah-se-r3w"/>
+                            <constraint firstItem="iwh-qa-lhU" firstAttribute="top" secondItem="HRJ-Sf-K4T" secondAttribute="bottom" constant="16" id="NdS-rS-RJ5"/>
+                            <constraint firstItem="iwh-qa-lhU" firstAttribute="leading" secondItem="i5b-Oa-2fS" secondAttribute="leading" id="Xwb-El-VZR"/>
+                            <constraint firstAttribute="bottom" secondItem="iwh-qa-lhU" secondAttribute="bottom" id="fEa-RN-Mht"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Jgf-8x-q64"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="iwh-qa-lhU" id="aGB-Qv-aJH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gwu-hH-nvm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="456.80000000000001" y="-197.45127436281859"/>
+        </scene>
+    </scenes>
+</document>

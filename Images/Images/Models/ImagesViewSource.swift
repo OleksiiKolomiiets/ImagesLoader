@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct ImagesDataSource {
+struct ImagesViewSource {
     let tag: String
     var data: [ImageViewEntity]?
 }

@@ -111,7 +111,7 @@
                                     <constraint firstAttribute="width" constant="40" id="IrK-55-uAZ"/>
                                 </constraints>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lk9-yp-lfp">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lk9-yp-lfp">
                                 <rect key="frame" x="0.0" y="245.33333333333334" width="414" height="441.66666666666663"/>
                                 <color key="backgroundColor" red="0.75406885150000003" green="0.75408679249999999" blue="0.75407713649999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -215,6 +215,58 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ugx-gC-RXi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1956" y="449.32533733133437"/>
+        </scene>
+        <!--Image Detail View Controller-->
+        <scene sceneID="15n-yb-qry">
+            <objects>
+                <viewController storyboardIdentifier="ImageDetailViewController" id="fWv-za-gR2" customClass="ImageDetailViewController" customModule="Images" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="DQ9-9l-9ub">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rqI-08-eCS">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bZt-8i-xWV">
+                                <rect key="frame" x="16" y="36" width="60" height="34"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="p6l-vZ-3NT"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Done"/>
+                                <connections>
+                                    <action selector="done:" destination="fWv-za-gR2" eventType="touchUpInside" id="irs-uJ-okQ"/>
+                                </connections>
+                            </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="FaY-nN-ft6">
+                                <rect key="frame" x="189" y="349.66666666666669" width="37" height="37"/>
+                                <color key="color" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="rqI-08-eCS" secondAttribute="bottom" id="6XB-nY-VP2"/>
+                            <constraint firstItem="rqI-08-eCS" firstAttribute="top" secondItem="DQ9-9l-9ub" secondAttribute="top" id="DhS-NM-aGh"/>
+                            <constraint firstItem="bZt-8i-xWV" firstAttribute="top" secondItem="r0Q-X7-nNU" secondAttribute="top" constant="16" id="GJM-tG-GAM"/>
+                            <constraint firstItem="bZt-8i-xWV" firstAttribute="leading" secondItem="r0Q-X7-nNU" secondAttribute="leading" constant="16" id="VDk-je-Zwk"/>
+                            <constraint firstItem="FaY-nN-ft6" firstAttribute="centerX" secondItem="rqI-08-eCS" secondAttribute="centerX" id="XZO-41-eyU"/>
+                            <constraint firstItem="FaY-nN-ft6" firstAttribute="centerY" secondItem="rqI-08-eCS" secondAttribute="centerY" id="aEG-dC-Lwr"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bZt-8i-xWV" secondAttribute="trailing" constant="20" symbolic="YES" id="dQW-at-8SV"/>
+                            <constraint firstItem="rqI-08-eCS" firstAttribute="leading" secondItem="DQ9-9l-9ub" secondAttribute="leading" id="tep-9Y-hq6"/>
+                            <constraint firstAttribute="trailing" secondItem="rqI-08-eCS" secondAttribute="trailing" id="uzb-R7-wvZ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="r0Q-X7-nNU"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="rqI-08-eCS" id="6dQ-Tr-6PN"/>
+                        <outlet property="loadActivityIndicator" destination="FaY-nN-ft6" id="qTT-FW-S3u"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="TFd-od-yPs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3827.5362318840585" y="112.50000000000001"/>
         </scene>
     </scenes>
     <resources>
