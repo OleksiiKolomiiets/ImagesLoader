@@ -11,7 +11,7 @@ import UIKit
 // MARK: delegate for service
 
 protocol ImageServiceDelegate: class {
-    func onDataLoaded(service: ImageService, data: [Images])
+    func onDataLoaded(service: ImageService, data: [ImagesDataSource])
 }
 
 class ImagesViewController: UIViewController, ImageServiceDelegate {
@@ -22,7 +22,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
     
     private var service: ImageService!
-    private var dataSource: [Images]?
+    private var dataSource: [ImagesDataSource]?
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
     
@@ -30,7 +30,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         super.viewDidLoad()
         service = ImageService()
         service.delegate = self        
-        service.tags = getRandomTags()
+        service.imageTags = getRandomTags()
         service.reload()
     }
     
@@ -84,7 +84,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     // MARK: setting datasource from delegate method
     
-    func onDataLoaded(service: ImageService, data: [Images]) {
+    func onDataLoaded(service: ImageService, data: [ImagesDataSource]) {
         self.dataSource = data
         self.tableView.reloadData()
         self.collectionView.reloadData()
@@ -105,7 +105,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     // MARK: reloading data source
     @objc private func onTimerTick() {
-        service.tags = getRandomTags()
+        service.imageTags = getRandomTags()
         service.reload()
     }
 }
@@ -126,7 +126,7 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
         
         var cellImage: UIImage?
         
-        if let url = dataSource?.first?.data![indexPath.row].url {
+        if let url = dataSource?.first?.data?[indexPath.row].url {
             if let image = ImageLoadHelper.getImageFromCache(by: url) {
                 cellImage = image
             } else {

@@ -34,9 +34,11 @@ class ImageLoadHelper {
     }
     
     static private func upload(by url: URL) -> UIImage? {
-        let imageData = try? Data(contentsOf: url)
-        let image = UIImage(data: imageData!)
-        self.cache[url] = image
+        var image: UIImage?
+        if let imageData = try? Data(contentsOf: url) {
+            image = UIImage(data: imageData)
+            self.cache[url] = image
+        }
         return image
     }
 }
