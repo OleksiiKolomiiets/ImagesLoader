@@ -30,6 +30,10 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
