@@ -10,8 +10,10 @@ import UIKit
 
 class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
 
+    // MARK: Outlets
     @IBOutlet weak var scrollView: UIScrollView! {
         didSet {
+            // MARK: Adding image inside scrol view after IB init it
             self.scrollView.addSubview(self.imageView)
         }
     }
@@ -21,12 +23,14 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     var imageView = UIImageView()
     var image: UIImage? {
         didSet {
+            // MARK: reacting when image is set
             self.imageView.image = image
             self.imageView.sizeToFit()
             self.scrollView.contentSize = self.imageView.frame.size
         }
     }
-        
+    
+    // MARK: action for ending display selected image
     @IBAction func done(_ sender: UIButton) {
         self.dismiss(animated: true)
     }
@@ -41,14 +45,17 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    // MARK: Making bar content light on black background
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
+    // MARK: Using scroll delegate method for zooming the image
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
     
+    // MARK: Getting image to display
     private func fetchImage() {
         let sizedPhotoUrl = ImageService.getUrlForPhoto(using: imageData)
         
