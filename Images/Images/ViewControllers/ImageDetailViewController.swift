@@ -22,10 +22,16 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        scrollView.maximumZoomScale = 1.2
+        scrollView.minimumZoomScale = 1/3
         scrollView.delegate = self
         if imageView.image == nil {
             fetchImage()
         }
+    }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
     }
     
     private func fetchImage() {
