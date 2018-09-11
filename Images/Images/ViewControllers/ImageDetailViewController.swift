@@ -24,21 +24,37 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
             self.scrollView.contentSize = self.imageView.frame.size
         }
     }
+    var isImageTappedTwice = false
     
     // MARK: action for ending display selected image
     @IBAction func done(_ sender: UIButton) {
         self.dismiss(animated: true)
     }
     
-    @IBAction func doubleTap(_ sender: UITapGestureRecognizer) {
-        if scrollView.zoomScale == scrollView.maximumZoomScale {
-            scrollView.zoom(to: zoomRectForScale(scale: scrollView.maximumZoomScale, center: sender.location(in: sender.view)), animated: true)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        scrollView.delegate = self
+        if imageView.image == nil {
+            fetchImage()
+        }
+        
+        // MARK: adding double tap gesture recognizer
+        let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped(sender:)))
+        tap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(tap)
+    }
+    
+    // MARK: action when immage tapped twice
+    @objc func doubleTapped(sender: UITapGestureRecognizer) {
+        if scrollView.zoomScale == scrollView.minimumZoomScale {
+            let rect = zoomRectForScale(scale: scrollView.maximumZoomScale, center: sender.location(in: sender.view))
+            scrollView.zoom(to: rect, animated: true)
         } else {
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
         }
     }
     
-    func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
+    private func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
         var zoomRect = CGRect.zero
         zoomRect.size.height = imageView.frame.size.height / scale
         zoomRect.size.width  = imageView.frame.size.width  / scale
@@ -46,15 +62,6 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         zoomRect.origin.x = newCenter.x - (zoomRect.size.width / 2.0)
         zoomRect.origin.y = newCenter.y - (zoomRect.size.height / 2.0)
         return zoomRect
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        scrollView.maximumZoomScale = 2
-        scrollView.delegate = self
-        if imageView.image == nil {
-            fetchImage()
-        }
     }
     
     // MARK: Making bar content light on black background
