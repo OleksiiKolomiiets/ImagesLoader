@@ -24,7 +24,6 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
             self.scrollView.contentSize = self.imageView.frame.size
         }
     }
-    var isImageTappedTwice = false
     
     // MARK: action for ending display selected image
     @IBAction func done(_ sender: UIButton) {
@@ -47,21 +46,10 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     // MARK: action when immage tapped twice
     @objc func doubleTapped(sender: UITapGestureRecognizer) {
         if scrollView.zoomScale == scrollView.minimumZoomScale {
-            let rect = zoomRectForScale(scale: scrollView.maximumZoomScale, center: sender.location(in: sender.view))
-            scrollView.zoom(to: rect, animated: true)
+            scrollView.setZoomScale(scrollView.maximumZoomScale, animated: true)
         } else {
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
         }
-    }
-    
-    private func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
-        var zoomRect = CGRect.zero
-        zoomRect.size.height = imageView.frame.size.height / scale
-        zoomRect.size.width  = imageView.frame.size.width  / scale
-        let newCenter = scrollView.convert(center, from: imageView)
-        zoomRect.origin.x = newCenter.x - (zoomRect.size.width / 2.0)
-        zoomRect.origin.y = newCenter.y - (zoomRect.size.height / 2.0)
-        return zoomRect
     }
     
     // MARK: Making bar content light on black background
@@ -72,6 +60,15 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     // MARK: Using scroll delegate method for zooming the image
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
+    }
+    
+     // MARK: Image to the center of view
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        let imageViewSize = imageView.frame.size
+        let scrollViewSize = scrollView.bounds.size
+        let verticalInset = imageViewSize.height < scrollViewSize.height ? (scrollViewSize.height - imageViewSize.height) / 2 : 0
+        let horizontalInset = imageViewSize.width < scrollViewSize.width ? (scrollViewSize.width - imageViewSize.width) / 2 : 0
+        scrollView.contentInset = UIEdgeInsets(top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset)
     }
     
     // MARK: Calculating mimum zoom scale for scroll view according to image sizes

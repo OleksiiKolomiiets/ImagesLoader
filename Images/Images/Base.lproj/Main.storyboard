@@ -219,7 +219,7 @@
         <!--Image Detail View Controller-->
         <scene sceneID="15n-yb-qry">
             <objects>
-                <viewController storyboardIdentifier="ImageDetailViewController" id="fWv-za-gR2" customClass="ImageDetailViewController" customModule="Images" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ImageDetailViewController" automaticallyAdjustsScrollViewInsets="NO" id="fWv-za-gR2" customClass="ImageDetailViewController" customModule="Images" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DQ9-9l-9ub">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -233,10 +233,10 @@
                                     </imageView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="fWc-Mg-Ld9" secondAttribute="trailing" id="5Qs-vr-YXL"/>
-                                    <constraint firstAttribute="bottom" secondItem="fWc-Mg-Ld9" secondAttribute="bottom" id="AnI-XJ-nRG"/>
                                     <constraint firstItem="fWc-Mg-Ld9" firstAttribute="top" secondItem="ZHO-5l-8pt" secondAttribute="top" id="Bir-19-6Cz"/>
                                     <constraint firstItem="fWc-Mg-Ld9" firstAttribute="leading" secondItem="ZHO-5l-8pt" secondAttribute="leading" id="QcT-so-IL3"/>
+                                    <constraint firstItem="fWc-Mg-Ld9" firstAttribute="bottom" secondItem="ZHO-5l-8pt" secondAttribute="bottom" id="Rok-JA-dyA"/>
+                                    <constraint firstItem="fWc-Mg-Ld9" firstAttribute="trailing" secondItem="ZHO-5l-8pt" secondAttribute="trailing" id="Sb3-6d-UMf"/>
                                 </constraints>
                             </scrollView>
                             <button contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bZt-8i-xWV">
