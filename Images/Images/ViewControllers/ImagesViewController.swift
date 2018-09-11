@@ -218,6 +218,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         return ImagesViewControllerSettings.kHeightForRow
     }
     
+    // MARK: Send selected data to ImageDetailViewController and present it
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {            
