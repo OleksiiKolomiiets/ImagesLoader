@@ -124,7 +124,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="414" height="93.666666666666671"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Wsa-Nt-M4C">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Wsa-Nt-M4C">
                                                     <rect key="frame" x="16" y="11" width="100" height="75"/>
                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <constraints>
@@ -224,8 +224,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="736" alwaysBounceVertical="YES" alwaysBounceHorizontal="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TEF-lI-IP6">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZHO-5l-8pt">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="736" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fWc-Mg-Ld9">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                        <gestureRecognizers/>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="krz-rG-yOg" appends="YES" id="TSa-cD-ZgG"/>
+                                        </connections>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="fWc-Mg-Ld9" secondAttribute="trailing" id="5Qs-vr-YXL"/>
+                                    <constraint firstAttribute="bottom" secondItem="fWc-Mg-Ld9" secondAttribute="bottom" id="AnI-XJ-nRG"/>
+                                    <constraint firstItem="fWc-Mg-Ld9" firstAttribute="top" secondItem="ZHO-5l-8pt" secondAttribute="top" id="Bir-19-6Cz"/>
+                                    <constraint firstItem="fWc-Mg-Ld9" firstAttribute="leading" secondItem="ZHO-5l-8pt" secondAttribute="leading" id="QcT-so-IL3"/>
+                                </constraints>
                             </scrollView>
                             <button contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bZt-8i-xWV">
                                 <rect key="frame" x="16" y="36" width="100" height="34"/>
@@ -241,30 +256,36 @@
                                 </connections>
                             </button>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="FaY-nN-ft6">
-                                <rect key="frame" x="189" y="349.66666666666669" width="37" height="37"/>
+                                <rect key="frame" x="189" y="350" width="37" height="37"/>
                                 <color key="color" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                         <constraints>
                             <constraint firstItem="bZt-8i-xWV" firstAttribute="top" secondItem="r0Q-X7-nNU" secondAttribute="top" constant="16" id="GJM-tG-GAM"/>
-                            <constraint firstItem="TEF-lI-IP6" firstAttribute="leading" secondItem="DQ9-9l-9ub" secondAttribute="leading" id="K0B-vs-hRe"/>
                             <constraint firstItem="FaY-nN-ft6" firstAttribute="centerX" secondItem="DQ9-9l-9ub" secondAttribute="centerX" id="Kue-Pt-2Pq"/>
                             <constraint firstItem="FaY-nN-ft6" firstAttribute="centerY" secondItem="DQ9-9l-9ub" secondAttribute="centerY" id="LGl-b1-sUQ"/>
+                            <constraint firstItem="ZHO-5l-8pt" firstAttribute="trailing" secondItem="DQ9-9l-9ub" secondAttribute="trailing" id="SYI-aK-yVj"/>
                             <constraint firstItem="bZt-8i-xWV" firstAttribute="leading" secondItem="r0Q-X7-nNU" secondAttribute="leading" constant="16" id="Y8H-19-aUK"/>
-                            <constraint firstItem="TEF-lI-IP6" firstAttribute="bottom" secondItem="DQ9-9l-9ub" secondAttribute="bottom" id="ZYC-tO-vRX"/>
-                            <constraint firstItem="TEF-lI-IP6" firstAttribute="top" secondItem="DQ9-9l-9ub" secondAttribute="top" id="hpg-hP-wkD"/>
-                            <constraint firstItem="TEF-lI-IP6" firstAttribute="trailing" secondItem="DQ9-9l-9ub" secondAttribute="trailing" id="m60-Fd-KYV"/>
+                            <constraint firstItem="ZHO-5l-8pt" firstAttribute="leading" secondItem="DQ9-9l-9ub" secondAttribute="leading" id="fjc-IM-8dJ"/>
+                            <constraint firstItem="ZHO-5l-8pt" firstAttribute="top" secondItem="DQ9-9l-9ub" secondAttribute="top" id="oHm-Vg-ZyG"/>
+                            <constraint firstItem="ZHO-5l-8pt" firstAttribute="bottom" secondItem="DQ9-9l-9ub" secondAttribute="bottom" id="seD-aR-irX"/>
                             <constraint firstItem="r0Q-X7-nNU" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="bZt-8i-xWV" secondAttribute="trailing" constant="16" id="yFb-bN-LyJ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="r0Q-X7-nNU"/>
                     </view>
                     <connections>
+                        <outlet property="imageView" destination="fWc-Mg-Ld9" id="KpC-ob-GsO"/>
                         <outlet property="loadActivityIndicator" destination="FaY-nN-ft6" id="qTT-FW-S3u"/>
-                        <outlet property="scrollView" destination="TEF-lI-IP6" id="sfv-hF-OT4"/>
+                        <outlet property="scrollView" destination="ZHO-5l-8pt" id="vdA-l8-aDL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TFd-od-yPs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer numberOfTapsRequired="2" id="krz-rG-yOg">
+                    <connections>
+                        <action selector="doubleTap:" destination="fWv-za-gR2" id="EZh-Ek-I4s"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="3827.5362318840585" y="112.50000000000001"/>
         </scene>

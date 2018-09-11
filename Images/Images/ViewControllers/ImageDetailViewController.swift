@@ -11,16 +11,11 @@ import UIKit
 class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
 
     // MARK: Outlets
-    @IBOutlet weak var scrollView: UIScrollView! {
-        didSet {
-            // MARK: Adding image inside scrol view after IB init it
-            self.scrollView.addSubview(self.imageView)
-        }
-    }
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var loadActivityIndicator: UIActivityIndicatorView!
     
     var imageData: ImageViewEntity!
-    var imageView = UIImageView()
     var image: UIImage? {
         didSet {
             // MARK: reacting when image is set
@@ -35,10 +30,27 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         self.dismiss(animated: true)
     }
     
+    @IBAction func doubleTap(_ sender: UITapGestureRecognizer) {
+        if scrollView.zoomScale == scrollView.maximumZoomScale {
+            scrollView.zoom(to: zoomRectForScale(scale: scrollView.maximumZoomScale, center: sender.location(in: sender.view)), animated: true)
+        } else {
+            scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
+        }
+    }
+    
+    func zoomRectForScale(scale: CGFloat, center: CGPoint) -> CGRect {
+        var zoomRect = CGRect.zero
+        zoomRect.size.height = imageView.frame.size.height / scale
+        zoomRect.size.width  = imageView.frame.size.width  / scale
+        let newCenter = scrollView.convert(center, from: imageView)
+        zoomRect.origin.x = newCenter.x - (zoomRect.size.width / 2.0)
+        zoomRect.origin.y = newCenter.y - (zoomRect.size.height / 2.0)
+        return zoomRect
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.maximumZoomScale = 1.2
-        scrollView.minimumZoomScale = 1/2
+        scrollView.maximumZoomScale = 2
         scrollView.delegate = self
         if imageView.image == nil {
             fetchImage()
@@ -55,6 +67,20 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         return imageView
     }
     
+    // MARK: Calculating mimum zoom scale for scroll view according to image sizes
+    private var minimumZoomScale: CGFloat {
+        let width = imageView.frame.size.width
+        let height = imageView.frame.size.height
+        
+        var scale: CGFloat = 0.0
+        if width > height {
+            scale = view.frame.size.width / width
+        } else {
+            scale = view.frame.size.height / height
+        }
+        return scale
+    }
+    
     // MARK: Getting image to display
     private func fetchImage() {
         let sizedPhotoUrl = ImageService.getUrlForPhoto(using: imageData)
@@ -66,6 +92,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
             ImageLoadHelper.getImage(by: sizedPhotoUrl) { loadedImage in
                 self.loadActivityIndicator.stopAnimating()
                 self.image = loadedImage
+                self.scrollView.minimumZoomScale = self.minimumZoomScale
             }
         }
     }
