@@ -16,12 +16,13 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var loadActivityIndicator: UIActivityIndicatorView!
     
     var imageData: ImageViewEntity!
+    
     var image: UIImage? {
         didSet {
             // MARK: reacting when image is set
             self.imageView.image = image
             self.imageView.sizeToFit()
-            self.scrollView.contentSize = self.imageView.frame.size
+            setImageCentred()
         }
     }
     
@@ -32,7 +33,6 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        scrollView.delegate = self
         if imageView.image == nil {
             fetchImage()
         }
@@ -64,6 +64,10 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
      // MARK: Image to the center of view
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        setImageCentred()
+    }
+    
+    fileprivate func setImageCentred() {
         let imageViewSize = imageView.frame.size
         let scrollViewSize = scrollView.bounds.size
         let verticalInset = imageViewSize.height < scrollViewSize.height ? (scrollViewSize.height - imageViewSize.height) / 2 : 0

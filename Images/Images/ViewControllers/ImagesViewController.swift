@@ -145,6 +145,7 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
     private func setCellForCollectionView(by indexPath: IndexPath, with image: UIImage?) {
         if let view = self.collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell {
             view.configure(with: image)
+            self.collectionView.reloadData()
         }
     }    
     

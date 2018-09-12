@@ -13,7 +13,7 @@ class ImagesViewControllerSettings {
     static let kHeightForHeader: CGFloat = 80
     static let kCellIdentifierForTableView: String = "imageCell"
     static let kCellIdentifierForCollectionView: String = "imageCollectionView"
-    static let kNumberOfUploadingImages: Int = 18
+    static let kNumberOfUploadingImages: Int = 30
     static let kTags = ["sun", "mercury", "venus", "earth", "mars", "jupiter","saturn", "uranus", "neptune", "pluto"]
     static let kDefultTitle = "Title doesn't exist"
     static let kTimeLimit = 30.0

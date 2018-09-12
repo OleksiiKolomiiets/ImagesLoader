@@ -22,8 +22,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
             spinner.stopAnimating()
         } else {
             spinner.startAnimating()
-        }
-        
+        }        
         pictureImageView.image = image
     }
     

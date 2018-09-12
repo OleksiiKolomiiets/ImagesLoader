@@ -18,13 +18,12 @@ class ImageTableViewCell: UITableViewCell {
     
     func configure(with data: CellViewModel) {
         let title = data.title.isEmpty ? ImagesViewControllerSettings.kDefultTitle : data.title
-        titleLabel.text = title
-        
+        titleLabel.text = title        
         
         if data.image != nil  {
             spinner.stopAnimating()
         } else {
-           spinner.startAnimating()
+            spinner.startAnimating()
         }
         pictureImageView.image = data.image
     }

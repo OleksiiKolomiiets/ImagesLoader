@@ -238,6 +238,9 @@
                                     <constraint firstItem="fWc-Mg-Ld9" firstAttribute="bottom" secondItem="ZHO-5l-8pt" secondAttribute="bottom" id="Rok-JA-dyA"/>
                                     <constraint firstItem="fWc-Mg-Ld9" firstAttribute="trailing" secondItem="ZHO-5l-8pt" secondAttribute="trailing" id="Sb3-6d-UMf"/>
                                 </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="fWv-za-gR2" id="ZUC-1s-4CW"/>
+                                </connections>
                             </scrollView>
                             <button contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bZt-8i-xWV">
                                 <rect key="frame" x="16" y="36" width="100" height="34"/>
