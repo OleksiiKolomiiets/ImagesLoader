@@ -20,6 +20,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var imageCollectionViewCell: ImageCollectionViewCell!
     
     private var service: ImageService!
     private var dataSource: [ImagesViewSource]?
@@ -119,6 +120,7 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
         return dataSource?.first?.data?.count ?? 0
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let identifier = ImagesViewControllerSettings.kCellIdentifierForCollectionView
         guard let view = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? ImageCollectionViewCell else {
@@ -150,6 +152,7 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
     }    
     
 }
+
 
 // MARK: Table view delegate and data source
 
@@ -226,6 +229,12 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
             detailVC.imageData = self.dataSource![indexPath.section].data![indexPath.row]
             self.present(detailVC, animated: true)
         }
+    }
+}
+
+extension ImagesViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height)
     }
 }
 
