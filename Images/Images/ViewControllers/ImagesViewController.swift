@@ -20,7 +20,6 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var imageCollectionViewCell: ImageCollectionViewCell!
     
     private var service: ImageService!
     private var dataSource: [ImagesViewSource]?
@@ -110,6 +109,8 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         service.imageTags = getRandomTags()
         service.reload()
     }
+    
+    
 }
 
 // MARK: Collection view delegate and data source
@@ -173,7 +174,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         return ImagesViewControllerSettings.kHeightForHeader
     }
     
-    // MARK: Configurate reusable cells
+    //  MARK: Configurate reusable cells
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return dataSource?.count ?? 0
@@ -232,10 +233,9 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+// MARK: Calculating mimum zoom scale for scroll view according to image sizes
 extension ImagesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height)
     }
 }
-
-

@@ -28,11 +28,11 @@ class ImageCollectionViewCell: UICollectionViewCell {
         }        
         pictureImageView.image = image
         
-        if let sidePaddings = superview?.superview?.superview?.superview?.superview?.superview?.superview?.frame.size.width {
-            rightConstraint.constant = sidePaddings * 0.1
-            leftConstraint.constant = sidePaddings * 0.1
-            widthImageConstraint.constant = sidePaddings * 0.8
-        }
+//        if let sidePaddings = superview?.superview?.superview?.superview?.superview?.superview?.superview?.frame.size.width {
+//            rightConstraint.constant = sidePaddings * 0.1
+//            leftConstraint.constant = sidePaddings * 0.1
+//            widthImageConstraint.constant = sidePaddings * 0.8
+//        }
     }
     
     override func prepareForReuse() {
