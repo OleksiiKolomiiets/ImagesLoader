@@ -39,7 +39,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fau-QN-ojd">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="286"/>
                                 <subviews>
-                                    <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="space" translatesAutoresizingMaskIntoConstraints="NO" id="bYD-VU-KNK">
+                                    <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" alpha="0.5" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="space" translatesAutoresizingMaskIntoConstraints="NO" id="bYD-VU-KNK">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="285.5"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </imageView>
@@ -62,27 +62,25 @@
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="5j7-Nc-gbs">
-                                                            <rect key="frame" x="120.5" y="66.5" width="37" height="37"/>
+                                                            <rect key="frame" x="120.5" y="66" width="37" height="37"/>
                                                             <color key="color" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         </activityIndicatorView>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalCompressionResistancePriority="749" translatesAutoresizingMaskIntoConstraints="NO" id="v6m-du-Ynr">
-                                                            <rect key="frame" x="0.0" y="1" width="278" height="169"/>
-                                                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="v6m-du-Ynr">
+                                                            <rect key="frame" x="0.0" y="0.0" width="278" height="170"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         </imageView>
                                                     </subviews>
                                                 </view>
                                                 <constraints>
                                                     <constraint firstItem="v6m-du-Ynr" firstAttribute="leading" secondItem="5EG-18-bQs" secondAttribute="leading" id="FYh-ML-hOC"/>
-                                                    <constraint firstItem="5j7-Nc-gbs" firstAttribute="centerX" secondItem="5EG-18-bQs" secondAttribute="centerX" id="cwU-LT-ww6"/>
-                                                    <constraint firstItem="5j7-Nc-gbs" firstAttribute="centerY" secondItem="5EG-18-bQs" secondAttribute="centerY" id="eT8-xN-6uW"/>
+                                                    <constraint firstItem="5j7-Nc-gbs" firstAttribute="centerX" secondItem="v6m-du-Ynr" secondAttribute="centerX" id="cwU-LT-ww6"/>
+                                                    <constraint firstItem="5j7-Nc-gbs" firstAttribute="centerY" secondItem="v6m-du-Ynr" secondAttribute="centerY" id="eT8-xN-6uW"/>
                                                     <constraint firstAttribute="bottom" secondItem="v6m-du-Ynr" secondAttribute="bottom" id="lAk-e1-I2T"/>
                                                     <constraint firstAttribute="trailing" secondItem="v6m-du-Ynr" secondAttribute="trailing" id="lco-zj-yv9"/>
-                                                    <constraint firstItem="v6m-du-Ynr" firstAttribute="top" secondItem="5EG-18-bQs" secondAttribute="top" constant="1" id="sYt-UO-Ub7"/>
+                                                    <constraint firstItem="v6m-du-Ynr" firstAttribute="top" secondItem="5EG-18-bQs" secondAttribute="top" id="sYt-UO-Ub7"/>
                                                 </constraints>
                                                 <connections>
-                                                    <outlet property="leftConstraint" destination="FYh-ML-hOC" id="aCt-N7-7eZ"/>
                                                     <outlet property="pictureImageView" destination="v6m-du-Ynr" id="yFn-hC-HqV"/>
-                                                    <outlet property="rightConstraint" destination="lco-zj-yv9" id="Zge-g8-xcR"/>
                                                     <outlet property="spinner" destination="5j7-Nc-gbs" id="Bx1-st-bRn"/>
                                                 </connections>
                                             </collectionViewCell>
