@@ -9,6 +9,8 @@
 import UIKit
 
 struct ImageViewEntity {
+    
+    // MARK: Variables
     let url: URL
     let title: String
     let photoID: String
@@ -16,6 +18,7 @@ struct ImageViewEntity {
     let secret: String
     let farm: Int
     
+    // MARK: Constructor to create instance using dictionary from api and existing url
     init(from dictionary: [String: Any], with url: URL) {
         self.url = url
         self.title = dictionary["title"] as! String

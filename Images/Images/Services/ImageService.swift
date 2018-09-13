@@ -11,18 +11,15 @@ import FlickrKit
 
 class ImageService {
     
-    private let imageDataLoader = DispatchQueue(label: "ImageService")
-    
+    // MARK: Variables
+    weak var delegate: ImageServiceDelegate?
     var imageTags: [String]?
-    
-    // MARK: dataSource for table and collection views
-    
+    private let imageDataLoader = DispatchQueue(label: "ImageService")
     private var imagesData = [ImagesViewSource]()
     
-    weak var delegate: ImageServiceDelegate?
-      
-    // MARK: start to upload images data
+    // MARK: Functions
     
+    // Start to upload images data
     func reload() {
         imagesData.removeAll()
         let imagesQuantity = ImagesViewControllerSettings.kNumberOfUploadingImages
@@ -31,8 +28,7 @@ class ImageService {
         }
     }
     
-    // MARK: getting images URL and title
-    
+    // Getting images URL and title
     private func getImagesData(_ quantity: Int, by tag: String) {
         let images = ImagesViewSource(tag: tag, data: nil)
         let quantity = String(quantity)
@@ -66,6 +62,7 @@ class ImageService {
         }
     }
     
+    // Getting images URL using Flikr image data
     static func getUrlForPhoto(using imageData: ImageViewEntity) -> URL {
         return FlickrKit.shared().photoURL(for: FKPhotoSize.large1024, photoID: imageData.photoID, server: imageData.server, secret: imageData.secret, farm: String(imageData.farm))
     }

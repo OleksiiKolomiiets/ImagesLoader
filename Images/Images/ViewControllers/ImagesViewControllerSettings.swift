@@ -9,14 +9,24 @@
 import UIKit
 
 class ImagesViewControllerSettings {
-    static let kHeightForRow: CGFloat = 91
-    static let kHeightForHeader: CGFloat = 80
-    static let kCellIdentifierForTableView: String = "imageCell"
-    static let kCellIdentifierForCollectionView: String = "imageCollectionView"
+    
+    //MARK: Uploading images constants
     static let kNumberOfUploadingImages: Int = 30
     static let kTags = ["sun", "mercury", "venus", "earth", "mars", "jupiter","saturn", "uranus", "neptune", "pluto"]
     static let kDefultTitle = "Title doesn't exist"
-    static let kTimeLimit = 30.0
     static let kNumberOfTagsInOneLoad = 3
+    
+    //MARK: Reloading constant
+    static let kTimeLimit = 30.0
+    
+    //MARK: Table view constants
+    static let kHeightForRow: CGFloat = 91
+    static let kHeightForHeader: CGFloat = 80
+    static let kCellIdentifierForTableView: String = "imageCell"
+    
+    //MARK: Collection view constants
+    static let kCellIdentifierForCollectionView: String = "imageCollectionView"
+    static let kCellPaddingQuote: CGFloat = 0.1
+    static let kCellWidthQuote: CGFloat = 0.8
 }
 

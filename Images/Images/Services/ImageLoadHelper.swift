@@ -11,7 +11,7 @@ import UIKit
 
 class ImageLoadHelper {
     
-    // MARK: cache for uploaded images
+    // MARK: custom thread for uploading images
     static private var loaderQueue = DispatchQueue(label: "ImageLoadHelper")
     
     // MARK: cache for uploaded images

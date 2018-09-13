@@ -17,10 +17,10 @@ protocol ImageServiceDelegate: class {
 class ImagesViewController: UIViewController, ImageServiceDelegate {
    
     // MARK: Outlets
-    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    // MARK: Properties
     private var service: ImageService!
     private var dataSource: [ImagesViewSource]?
     private var reloadingTimer: Timer?
@@ -49,8 +49,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     }
     
         
-    // MARK: getting random tags
-    
+    // MARK: Functions
     private func getRandomTags() -> [String] {
         var result = [String]()
         
@@ -83,16 +82,14 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         return result
     }
     
-    // MARK: setting datasource from delegate method
-    
+    // setting datasource from delegate method
     func onDataLoaded(service: ImageService, data: [ImagesViewSource]) {
         self.dataSource = data
         self.tableView.reloadData()
         self.collectionView.reloadData()
     }
     
-    // MARK: start to count time for reload
-    
+    // start to count time for reload
     private func startTimer() {
         let reloadTimeInterval = ImagesViewControllerSettings.kTimeLimit
         if reloadingTimer == nil {
@@ -104,7 +101,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         }
     }
     
-    // MARK: reloading data source
+    // reloading data source
     @objc private func onTimerTick() {
         service.imageTags = getRandomTags()
         service.reload()
@@ -114,7 +111,6 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
 }
 
 // MARK: Collection view delegate and data source
-
 extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -156,11 +152,9 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
 
 
 // MARK: Table view delegate and data source
-
 extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
     
-    // MARK: Configurate header section view
-    
+    // Configurate header section view
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let bundle = Bundle(for: type(of: self))
         let nibName = "CustomSectionHeaderView"
@@ -174,8 +168,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         return ImagesViewControllerSettings.kHeightForHeader
     }
     
-    //  MARK: Configurate reusable cells
-    
+    // Configurate reusable cells
     func numberOfSections(in tableView: UITableView) -> Int {
         return dataSource?.count ?? 0
     }
@@ -207,8 +200,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let data = CellViewModel(image: cellImage, title: title!)
-        cell.configure(with: data)
-        // cell alway should be init  cel.imageView.image = nil
+        cell.configure(with: data) // cell alway should be init  cel.imageView.image = nil
         
         return cell
     }
@@ -223,7 +215,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
         return ImagesViewControllerSettings.kHeightForRow
     }
     
-    // MARK: Send selected data to ImageDetailViewController and present it
+    // Send selected data to ImageDetailViewController and present it
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {            
@@ -233,7 +225,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-// MARK: Calculating mimum zoom scale for scroll view according to image sizes
+// MARK: Collection View delegate flow layout extension
 extension ImagesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height)

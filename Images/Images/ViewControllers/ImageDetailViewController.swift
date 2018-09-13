@@ -15,8 +15,8 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var loadActivityIndicator: UIActivityIndicatorView!
     
+    // MARK: Variables
     var imageData: ImageViewEntity!
-    
     var image: UIImage? {
         didSet {
             // MARK: reacting when image is set
@@ -26,24 +26,14 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    // MARK: action for ending display selected image
+    // MARK: Actions
+    
+    //action for ending display selected image
     @IBAction func done(_ sender: UIButton) {
         self.dismiss(animated: true)
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        if imageView.image == nil {
-            fetchImage()
-        }
-        
-        // MARK: adding double tap gesture recognizer
-        let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped(sender:)))
-        tap.numberOfTapsRequired = 2
-        view.addGestureRecognizer(tap)
-    }
-    
-    // MARK: action when immage tapped twice
+    // action when immage tapped twice
     @objc func doubleTapped(sender: UITapGestureRecognizer) {
         if scrollView.zoomScale == scrollView.minimumZoomScale {
             scrollView.setZoomScale(scrollView.maximumZoomScale, animated: true)
@@ -52,17 +42,32 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    // MARK: Making bar content light on black background
+    // MARK: Functions
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if imageView.image == nil {
+            fetchImage()
+        }
+        
+        // adding double tap gesture recognizer
+        let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped(sender:)))
+        tap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(tap)
+    }
+    
+    
+    // Making bar content light on black background
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
     
-    // MARK: Using scroll delegate method for zooming the image
+    // Using scroll delegate method for zooming the image
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
     
-     // MARK: Image to the center of view
+     // set image to the center of view
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         setImageCentred()
     }
@@ -75,7 +80,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentInset = UIEdgeInsets(top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset)
     }
     
-    // MARK: Calculating mimum zoom scale for scroll view according to image sizes
+    // Calculating mimum zoom scale for scroll view according to image sizes
     private var minimumZoomScale: CGFloat {
         let width = imageView.frame.size.width
         let height = imageView.frame.size.height
@@ -89,7 +94,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         return scale
     }
     
-    // MARK: Getting image to display
+    // Getting image to display
     private func fetchImage() {
         let sizedPhotoUrl = ImageService.getUrlForPhoto(using: imageData)
         

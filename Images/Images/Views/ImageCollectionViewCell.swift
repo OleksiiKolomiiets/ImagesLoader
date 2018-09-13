@@ -14,7 +14,15 @@ class ImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var pictureImageView: UIImageView!
     @IBOutlet private weak var spinner: UIActivityIndicatorView!
     
-    // MARK: cell configuration
+    // MARK: Functions
+    
+    // cleaning cell before reuse
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        pictureImageView.image = nil
+    }
+    
+    // cell configuration
     func configure(with image: UIImage?) {                
         if image != nil {
             spinner.stopAnimating()
@@ -22,12 +30,6 @@ class ImageCollectionViewCell: UICollectionViewCell {
             spinner.startAnimating()
         }        
         pictureImageView.image = image
-    }
-    
-    // MARK: cell configuration
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        pictureImageView.image = nil
     }
 }
 

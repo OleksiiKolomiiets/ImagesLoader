@@ -121,8 +121,8 @@
 				792348BD213E87D4007903E1 /* ViewModels */,
 				795B8B79212D804D00E18F16 /* Views */,
 				792348CE214024D0007903E1 /* Extensions */,
-				794C9D6E212D53D40034E77F /* Main.storyboard */,
-				794C9D76212D53D50034E77F /* Info.plist */,
+				79545932214A8B36004191EE /* Storyboard */,
+				79545933214A8B79004191EE /* Assets */,
 				794C9D7C212D60C70034E77F /* Supporting Files */,
 			);
 			path = Images;
@@ -131,9 +131,8 @@
 		794C9D7C212D60C70034E77F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				794C9D76212D53D50034E77F /* Info.plist */,
 				794C9D6A212D53D40034E77F /* AppDelegate.swift */,
-				794C9D71212D53D50034E77F /* Assets.xcassets */,
-				794C9D73212D53D50034E77F /* LaunchScreen.storyboard */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -146,6 +145,23 @@
 				7967F8882136721F00FF870E /* ImagesViewControllerSettings.swift */,
 			);
 			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		79545932214A8B36004191EE /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				794C9D73212D53D50034E77F /* LaunchScreen.storyboard */,
+				794C9D6E212D53D40034E77F /* Main.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		79545933214A8B79004191EE /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				794C9D71212D53D50034E77F /* Assets.xcassets */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		795B8B79212D804D00E18F16 /* Views */ = {
@@ -468,7 +484,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MAY262PPKP;
-				INFOPLIST_FILE = Images/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Images/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -487,7 +503,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = MAY262PPKP;
-				INFOPLIST_FILE = Images/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/Images/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
