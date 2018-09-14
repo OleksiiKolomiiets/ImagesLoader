@@ -10,12 +10,12 @@ import UIKit
 
 class ImageTableViewCell: UITableViewCell {
     
-    // MARK: Outlets
+    // MARK: - Outlets
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var pictureImageView: UIImageView!
     @IBOutlet private weak var spinner: UIActivityIndicatorView!    
     
-    // MARK: Functions
+    // MARK: - Functions
     
     // cleaning cell before reuse
     override func prepareForReuse() {
@@ -23,7 +23,7 @@ class ImageTableViewCell: UITableViewCell {
         pictureImageView.image = nil
     }
     
-    //cell configuration
+    // cell configuration
     func configure(with data: CellViewModel) {
         let title = data.title.isEmpty ? ImagesViewControllerSettings.kDefultTitle : data.title
         titleLabel.text = title        

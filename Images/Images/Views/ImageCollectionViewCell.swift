@@ -10,11 +10,11 @@ import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
     
-    // MARK: Outlets CollectionView
+    // MARK: - Outlets CollectionView
     @IBOutlet private weak var pictureImageView: UIImageView!
     @IBOutlet private weak var spinner: UIActivityIndicatorView!
     
-    // MARK: Functions
+    // MARK: - Functions
     
     // cleaning cell before reuse
     override func prepareForReuse() {

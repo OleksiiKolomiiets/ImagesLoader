@@ -10,12 +10,12 @@ import UIKit
 
 class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
 
-    // MARK: Outlets
+    // MARK: - Outlets
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var loadActivityIndicator: UIActivityIndicatorView!
     
-    // MARK: Variables
+    // MARK: - Variables
     var imageData: ImageViewEntity!
     var image: UIImage? {
         didSet {
@@ -26,9 +26,9 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    // MARK: Actions
+    // MARK: - Actions
     
-    //action for ending display selected image
+    // action for ending display selected image
     @IBAction func done(_ sender: UIButton) {
         self.dismiss(animated: true)
     }
@@ -42,7 +42,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    // MARK: Functions
+    // MARK: - Functions
     
     override func viewDidLoad() {
         super.viewDidLoad()

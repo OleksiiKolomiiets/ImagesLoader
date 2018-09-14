@@ -10,8 +10,10 @@ import UIKit
 
 class CustomSectionHeaderView: UIView {
 
+    // MARK: - Outlets
     @IBOutlet private weak var titleLabel: UILabel!
     
+    // MARK: - Outlets
     func setTitle(_ title: String?) {
         titleLabel.text = title?.uppercased()
     }

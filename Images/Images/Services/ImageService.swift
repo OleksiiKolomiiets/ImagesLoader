@@ -11,13 +11,13 @@ import FlickrKit
 
 class ImageService {
     
-    // MARK: Variables
+    // MARK: - Variables
     weak var delegate: ImageServiceDelegate?
     var imageTags: [String]?
     private let imageDataLoader = DispatchQueue(label: "ImageService")
     private var imagesData = [ImagesViewSource]()
     
-    // MARK: Functions
+    // MARK: - Functions
     
     // Start to upload images data
     func reload() {

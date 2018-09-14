@@ -16,11 +16,11 @@ protocol ImageServiceDelegate: class {
 
 class ImagesViewController: UIViewController, ImageServiceDelegate {
    
-    // MARK: Outlets
+    // MARK: - Outlets
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var collectionView: UICollectionView!
     
-    // MARK: Properties
+    // MARK:  - Properties
     private var service: ImageService!
     private var dataSource: [ImagesViewSource]?
     private var reloadingTimer: Timer?
@@ -37,19 +37,19 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        // MARK: ending timer work when user go to anothe screen
+        // - ending timer work when user go to anothe screen
         reloadingTimer?.invalidate()
         reloadingTimer = nil
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // MARK: timer start to work
+        // timer start to work
         startTimer()
     }
     
         
-    // MARK: Functions
+    // MARK: - Functions
     private func getRandomTags() -> [String] {
         var result = [String]()
         
@@ -110,7 +110,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
 }
 
-// MARK: Collection view delegate and data source
+// MARK: - Collection view delegate and data source
 extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -151,7 +151,7 @@ extension ImagesViewController: UICollectionViewDataSource, UICollectionViewDele
 }
 
 
-// MARK: Table view delegate and data source
+// MARK: - Table view delegate and data source
 extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
     
     // Configurate header section view
@@ -225,7 +225,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
-// MARK: Collection View delegate flow layout extension
+// MARK: - Collection View delegate flow layout extension
 extension ImagesViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.size.width, height: collectionView.frame.size.height)

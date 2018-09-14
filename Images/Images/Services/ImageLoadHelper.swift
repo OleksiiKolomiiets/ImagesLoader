@@ -11,19 +11,17 @@ import UIKit
 
 class ImageLoadHelper {
     
-    // MARK: custom thread for uploading images
-    static private var loaderQueue = DispatchQueue(label: "ImageLoadHelper")
+    // MARK: - Variables
+    static private var loaderQueue = DispatchQueue(label: "ImageLoadHelper") // Custom thread for uploading images
+    static private var cache = [URL: UIImage]()  // Cache for uploaded images
     
-    // MARK: cache for uploaded images
-    static private var cache = [URL: UIImage]()
+    // MARK: - Functions
     
-    // MARK: method for getting mages from cache
+    // Method for getting mages from cache
     static func getImageFromCache(by url: URL) -> UIImage? {
         return ImageLoadHelper.cache[url]
     }
-    
-    
-    // MARK: method for uploading the image by URL
+    // Method for getting the image by URL
     static func getImage(by url: URL, completion: @escaping (UIImage?) -> Void) {
         loaderQueue.async {
             let image = upload(by: url)
@@ -33,6 +31,7 @@ class ImageLoadHelper {
         }
     }
     
+    // Method for uploading the image by URL
     static private func upload(by url: URL) -> UIImage? {
         var image: UIImage?
         if let imageData = try? Data(contentsOf: url) {
