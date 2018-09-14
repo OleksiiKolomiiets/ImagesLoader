@@ -45,10 +45,11 @@ class ImageService {
     }
     
     private func getImageEntities(from source: [[String: Any]], to images: ImagesViewSource) {
+        let size = ImagesViewControllerSettings.kCellsImageDimension.size
         var images = images
         var imageArray =  [ImageViewEntity]()
         for photoDictionary in source {
-            let photoURL = FlickrKit.shared().photoURL(for: FKPhotoSize.small240, fromPhotoDictionary: photoDictionary)
+            let photoURL = FlickrKit.shared().photoURL(for: size, fromPhotoDictionary: photoDictionary)
             let data = ImageViewEntity(from: photoDictionary, with: photoURL)
             
             imageArray.append(data)
@@ -64,6 +65,7 @@ class ImageService {
     
     // Getting images URL using Flikr image data
     static func getUrlForPhoto(using imageData: ImageViewEntity) -> URL {
-        return FlickrKit.shared().photoURL(for: FKPhotoSize.large1024, photoID: imageData.photoID, server: imageData.server, secret: imageData.secret, farm: String(imageData.farm))
+        let size = ImageDetailViewControllerSettings.kDetailImageDimension.size
+        return FlickrKit.shared().photoURL(for: size, photoID: imageData.photoID, server: imageData.server, secret: imageData.secret, farm: String(imageData.farm))
     }
 }

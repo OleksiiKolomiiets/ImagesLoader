@@ -37,7 +37,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        // - ending timer work when user go to anothe screen
+        // ending timer work when user go to anothe screen
         reloadingTimer?.invalidate()
         reloadingTimer = nil
     }
@@ -50,6 +50,8 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
         
     // MARK: - Functions
+    
+    // getting random tags
     private func getRandomTags() -> [String] {
         var result = [String]()
         
@@ -63,6 +65,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         return result
     }
     
+    // getting random indices for tags collection
     private func getRandomIndices(number: Int, _ max: Int) -> [Int] {
         var result = [Int]()
     

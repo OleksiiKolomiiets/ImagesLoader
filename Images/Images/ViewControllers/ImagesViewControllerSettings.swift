@@ -15,6 +15,7 @@ class ImagesViewControllerSettings {
     static let kTags = ["sun", "mercury", "venus", "earth", "mars", "jupiter","saturn", "uranus", "neptune", "pluto"]
     static let kDefultTitle = "Title doesn't exist"
     static let kNumberOfTagsInOneLoad = 3
+    static let kCellsImageDimension:ImageDimensionType = .small
     
     //MARK: - Reloading constant
     static let kTimeLimit = 30.0
@@ -29,4 +30,5 @@ class ImagesViewControllerSettings {
     static let kCellPaddingQuote: CGFloat = 0.1
     static let kCellWidthQuote: CGFloat = 0.8
 }
+
 
