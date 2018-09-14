@@ -220,7 +220,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate {
     
     // Send selected data to ImageDetailViewController and present it
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
         if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {            
             detailVC.imageData = self.dataSource![indexPath.section].data![indexPath.row]
             self.present(detailVC, animated: true)

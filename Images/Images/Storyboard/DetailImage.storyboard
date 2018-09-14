@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qYG-6m-VhN">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Image Detail View Controller-->
+        <scene sceneID="Hvb-np-ZLi">
+            <objects>
+                <viewController storyboardIdentifier="ImageDetailViewController" automaticallyAdjustsScrollViewInsets="NO" id="qYG-6m-VhN" customClass="ImageDetailViewController" customModule="Images" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uoc-9l-vqh">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="2" translatesAutoresizingMaskIntoConstraints="NO" id="Rcy-BJ-E0f">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="736" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3jd-eq-ORT">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                                        <gestureRecognizers/>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="3jd-eq-ORT" firstAttribute="bottom" secondItem="Rcy-BJ-E0f" secondAttribute="bottom" id="7Q4-KH-LaG"/>
+                                    <constraint firstItem="3jd-eq-ORT" firstAttribute="leading" secondItem="Rcy-BJ-E0f" secondAttribute="leading" id="HmR-Kt-uPb"/>
+                                    <constraint firstItem="3jd-eq-ORT" firstAttribute="trailing" secondItem="Rcy-BJ-E0f" secondAttribute="trailing" id="RSQ-0d-xFA"/>
+                                    <constraint firstItem="3jd-eq-ORT" firstAttribute="top" secondItem="Rcy-BJ-E0f" secondAttribute="top" id="UWj-P0-qbJ"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="delegate" destination="qYG-6m-VhN" id="PsG-IO-Uz6"/>
+                                </connections>
+                            </scrollView>
+                            <button contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u38-O6-q7G">
+                                <rect key="frame" x="16" y="36" width="100" height="34"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="ZJF-nz-c3j"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Done"/>
+                                <connections>
+                                    <action selector="done:" destination="qYG-6m-VhN" eventType="touchUpInside" id="WZ3-JS-sm9"/>
+                                </connections>
+                            </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="ETv-gh-k2k">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                                <color key="color" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <constraints>
+                            <constraint firstItem="Rcy-BJ-E0f" firstAttribute="trailing" secondItem="uoc-9l-vqh" secondAttribute="trailing" id="IjM-3P-vvn"/>
+                            <constraint firstItem="MTn-No-ISH" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="u38-O6-q7G" secondAttribute="trailing" constant="16" id="Mn3-0x-KiO"/>
+                            <constraint firstItem="Rcy-BJ-E0f" firstAttribute="leading" secondItem="uoc-9l-vqh" secondAttribute="leading" id="Pmd-g8-jee"/>
+                            <constraint firstItem="ETv-gh-k2k" firstAttribute="centerX" secondItem="uoc-9l-vqh" secondAttribute="centerX" id="bWZ-6Y-p8u"/>
+                            <constraint firstItem="u38-O6-q7G" firstAttribute="top" secondItem="MTn-No-ISH" secondAttribute="top" constant="16" id="cII-Xu-8eB"/>
+                            <constraint firstItem="ETv-gh-k2k" firstAttribute="centerY" secondItem="uoc-9l-vqh" secondAttribute="centerY" id="gyv-Vw-Mf5"/>
+                            <constraint firstItem="Rcy-BJ-E0f" firstAttribute="bottom" secondItem="uoc-9l-vqh" secondAttribute="bottom" id="hjx-Ib-AAS"/>
+                            <constraint firstItem="Rcy-BJ-E0f" firstAttribute="top" secondItem="uoc-9l-vqh" secondAttribute="top" id="oqm-Fl-9Ld"/>
+                            <constraint firstItem="u38-O6-q7G" firstAttribute="leading" secondItem="MTn-No-ISH" secondAttribute="leading" constant="16" id="u78-lU-7iZ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="MTn-No-ISH"/>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="3jd-eq-ORT" id="Iae-FL-Z1N"/>
+                        <outlet property="loadActivityIndicator" destination="ETv-gh-k2k" id="dEx-Gj-tAT"/>
+                        <outlet property="scrollView" destination="Rcy-BJ-E0f" id="Y0U-6r-P28"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7ZT-yL-Opp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="94" y="-149"/>
+        </scene>
+    </scenes>
+</document>
