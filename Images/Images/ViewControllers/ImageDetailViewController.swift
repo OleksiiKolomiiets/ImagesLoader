@@ -8,6 +8,16 @@
 
 import UIKit
 
+//MARK: - CONSTANTS
+
+class ImageDetailViewControllerSettings {
+    
+    // Uploading images constants
+    static let kDetailImageDimension:ImageDimensionType = .large
+}
+
+//MARK: - CLASS
+
 class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
 
     // MARK: - Outlets
