@@ -69,6 +69,7 @@
                         <viewLayoutGuide key="safeArea" id="MTn-No-ISH"/>
                     </view>
                     <connections>
+                        <outlet property="doneButton" destination="u38-O6-q7G" id="dhe-Ff-Y0o"/>
                         <outlet property="imageView" destination="3jd-eq-ORT" id="Iae-FL-Z1N"/>
                         <outlet property="loadActivityIndicator" destination="ETv-gh-k2k" id="dEx-Gj-tAT"/>
                         <outlet property="scrollView" destination="Rcy-BJ-E0f" id="Y0U-6r-P28"/>

@@ -14,32 +14,49 @@ import MobileCoreServices
 extension ImagesViewController: UIDropInteractionDelegate {
     
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        return session.canLoadObjects(ofClass: NSURL.self)
+        return session.canLoadObjects(ofClass: NSString.self)
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        return UIDropProposal(operation: .move)
+        return UIDropProposal(operation: .copy)
     }
     
-    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        session.loadObjects(ofClass: NSURL.self) { nsurls in
-            print(nsurls)
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {  
+        session.loadObjects(ofClass: NSString.self) { nsstrings in
+            print(nsstrings)
+            // parsing sended string
+            let string = nsstrings.first as! String
+            let stringArray = string.split(separator: " ")
+            let section = Int(String(stringArray.first!))
+            let row = Int(String(stringArray.last!))
+            self.draggedItem = IndexPath(row: row!, section: section!)
         }
     }
 }
 
 // MARK: - Drag interaction delegate extension
-
 extension ImagesViewController: UITableViewDragDelegate {
     
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         return dragItem(at: indexPath)
     }
     
+    func tableView(_ tableView: UITableView, dragSessionDidEnd session: UIDragSession) {
+        dropZoneView.backgroundColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 0.3265999572)
+    }
+    
+    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
+        dropZoneView.backgroundColor = #colorLiteral(red: 0.8133127162, green: 0.9582959676, blue: 1, alpha: 1)
+    }
+    
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
-        let url = ImageService.getUrlForPhoto(using: (dataSource![indexPath.section].data![indexPath.row]))
-        let dragItem = UIDragItem(itemProvider: NSItemProvider(contentsOf: url)!)
-        dragItem.localObject = url
+        let item = "\(indexPath.section) \(indexPath.row)" // create string to send via drag
+        let itemProvider = NSItemProvider(object: item as NSString)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = item
         return [dragItem]
     }
 }
+
+
+

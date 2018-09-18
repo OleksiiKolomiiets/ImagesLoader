@@ -21,11 +21,16 @@ class ImageDetailViewControllerSettings {
 class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
 
     // MARK: - Outlets
+    
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var loadActivityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var tabButton: UITabBarItem!
+    @IBOutlet weak var doneButton: UIButton!
+    
     
     // MARK: - Variables
+    
     var imageData: ImageViewEntity!
     var image: UIImage? {
         didSet {
@@ -35,6 +40,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
             setImageCentred()
         }
     }
+    var doneButtonisHidden = false
     
     // MARK: - Actions
     
@@ -56,7 +62,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if imageView.image == nil {
+        if imageView != nil {
             fetchImage()
         }
         
@@ -64,6 +70,8 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped(sender:)))
         tap.numberOfTapsRequired = 2
         view.addGestureRecognizer(tap)
+        
+        doneButton.isHidden = doneButtonisHidden
     }
     
     

@@ -51,6 +51,18 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
     var dataSource: [ImagesViewSource]?
+    var draggedItem: IndexPath? {
+        didSet {
+            self.tabBarController?.viewControllers?.forEach() { viewController in
+                if let vc = viewController as? ImageDetailViewController,
+                    let draggedItem = self.draggedItem {
+                    vc.tabButton.isEnabled = true
+                    vc.doneButtonisHidden = true
+                    vc.imageData = self.dataSource![draggedItem.section].data![draggedItem.row]
+                }
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
