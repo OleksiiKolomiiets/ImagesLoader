@@ -31,16 +31,29 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     // MARK: - Variables
     
-    var imageData: ImageViewEntity!
+    var imageData: ImageViewEntity! {
+        didSet {
+            isImageDataSetted = true
+            if imageView != nil,
+                imageView.image != nil {
+                imageView.image = nil
+            }
+        }
+    }
     var image: UIImage? {
         didSet {
-            // MARK: reacting when image is set
-            self.imageView.image = image
-            self.imageView.sizeToFit()
+            imageView.image = image
+            imageView.sizeToFit()
             setImageCentred()
+            let scale = zoomScale
+            scrollView.minimumZoomScale = scale.min
+            scrollView.maximumZoomScale = scale.max
+            scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
         }
     }
     var doneButtonisHidden = false
+    var isImageDataSetted = false
+    
     
     // MARK: - Actions
     
@@ -62,16 +75,28 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if imageView != nil {
-            fetchImage()
-        }
-        
         // adding double tap gesture recognizer
         let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped(sender:)))
         tap.numberOfTapsRequired = 2
         view.addGestureRecognizer(tap)
         
         doneButton.isHidden = doneButtonisHidden
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print(isImageDataSetted)
+        scrollView.frame = view.frame
+        if imageView != nil,
+            isImageDataSetted {
+            fetchImage()
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        isImageDataSetted = false
     }
     
     
@@ -95,20 +120,23 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         let scrollViewSize = scrollView.bounds.size
         let verticalInset = imageViewSize.height < scrollViewSize.height ? (scrollViewSize.height - imageViewSize.height) / 2 : 1
         let horizontalInset = imageViewSize.width < scrollViewSize.width ? (scrollViewSize.width - imageViewSize.width) / 2 : 1
-        scrollView.contentInset = UIEdgeInsets(top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset)
+        scrollView.contentInset = UIEdgeInsets(top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset) 
     }
     
-    // Calculating mimum zoom scale for scroll view according to image sizes
-    private var minimumZoomScale: CGFloat {
-        let width = imageView.frame.size.width
-        let height = imageView.frame.size.height
+    // Calculating mimum and maximum zoom scale for scroll view according to image sizes
+    private var zoomScale: (min: CGFloat, max: CGFloat) {
+        let width = image!.size.width
+        let height = image!.size.height
         
-        var scale: CGFloat = 0.0
-        if width > height {
-            scale = view.frame.size.width / width
-        } else {
-            scale = view.frame.size.height / height
-        }
+        var scale: (min: CGFloat, max: CGFloat) = (min: 0.0, max: 0.0)
+        var maxScale: CGFloat = 0.0
+        var minScale: CGFloat = 0.0
+        
+        maxScale = (width >= height) ? (view.frame.size.height / height) :   (view.frame.size.width / width)
+        minScale = (width >= height) ? (view.frame.size.width / width)   : (view.frame.size.height / height)
+                
+        scale = (minScale < maxScale) ? (min: minScale, max: maxScale) : (min: maxScale, max: minScale)
+        
         return scale
     }
     
@@ -123,7 +151,6 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
             ImageLoadHelper.getImage(by: sizedPhotoUrl) { loadedImage in
                 self.loadActivityIndicator.stopAnimating()
                 self.image = loadedImage
-                self.scrollView.minimumZoomScale = self.minimumZoomScale
             }
         }
     }
