@@ -72,15 +72,10 @@
                                             <outlet property="delegate" destination="ZxH-Md-4CK" id="tFG-MT-hXM"/>
                                         </connections>
                                     </collectionView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kfe-0p-AKc">
-                                        <rect key="frame" x="8" y="20" width="124" height="40"/>
-                                        <color key="backgroundColor" white="0.66666666666666663" alpha="0.32659995719178081" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="4Ry-5J-rxE" secondAttribute="bottom" id="6It-Vt-fl0"/>
                                     <constraint firstItem="bYD-VU-KNK" firstAttribute="top" secondItem="Fau-QN-ojd" secondAttribute="top" id="EpS-TR-dTU"/>
-                                    <constraint firstItem="kfe-0p-AKc" firstAttribute="leading" secondItem="Fau-QN-ojd" secondAttribute="leading" constant="8" id="ICs-p9-eGP"/>
                                     <constraint firstAttribute="trailing" secondItem="4Ry-5J-rxE" secondAttribute="trailing" id="PMx-FD-WbD"/>
                                     <constraint firstItem="bYD-VU-KNK" firstAttribute="leading" secondItem="Fau-QN-ojd" secondAttribute="leading" id="Pi5-ni-SVX"/>
                                     <constraint firstItem="4Ry-5J-rxE" firstAttribute="leading" secondItem="Fau-QN-ojd" secondAttribute="leading" id="fxc-ra-VN9"/>
@@ -152,6 +147,10 @@
                                     <outlet property="delegate" destination="ZxH-Md-4CK" id="WDn-df-MM2"/>
                                 </connections>
                             </tableView>
+                            <view hidden="YES" alpha="0.75" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="kfe-0p-AKc">
+                                <rect key="frame" x="0.0" y="60" width="320" height="263.5"/>
+                                <color key="backgroundColor" red="0.22102877500000001" green="0.76200133560000005" blue="0.84233474730000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="0.48755886130136988" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -162,14 +161,15 @@
                             <constraint firstItem="Fau-QN-ojd" firstAttribute="leading" secondItem="kyM-B2-r2j" secondAttribute="leading" id="K1V-kX-NJw"/>
                             <constraint firstItem="kyM-B2-r2j" firstAttribute="trailing" secondItem="lk9-yp-lfp" secondAttribute="trailing" id="KOa-8v-lz1"/>
                             <constraint firstItem="Fau-QN-ojd" firstAttribute="height" secondItem="MA1-Z6-EM2" secondAttribute="height" multiplier="3/7" id="L4G-en-wjt"/>
-                            <constraint firstItem="WxL-rk-o1e" firstAttribute="leading" secondItem="kfe-0p-AKc" secondAttribute="trailing" constant="8" id="QzK-4x-ZdY"/>
                             <constraint firstItem="WxL-rk-o1e" firstAttribute="centerX" secondItem="kyM-B2-r2j" secondAttribute="centerX" id="Xdf-B2-lZ0"/>
                             <constraint firstItem="lk9-yp-lfp" firstAttribute="top" secondItem="Fau-QN-ojd" secondAttribute="bottom" id="Z1J-mY-L4O"/>
                             <constraint firstItem="Fau-QN-ojd" firstAttribute="trailing" secondItem="kyM-B2-r2j" secondAttribute="trailing" id="dSV-WT-1KA"/>
+                            <constraint firstItem="kfe-0p-AKc" firstAttribute="trailing" secondItem="kyM-B2-r2j" secondAttribute="trailing" id="dyZ-LX-K3c"/>
+                            <constraint firstItem="lk9-yp-lfp" firstAttribute="top" secondItem="kfe-0p-AKc" secondAttribute="bottom" constant="-80" id="hhH-p2-yVU"/>
+                            <constraint firstItem="kfe-0p-AKc" firstAttribute="leading" secondItem="kyM-B2-r2j" secondAttribute="leading" id="l3Q-Of-diS"/>
                             <constraint firstItem="Fau-QN-ojd" firstAttribute="width" secondItem="MA1-Z6-EM2" secondAttribute="width" id="pZx-fZ-hCi"/>
-                            <constraint firstItem="kfe-0p-AKc" firstAttribute="bottom" secondItem="WxL-rk-o1e" secondAttribute="bottom" id="s4Z-jS-EmG"/>
                             <constraint firstItem="kyM-B2-r2j" firstAttribute="bottom" secondItem="lk9-yp-lfp" secondAttribute="bottom" id="tB7-0a-mCq"/>
-                            <constraint firstItem="kfe-0p-AKc" firstAttribute="top" secondItem="WxL-rk-o1e" secondAttribute="top" id="zD7-G3-L25"/>
+                            <constraint firstItem="kfe-0p-AKc" firstAttribute="top" secondItem="WxL-rk-o1e" secondAttribute="bottom" id="uTY-xg-sJ2"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kyM-B2-r2j"/>
                     </view>

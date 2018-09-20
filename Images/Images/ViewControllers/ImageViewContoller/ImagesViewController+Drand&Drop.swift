@@ -42,11 +42,11 @@ extension ImagesViewController: UITableViewDragDelegate {
     }
     
     func tableView(_ tableView: UITableView, dragSessionDidEnd session: UIDragSession) {
-        dropZoneView.backgroundColor = #colorLiteral(red: 0.6666666865, green: 0.6666666865, blue: 0.6666666865, alpha: 0.3265999572)
+        dropZoneView.isHidden = true
     }
     
     func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
-        dropZoneView.backgroundColor = #colorLiteral(red: 0.8133127162, green: 0.9582959676, blue: 1, alpha: 1)
+        dropZoneView.isHidden = false
     }
     
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {

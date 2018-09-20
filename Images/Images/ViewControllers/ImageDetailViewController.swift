@@ -134,7 +134,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         
         maxScale = (width >= height) ? (view.frame.size.height / height) :   (view.frame.size.width / width)
         minScale = (width >= height) ? (view.frame.size.width / width)   : (view.frame.size.height / height)
-                
+        
         scale = (minScale < maxScale) ? (min: minScale, max: maxScale) : (min: maxScale, max: minScale)
         
         return scale
