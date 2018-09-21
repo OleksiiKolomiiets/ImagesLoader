@@ -31,5 +31,14 @@ class ImageCollectionViewCell: UICollectionViewCell {
         }        
         pictureImageView.image = image
     }
+    
+    // method for testing
+    
+    func setCell() {
+        spinner.startAnimating()
+        pictureImageView.layer.borderWidth = 1
+        pictureImageView.layer.cornerRadius = 15
+        pictureImageView.layer.borderColor = UIColor.white.cgColor
+    }
 }
 

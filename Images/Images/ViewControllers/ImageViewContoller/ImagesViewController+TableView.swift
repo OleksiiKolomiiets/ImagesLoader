@@ -8,7 +8,10 @@
 
 import UIKit
 
+// ========================================
 // MARK: - Table view data source extension
+// ========================================
+
 extension ImagesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -52,7 +55,10 @@ extension ImagesViewController: UITableViewDataSource {
     
 }
 
+// =====================================
 // MARK: - Table view delegate extension
+// =====================================
+
 extension ImagesViewController: UITableViewDelegate {
     
     // Configurate header section view

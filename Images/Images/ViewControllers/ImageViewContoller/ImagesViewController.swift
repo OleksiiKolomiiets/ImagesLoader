@@ -36,20 +36,27 @@ protocol ImageServiceDelegate: class {
 
 // MARK: - CLASS
 class ImagesViewController: UIViewController, ImageServiceDelegate {
-   
-    // MARK: - Outlets
-    @IBOutlet weak var tableView: UITableView! 
-    @IBOutlet weak var collectionView: UICollectionView!
+    
+    // ================
+    // MARK: - Outlets:
+    // ================
+    
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var dropZoneView: UIView! {
         didSet {
             dropZoneView.addInteraction(UIDropInteraction(delegate: self))
         }
     }
     
-    // MARK:  - Properties
+    // ====================
+    // MARK:  - Properties:
+    // ====================
+    
     private var service: ImageService!
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
+    private var imagesCollectionViewController: ImagesCollectionViewController!
+    var indexOfCellBeforeDragging = 0
     var dataSource: [ImagesViewSource]?
     var draggedItem: IndexPath? {
         didSet {
@@ -84,12 +91,19 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // timer start to work
+        
         startTimer()
     }
     
-        
-    // MARK: - Functions
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let embededCV = segue.destination as? ImagesCollectionViewController {
+            self.imagesCollectionViewController = embededCV
+        }
+    }
+    
+    // ==================
+    // MARK: - Functions:
+    // ==================
     
     // getting random tags
     private func getRandomTags() -> [String] {
@@ -127,9 +141,10 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     // setting datasource from delegate method
     func onDataLoaded(service: ImageService, data: [ImagesViewSource]) {
-        self.dataSource = data
-        self.tableView.reloadData()
-        self.collectionView.reloadData()
+        dataSource = data
+        imagesCollectionViewController.dataSourceCollectionView = data.first
+        tableView.reloadData()
+        imagesCollectionViewController.collectionView.reloadData()
     }
     
     // start to count time for reload
