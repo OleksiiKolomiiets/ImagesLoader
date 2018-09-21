@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qYG-6m-VhN">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qYG-6m-VhN">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Image Detail View Controller-->
+        <!--Item-->
         <scene sceneID="Hvb-np-ZLi">
             <objects>
                 <viewController storyboardIdentifier="ImageDetailViewController" automaticallyAdjustsScrollViewInsets="NO" id="qYG-6m-VhN" customClass="ImageDetailViewController" customModule="Images" customModuleProvider="target" sceneMemberID="viewController">
@@ -68,11 +68,14 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="MTn-No-ISH"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="yMO-jB-Ws3"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="doneButton" destination="u38-O6-q7G" id="dhe-Ff-Y0o"/>
                         <outlet property="imageView" destination="3jd-eq-ORT" id="Iae-FL-Z1N"/>
                         <outlet property="loadActivityIndicator" destination="ETv-gh-k2k" id="dEx-Gj-tAT"/>
                         <outlet property="scrollView" destination="Rcy-BJ-E0f" id="Y0U-6r-P28"/>
+                        <outlet property="tabButton" destination="yMO-jB-Ws3" id="Yet-fT-MnC"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7ZT-yL-Opp" userLabel="First Responder" sceneMemberID="firstResponder"/>

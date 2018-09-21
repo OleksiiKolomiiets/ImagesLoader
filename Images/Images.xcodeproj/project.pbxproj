@@ -29,6 +29,8 @@
 		79C1563C212EE53F00E486C1 /* CustomSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C1563B212EE53F00E486C1 /* CustomSectionHeaderView.swift */; };
 		79D368C6213545DB007E14AE /* CustomSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79D368C5213545DB007E14AE /* CustomSectionHeaderView.xib */; };
 		79D368C8213577AD007E14AE /* ImageLoadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D368C7213577AD007E14AE /* ImageLoadHelper.swift */; };
+		79DB8B6F21552A4400C0874B /* ImageViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79DB8B6E21552A4400C0874B /* ImageViewController.storyboard */; };
+		79DB8B7121552D0100C0874B /* ImageCollectionViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79DB8B7021552D0100C0874B /* ImageCollectionViewController.storyboard */; };
 		79E06D892154E11B004266C0 /* ImagesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E06D882154E11B004266C0 /* ImagesCollectionViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +60,8 @@
 		79C1563B212EE53F00E486C1 /* CustomSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSectionHeaderView.swift; sourceTree = "<group>"; };
 		79D368C5213545DB007E14AE /* CustomSectionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomSectionHeaderView.xib; sourceTree = "<group>"; };
 		79D368C7213577AD007E14AE /* ImageLoadHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadHelper.swift; sourceTree = "<group>"; };
+		79DB8B6E21552A4400C0874B /* ImageViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ImageViewController.storyboard; sourceTree = "<group>"; };
+		79DB8B7021552D0100C0874B /* ImageCollectionViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ImageCollectionViewController.storyboard; sourceTree = "<group>"; };
 		79E06D882154E11B004266C0 /* ImagesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesCollectionViewController.swift; sourceTree = "<group>"; };
 		FA443E1265A17EE96574F84D /* Pods-Images.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Images.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Images/Pods-Images.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -159,6 +163,8 @@
 				794C9D73212D53D50034E77F /* LaunchScreen.storyboard */,
 				794C9D6E212D53D40034E77F /* Main.storyboard */,
 				7954593C214BF8F4004191EE /* DetailImage.storyboard */,
+				79DB8B6E21552A4400C0874B /* ImageViewController.storyboard */,
+				79DB8B7021552D0100C0874B /* ImageCollectionViewController.storyboard */,
 			);
 			path = Storyboard;
 			sourceTree = "<group>";
@@ -304,6 +310,8 @@
 				794C9D75212D53D50034E77F /* LaunchScreen.storyboard in Resources */,
 				794C9D72212D53D50034E77F /* Assets.xcassets in Resources */,
 				794C9D70212D53D40034E77F /* Main.storyboard in Resources */,
+				79DB8B7121552D0100C0874B /* ImageCollectionViewController.storyboard in Resources */,
+				79DB8B6F21552A4400C0874B /* ImageViewController.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
