@@ -45,9 +45,15 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
             imageView.image = image
             imageView.sizeToFit()
             setImageCentred()
-            let scale = zoomScale
-            scrollView.minimumZoomScale = scale.min
-            scrollView.maximumZoomScale = scale.max
+            var max = maxScale
+            var min = minScale
+            if min > max{
+                let temp = max
+                max = min
+                min = temp
+            }
+            scrollView.minimumZoomScale = min
+            scrollView.maximumZoomScale = max
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
         }
     }
@@ -124,20 +130,17 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     }
     
     // Calculating mimum and maximum zoom scale for scroll view according to image sizes
-    private var zoomScale: (min: CGFloat, max: CGFloat) {
+   
+    private var maxScale: CGFloat {
         let width = image!.size.width
         let height = image!.size.height
-        
-        var scale: (min: CGFloat, max: CGFloat) = (min: 0.0, max: 0.0)
-        var maxScale: CGFloat = 0.0
-        var minScale: CGFloat = 0.0
-        
-        maxScale = (width >= height) ? (view.frame.size.height / height) :   (view.frame.size.width / width)
-        minScale = (width >= height) ? (view.frame.size.width / width)   : (view.frame.size.height / height)
-        
-        scale = (minScale < maxScale) ? (min: minScale, max: maxScale) : (min: maxScale, max: minScale)
-        
-        return scale
+        return (width >= height) ? (view.frame.size.height / height) :   (view.frame.size.width / width)
+    }
+    
+    private var minScale: CGFloat {
+        let width = image!.size.width
+        let height = image!.size.height
+        return (width >= height) ? (view.frame.size.width / width)   : (view.frame.size.height / height)
     }
     
     // Getting image to display
