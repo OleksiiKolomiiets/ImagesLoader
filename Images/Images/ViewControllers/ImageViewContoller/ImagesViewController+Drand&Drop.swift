@@ -25,7 +25,6 @@ extension ImagesViewController: UIDropInteractionDelegate {
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {  
         session.loadObjects(ofClass: NSString.self) { nsstrings in
-            print(nsstrings)
             // parsing sended string
             let string = nsstrings.first as! String
             let stringArray = string.split(separator: " ")

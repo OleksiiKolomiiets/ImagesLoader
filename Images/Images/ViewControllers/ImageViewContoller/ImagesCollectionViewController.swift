@@ -145,7 +145,6 @@ class ImagesCollectionViewController: UICollectionViewController {
         let proportionalOffset = collectionViewFlowLayout.collectionView!.contentOffset.x / itemWidth
         let index = Int(round(proportionalOffset))
         let safeIndex = max(0, min(count - 1, index))
-        print(safeIndex)
         return safeIndex
     }
 }

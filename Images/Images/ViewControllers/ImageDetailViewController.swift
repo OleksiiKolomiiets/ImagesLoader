@@ -24,11 +24,11 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     // MARK: - Outlets:
     //=================
     
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var scrollView           : UIScrollView!
+    @IBOutlet weak var imageView            : UIImageView!
     @IBOutlet weak var loadActivityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var tabButton: UITabBarItem!
-    @IBOutlet weak var doneButton: UIButton!
+    @IBOutlet weak var tabButton            : UITabBarItem!
+    @IBOutlet weak var doneButton           : UIButton!
     
     //===================
     // MARK: - Variables:
@@ -98,7 +98,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print(isImageDataSetted)
+        
         scrollView.frame = view.frame
         if imageView != nil,
             isImageDataSetted {
@@ -108,6 +108,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
         isImageDataSetted = false
     }
     
