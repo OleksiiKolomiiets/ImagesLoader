@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct ImageViewEntity {
+struct ImageViewEntity: Codable {
     
     // MARK: - Variables
     let url: URL
@@ -17,6 +17,14 @@ struct ImageViewEntity {
     let server: String
     let secret: String
     let farm: Int
+    
+    enum codingKeys: String, CodingKey {
+        case title
+        case photoID = "id"
+        case server
+        case secret
+        case farm
+    }
     
     // MARK: - Functions
     // Constructor to create instance using dictionary from api and existing url

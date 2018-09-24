@@ -9,7 +9,9 @@
 import UIKit
 import MobileCoreServices
 
-// MARK: - Drop interaction delegate extension
+//===================================
+// MARK: - Drop interaction delegate:
+//===================================
 
 extension ImagesViewController: UIDropInteractionDelegate {
     
@@ -34,7 +36,10 @@ extension ImagesViewController: UIDropInteractionDelegate {
     }
 }
 
-// MARK: - Drag interaction delegate extension
+//===================================
+// MARK: - Drag interaction delegate:
+//===================================
+
 extension ImagesViewController: UITableViewDragDelegate {
     
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
