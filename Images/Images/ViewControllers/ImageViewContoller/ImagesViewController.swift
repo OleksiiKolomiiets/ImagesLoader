@@ -56,8 +56,16 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
     private var imagesCollectionViewController: ImagesCollectionViewController!
+    private var proccesingView: UIView?
     var indexOfCellBeforeDragging = 0
-    var dataSource: [ImagesViewSource]?
+    var dataSource: [ImagesViewSource]? {
+        willSet {
+            if dataSource == nil {
+                proccesingView?.removeFromSuperview()
+                tabBarController?.tabBar.isHidden = false
+            }
+        }
+    }
     var draggedItem: IndexPath? {
         didSet {
             self.tabBarController?.viewControllers?.forEach() { viewController in
@@ -72,6 +80,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        coverTheScreen()
         service = ImageService()
         service.delegate = self        
         service.imageTags = getRandomTags()
@@ -79,6 +88,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.dragDelegate = self
         tableView.dragInteractionEnabled = true
+        
     }
     
     
@@ -163,6 +173,18 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     @objc private func onTimerTick() {
         service.imageTags = getRandomTags()
         service.reload()
+    }
+    
+    private func coverTheScreen() {
+        proccesingView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height))
+        proccesingView?.backgroundColor = .white
+        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height))
+        imageView.image = UIImage(named: "space")
+        imageView.layer.opacity = 0.8
+        imageView.contentMode = .scaleAspectFill
+        tabBarController?.tabBar.isHidden = true
+        proccesingView?.addSubview(imageView)
+        view.addSubview(proccesingView!)
     }
     
 }
