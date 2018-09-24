@@ -60,7 +60,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
         }
     }
-    var doneButtonisHidden = false
+    var doneButtonisHidden = true
     var isImageDataSetted = false
     
     //=================

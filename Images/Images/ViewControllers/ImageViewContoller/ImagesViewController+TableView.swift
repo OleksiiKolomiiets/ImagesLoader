@@ -88,6 +88,7 @@ extension ImagesViewController: UITableViewDelegate {
         let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
         if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {
             detailVC.imageData = self.dataSource![indexPath.section].data![indexPath.row]
+            detailVC.doneButtonisHidden = false
             self.present(detailVC, animated: true)
         }
     }

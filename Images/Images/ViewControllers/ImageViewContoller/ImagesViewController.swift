@@ -64,7 +64,6 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
                 if let vc = viewController as? ImageDetailViewController,
                     let draggedItem = self.draggedItem {
                     vc.tabButton.isEnabled = true
-                    vc.doneButtonisHidden = true
                     vc.imageData = self.dataSource![draggedItem.section].data![draggedItem.row]
                 }
             }

@@ -68,7 +68,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="MTn-No-ISH"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="yMO-jB-Ws3"/>
+                    <tabBarItem key="tabBarItem" enabled="NO" title="Item" id="yMO-jB-Ws3"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="doneButton" destination="u38-O6-q7G" id="dhe-Ff-Y0o"/>

@@ -105,5 +105,6 @@ build/
 # AppCode
 .idea/
 *.xccheckout
-Images/*.xcuserstate
+Images/Images.xcworkspace/
+Images.xcworkspace/
 Images/.DS_Store
