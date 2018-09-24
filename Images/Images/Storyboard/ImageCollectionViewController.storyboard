@@ -25,17 +25,17 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" reuseIdentifier="imageCollectionView" id="nvR-CH-ANp" customClass="ImageCollectionViewCell" customModule="Images" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="5" width="283" height="166"/>
+                                <rect key="frame" x="0.0" y="2" width="283" height="172"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                    <rect key="frame" x="0.0" y="0.0" width="283" height="166"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="283" height="172"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aY2-ec-WB0">
-                                            <rect key="frame" x="10" y="0.0" width="261" height="166"/>
+                                            <rect key="frame" x="10" y="0.0" width="261" height="172"/>
                                         </imageView>
                                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="MMV-n2-aI5">
-                                            <rect key="frame" x="123" y="64.5" width="37" height="37"/>
+                                            <rect key="frame" x="123" y="67.5" width="37" height="37"/>
                                             <color key="color" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </activityIndicatorView>
                                     </subviews>
@@ -50,7 +50,6 @@
                                     <constraint firstItem="MMV-n2-aI5" firstAttribute="centerX" secondItem="nvR-CH-ANp" secondAttribute="centerX" id="qgc-P2-GRJ"/>
                                     <constraint firstItem="MMV-n2-aI5" firstAttribute="centerY" secondItem="nvR-CH-ANp" secondAttribute="centerY" id="wyb-ot-oMm"/>
                                 </constraints>
-                                <size key="customSize" width="283" height="166"/>
                                 <connections>
                                     <outlet property="pictureImageView" destination="aY2-ec-WB0" id="4d6-cp-bSJ"/>
                                     <outlet property="spinner" destination="MMV-n2-aI5" id="cgu-kh-tIa"/>

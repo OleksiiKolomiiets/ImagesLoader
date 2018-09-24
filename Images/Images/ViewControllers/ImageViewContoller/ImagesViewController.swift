@@ -77,6 +77,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         service.delegate = self        
         service.imageTags = getRandomTags()
         service.reload()
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.dragDelegate = self
         tableView.dragInteractionEnabled = true
     }

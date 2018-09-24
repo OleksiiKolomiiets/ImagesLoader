@@ -26,17 +26,16 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </imageView>
                                     <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xIE-UK-YMh">
-                                        <rect key="frame" x="0.0" y="68" width="320" height="175.5"/>
+                                        <rect key="frame" x="0.0" y="64" width="320" height="171.5"/>
                                         <connections>
                                             <segue destination="4K1-Xf-mDH" kind="embed" id="md0-Rh-SFc"/>
                                         </connections>
                                     </containerView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="xIE-UK-YMh" firstAttribute="top" secondItem="6cP-V6-eD9" secondAttribute="top" constant="68" id="LPZ-dQ-qtQ"/>
                                     <constraint firstItem="UOq-Bq-Ha5" firstAttribute="top" secondItem="6cP-V6-eD9" secondAttribute="top" id="U2E-WY-gHZ"/>
                                     <constraint firstAttribute="trailing" secondItem="xIE-UK-YMh" secondAttribute="trailing" id="YKm-MV-BOd"/>
-                                    <constraint firstAttribute="bottom" secondItem="xIE-UK-YMh" secondAttribute="bottom" id="YPD-vh-C6Y"/>
+                                    <constraint firstAttribute="bottom" secondItem="xIE-UK-YMh" secondAttribute="bottom" constant="8" id="YPD-vh-C6Y"/>
                                     <constraint firstAttribute="bottom" secondItem="UOq-Bq-Ha5" secondAttribute="bottom" id="YPj-Dp-kSp"/>
                                     <constraint firstItem="UOq-Bq-Ha5" firstAttribute="leading" secondItem="6cP-V6-eD9" secondAttribute="leading" id="bOd-TO-4rq"/>
                                     <constraint firstAttribute="trailing" secondItem="UOq-Bq-Ha5" secondAttribute="trailing" id="kGe-Jp-LTT"/>
@@ -56,11 +55,11 @@
                                 <color key="separatorColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="imageCell" rowHeight="94" id="Mez-D4-cma" customClass="ImageTableViewCell" customModule="Images" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="320" height="94"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="imageCell" id="Mez-D4-cma" customClass="ImageTableViewCell" customModule="Images" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Mez-D4-cma" id="9vQ-eJ-ryI">
-                                            <rect key="frame" x="0.0" y="0.0" width="320" height="93.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="KJq-aJ-9ft">
@@ -122,6 +121,7 @@
                             <constraint firstItem="6cP-V6-eD9" firstAttribute="width" secondItem="umi-wv-8HL" secondAttribute="width" id="Jhx-9Q-O2h"/>
                             <constraint firstItem="j0g-xs-tP2" firstAttribute="centerX" secondItem="KH4-IR-CVc" secondAttribute="centerX" id="LQd-lk-YfH"/>
                             <constraint firstItem="j0g-xs-tP2" firstAttribute="top" secondItem="KH4-IR-CVc" secondAttribute="top" id="LUg-3N-JFU"/>
+                            <constraint firstItem="xIE-UK-YMh" firstAttribute="top" secondItem="j0g-xs-tP2" secondAttribute="bottom" constant="4" id="Njv-Yq-5h6"/>
                             <constraint firstItem="6cP-V6-eD9" firstAttribute="top" secondItem="umi-wv-8HL" secondAttribute="top" id="R05-ld-hwW"/>
                             <constraint firstItem="6cP-V6-eD9" firstAttribute="height" secondItem="umi-wv-8HL" secondAttribute="height" multiplier="3/7" id="SGm-uJ-g5o"/>
                             <constraint firstItem="9c9-WG-hgN" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" id="YRw-uO-RtC"/>
@@ -142,7 +142,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pvZ-L4-HU0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2898.75" y="111.97183098591549"/>
+            <point key="canvasLocation" x="2897.5999999999999" y="111.54422788605699"/>
         </scene>
         <!--ImageCollectionViewController-->
         <scene sceneID="ESc-Au-OJE">
