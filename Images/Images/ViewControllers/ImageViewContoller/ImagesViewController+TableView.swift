@@ -8,9 +8,9 @@
 
 import UIKit
 
-// ========================================
-// MARK: - Table view data source extension
-// ========================================
+// ===============================
+// MARK: - Table view data source:
+// ===============================
 
 extension ImagesViewController: UITableViewDataSource {
     
@@ -55,9 +55,9 @@ extension ImagesViewController: UITableViewDataSource {
     
 }
 
-// =====================================
-// MARK: - Table view delegate extension
-// =====================================
+// ============================
+// MARK: - Table view delegate:
+// ============================
 
 extension ImagesViewController: UITableViewDelegate {
     

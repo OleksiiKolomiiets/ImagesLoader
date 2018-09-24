@@ -20,7 +20,9 @@ class ImageDetailViewControllerSettings {
 
 class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
 
-    // MARK: - Outlets
+    //=================
+    // MARK: - Outlets:
+    //=================
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var imageView: UIImageView!
@@ -28,8 +30,9 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var tabButton: UITabBarItem!
     @IBOutlet weak var doneButton: UIButton!
     
-    
-    // MARK: - Variables
+    //===================
+    // MARK: - Variables:
+    //===================
     
     var imageData: ImageViewEntity! {
         didSet {
@@ -60,8 +63,9 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     var doneButtonisHidden = false
     var isImageDataSetted = false
     
-    
-    // MARK: - Actions
+    //=================
+    // MARK: - Actions:
+    //=================
     
     // action for ending display selected image
     @IBAction func done(_ sender: UIButton) {
@@ -77,7 +81,9 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    // MARK: - Functions
+    //===================
+    // MARK: - Functions:
+    //===================
     
     override func viewDidLoad() {
         super.viewDidLoad()

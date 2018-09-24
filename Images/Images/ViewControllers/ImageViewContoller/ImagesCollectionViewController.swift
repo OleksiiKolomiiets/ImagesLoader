@@ -116,7 +116,7 @@ class ImagesCollectionViewController: UICollectionViewController {
         let indexOfMajorCell = self.indexOfMajorCell()
         
         // calculate conditions:
-        let swipeVelocityThreshold: CGFloat = 0.5 // after some trail and error
+        let swipeVelocityThreshold: CGFloat = 0.5
         let hasEnoughVelocityToSlideToTheNextCell = indexOfCellBeforeDragging + 1 < count && velocity.x > swipeVelocityThreshold
         let hasEnoughVelocityToSlideToThePreviousCell = indexOfCellBeforeDragging - 1 >= 0 && velocity.x < -swipeVelocityThreshold
         let majorCellIsTheCellBeforeDragging = indexOfMajorCell == indexOfCellBeforeDragging
@@ -134,7 +134,6 @@ class ImagesCollectionViewController: UICollectionViewController {
             }, completion: nil)
             
         } else {
-            // This is a much better way to scroll to a cell:
             let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
             collectionViewLayout.collectionView!.scrollToItem(at: indexPath, at: .left, animated: true)
         }
