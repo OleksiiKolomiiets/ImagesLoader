@@ -10,6 +10,11 @@ import Foundation
 import UIKit
 
 struct CellViewModel {
+    
+    //===================
+    // MARK: - Variables:
+    //===================
+    
     let image: UIImage?
     let title: String
 }

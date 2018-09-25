@@ -58,6 +58,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     private var imagesCollectionViewController: ImagesCollectionViewController!
     private var proccesingView: UIView?
     var indexOfCellBeforeDragging = 0
+    var draggedItem: IndexPath?
     var dataSource: [ImagesViewSource]? {
         willSet {
             if dataSource == nil {
@@ -66,7 +67,6 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
             }
         }
     }
-    var draggedItem: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()

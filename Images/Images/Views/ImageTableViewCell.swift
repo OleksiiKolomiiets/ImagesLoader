@@ -12,7 +12,7 @@ class ImageTableViewCell: UITableViewCell {
     
     //=================
     // MARK: - Outlets:
-    //===================
+    //=================
     
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var pictureImageView: UIImageView!
