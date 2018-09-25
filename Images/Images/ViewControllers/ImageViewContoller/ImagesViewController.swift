@@ -66,20 +66,11 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
             }
         }
     }
-    var draggedItem: IndexPath? {
-        didSet {
-            self.tabBarController?.viewControllers?.forEach() { viewController in
-                if let vc = viewController as? ImageDetailViewController,
-                    let draggedItem = self.draggedItem {
-                    vc.tabButton.isEnabled = true
-                    vc.imageData = self.dataSource![draggedItem.section].data![draggedItem.row]
-                }
-            }
-        }
-    }
+    var draggedItem: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         coverTheScreen()
         service = ImageService()
         service.delegate = self        

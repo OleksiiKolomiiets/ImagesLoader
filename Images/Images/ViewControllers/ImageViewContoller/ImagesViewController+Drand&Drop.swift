@@ -31,6 +31,18 @@ extension ImagesViewController: UIDropInteractionDelegate {
             let section = Int(String(stringArray.first!))
             let row = Int(String(stringArray.last!))
             self.draggedItem = IndexPath(row: row!, section: section!)
+            self.enableTabBar()
+            
+        }
+    }
+    
+    private func enableTabBar() {
+        self.tabBarController?.viewControllers?.forEach() { viewController in
+            if let vc = viewController as? ImageDetailViewController,
+                let draggedItem = self.draggedItem {
+                vc.tabButton.isEnabled = true
+                vc.imageData = self.dataSource![draggedItem.section].data![draggedItem.row]
+            }
         }
     }
 }

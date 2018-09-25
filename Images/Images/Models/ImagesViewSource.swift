@@ -9,6 +9,11 @@
 import Foundation
 
 struct ImagesViewSource {
-    let tag: String
+    
+    //===================
+    // MARK: - Variables:
+    //===================
+    
+    let tag : String
     var data: [ImageViewEntity]?
 }
