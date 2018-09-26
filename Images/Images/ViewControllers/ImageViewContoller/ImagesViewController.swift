@@ -33,6 +33,11 @@ class ImagesViewControllerSettings {
 protocol ImageServiceDelegate: class {
     func onDataLoaded(service: ImageService, data: [ImagesViewSource])
 }
+//
+//// MARK: - Delegate for animate view cover
+//protocol ImageServiceDelegate: class {
+//    func onDataLoaded(service: ImageService, data: [ImagesViewSource])
+//}
 
 // MARK: - CLASS
 class ImagesViewController: UIViewController, ImageServiceDelegate {

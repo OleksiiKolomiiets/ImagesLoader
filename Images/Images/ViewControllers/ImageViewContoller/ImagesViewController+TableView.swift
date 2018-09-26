@@ -85,11 +85,16 @@ extension ImagesViewController: UITableViewDelegate {
     
     // Send selected data to ImageDetailViewController and present it
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
-        if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {
-            detailVC.imageData = self.dataSource![indexPath.section].data![indexPath.row]
-            detailVC.doneButtonisHidden = false
-            self.present(detailVC, animated: true)
-        }
+        let shadowView = UIView(frame: CGRect(x: 0, y: 0,
+                                              width: view.bounds.size.width,
+                                              height: view.bounds.size.height))
+        shadowView.backgroundColor = UIColor(displayP3Red: 255, green: 255, blue: 255, alpha: 0.5)
+        view.addSubview(shadowView)
+//        let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
+//        if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {
+//            detailVC.imageData = self.dataSource![indexPath.section].data![indexPath.row]
+//            detailVC.doneButtonisHidden = false
+//            self.present(detailVC, animated: true)
+//        }
     }
 }
