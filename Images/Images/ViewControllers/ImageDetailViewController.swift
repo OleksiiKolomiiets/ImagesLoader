@@ -48,15 +48,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
             imageView.image = image
             imageView.sizeToFit()
             setImageCentred()
-            var max = maxScale
-            var min = minScale
-            if min > max{
-                let temp = max
-                max = min
-                min = temp
-            }
-            scrollView.minimumZoomScale = min
-            scrollView.maximumZoomScale = max
+            setZoomScale()
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
         }
     }
@@ -136,18 +128,20 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentInset = UIEdgeInsets(top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset) 
     }
     
-    // Calculating mimum and maximum zoom scale for scroll view according to image sizes
-   
-    private var maxScale: CGFloat {
-        let width = image!.size.width
-        let height = image!.size.height
-        return (width >= height) ? (view.frame.size.height / height) :   (view.frame.size.width / width)
-    }
+    // Calculating minimum and maximum zoom scale for scroll view according to image sizes   
     
-    private var minScale: CGFloat {
+    fileprivate func setZoomScale() {
         let width = image!.size.width
         let height = image!.size.height
-        return (width >= height) ? (view.frame.size.width / width)   : (view.frame.size.height / height)
+        
+        let verticalScale = view.frame.size.height / height
+        let horizontalScale = view.frame.size.width / width
+        
+        let minScale = min(verticalScale, horizontalScale)
+        let maxScale = max(verticalScale, horizontalScale)
+        
+        scrollView.minimumZoomScale = minScale
+        scrollView.maximumZoomScale = maxScale
     }
     
     // Getting image to display
