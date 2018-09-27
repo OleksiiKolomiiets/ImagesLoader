@@ -84,17 +84,70 @@ extension ImagesViewController: UITableViewDelegate {
     }
     
     // Send selected data to ImageDetailViewController and present it
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let shadowView = UIView(frame: CGRect(x: 0, y: 0,
-                                              width: view.bounds.size.width,
-                                              height: view.bounds.size.height))
-        shadowView.backgroundColor = UIColor(displayP3Red: 255, green: 255, blue: 255, alpha: 0.5)
-        view.addSubview(shadowView)
-//        let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
-//        if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {
-//            detailVC.imageData = self.dataSource![indexPath.section].data![indexPath.row]
-//            detailVC.doneButtonisHidden = false
-//            self.present(detailVC, animated: true)
-//        }
+        
+        let superViewRect = view.bounds
+        let viewHeight = superViewRect.size.height
+        
+        let cellRect = tableView.rectForRow(at: indexPath)
+        let cellGlobalPosition = tableView.convert(cellRect, to: view)
+                
+        let yPosition = cellGlobalPosition.origin.y
+        let width = cellGlobalPosition.size.width
+        let height = cellGlobalPosition.size.height
+        
+        let shadowColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
+        let shadowPath = UIBezierPath()
+        let shadowLayer = CAShapeLayer()
+        
+        let startX: CGFloat = 0
+        var startY: CGFloat = 0
+        
+        shadowPath.move(to: CGPoint(x: startX, y: startY))
+       
+        shadowPath.addLine(to: CGPoint(x: width, y: startY))
+        shadowPath.addLine(to: CGPoint(x: width, y: yPosition))
+        shadowPath.addLine(to: CGPoint(x: startX, y: yPosition))
+        shadowPath.addLine(to: CGPoint(x: startX, y: startY))
+        
+        startY = yPosition + height
+        
+        shadowPath.move(to: CGPoint(x: startX, y: startY))
+
+        shadowPath.addLine(to: CGPoint(x: width, y: startY))
+        shadowPath.addLine(to: CGPoint(x: width, y: viewHeight))
+        shadowPath.addLine(to: CGPoint(x: startX, y: viewHeight))
+        shadowPath.addLine(to: CGPoint(x: startX, y: startY))
+        
+        shadowPath.close()
+        
+        shadowLayer.path = shadowPath.cgPath
+        shadowLayer.fillColor = shadowColor.cgColor
+        shadowLayer.fillRule = CAShapeLayerFillRule.nonZero
+        shadowLayer.lineCap = CAShapeLayerLineCap.butt
+        shadowLayer.lineDashPattern = nil
+        shadowLayer.lineDashPhase = 0.0
+        shadowLayer.lineJoin = CAShapeLayerLineJoin.miter
+        shadowLayer.lineWidth = 1.0
+        shadowLayer.miterLimit = 10.0
+        shadowLayer.strokeColor = shadowColor.cgColor
+        
+        shadowView!.layer.addSublayer(shadowLayer)
+
+        if true { // TODO: add boolean variable for tapped state
+            UIView.transition(with: self.view, duration: 1.5,
+                              options: .transitionCrossDissolve,
+                              animations: { self.shadowView.isHidden = false },
+                              completion: nil)
+        } else {
+            let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
+            if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {
+                detailVC.imageData = self.dataSource![indexPath.section].data![indexPath.row]
+                detailVC.doneButtonisHidden = false
+                self.present(detailVC, animated: true)
+            }
+        }
     }
+    
 }

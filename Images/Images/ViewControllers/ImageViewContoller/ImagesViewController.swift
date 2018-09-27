@@ -47,6 +47,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     // ================
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet var shadowView: UIView!
     @IBOutlet weak var dropZoneView: UIView! {
         didSet {
             dropZoneView.addInteraction(UIDropInteraction(delegate: self))
@@ -57,7 +58,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     // MARK:  - Properties:
     // ====================
     
-    private var service: ImageService!
+    private var service = ImageService()
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
     private var imagesCollectionViewController: ImagesCollectionViewController!
@@ -77,8 +78,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         super.viewDidLoad()
         
         coverTheScreen()
-        service = ImageService()
-        service.delegate = self        
+        service.delegate = self
         service.imageTags = getRandomTags()
         service.reload()
         tableView.rowHeight = UITableView.automaticDimension
@@ -123,6 +123,10 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         randomIndices.forEach() { result.append(tags[$0]) }        
         
         return result
+    }
+    
+    func submitTheAction(isSuccess: Bool) {
+        
     }
     
     // getting random indices for tags collection
@@ -182,5 +186,6 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         proccesingView?.addSubview(imageView)
         view.addSubview(proccesingView!)
     }
+    
     
 }
