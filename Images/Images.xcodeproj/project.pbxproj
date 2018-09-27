@@ -193,8 +193,8 @@
 			children = (
 				794C9D7E212D61000034E77F /* ImageTableViewCell.swift */,
 				795B8B7A212D815A00E18F16 /* ImageCollectionViewCell.swift */,
-				792388EB2136E7AF007E0948 /* CustomSectionHeader */,
 				798EF882215CF98D0060452C /* ShadowView.swift */,
+				792388EB2136E7AF007E0948 /* CustomSectionHeader */,
 			);
 			path = Views;
 			sourceTree = "<group>";

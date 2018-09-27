@@ -37,6 +37,7 @@ class ShadowView: UIView {
         
         shadowPath.removeAllPoints()
         isHidden = true
+        delegate?.tapSubmit(isSuccess: true)
     }
     
     private func setupView() {

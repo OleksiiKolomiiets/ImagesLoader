@@ -36,11 +36,11 @@ protocol ImageServiceDelegate: class {
 
 // MARK: - Delegate for animate view cover
 protocol ShadowViewDelegate: class {
-    var isSuccess: Bool { get }
+    func tapSubmit(isSuccess: Bool)
 }
 
 // MARK: - CLASS
-class ImagesViewController: UIViewController, ImageServiceDelegate {
+class ImagesViewController: UIViewController, ImageServiceDelegate, ShadowViewDelegate {
     
     // ================
     // MARK: - Outlets:
@@ -78,6 +78,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         super.viewDidLoad()
         
         coverTheScreen()
+        shadowView.delegate = self
         service.delegate = self
         service.imageTags = getRandomTags()
         service.reload()
@@ -125,8 +126,15 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         return result
     }
     
-    func submitTheAction(isSuccess: Bool) {
-        
+    func tapSubmit(isSuccess: Bool) {
+        switch isSuccess {
+        case true:
+            // TODO: show detail for selected image
+            print(true)
+        case false:
+            // TODO: dismiss shadow view
+            print(false)
+        }
     }
     
     // getting random indices for tags collection
@@ -186,6 +194,5 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         proccesingView?.addSubview(imageView)
         view.addSubview(proccesingView!)
     }
-    
     
 }

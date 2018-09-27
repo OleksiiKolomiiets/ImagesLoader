@@ -84,7 +84,7 @@ extension ImagesViewController: UITableViewDelegate {
     }
     
     // Send selected data to ImageDetailViewController and present it
-        
+    
     private func calculateCoordinatesForSelectedArea(at indexPath: IndexPath) -> (centr: CGPoint, radius: CGFloat) {        
         let cellRect = tableView.rectForRow(at: indexPath)
         let cellGlobalPosition = tableView.convert(cellRect, to: view)
