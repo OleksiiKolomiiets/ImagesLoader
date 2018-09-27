@@ -84,61 +84,27 @@ extension ImagesViewController: UITableViewDelegate {
     }
     
     // Send selected data to ImageDetailViewController and present it
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let superViewRect = view.bounds
-        let viewHeight = superViewRect.size.height
-        
+    private func calculateCoordinatesForSelectedArea(at indexPath: IndexPath) -> (centr: CGPoint, radius: CGFloat) {        
         let cellRect = tableView.rectForRow(at: indexPath)
         let cellGlobalPosition = tableView.convert(cellRect, to: view)
-                
+        
         let yPosition = cellGlobalPosition.origin.y
+        let xPosition = cellGlobalPosition.origin.x
         let width = cellGlobalPosition.size.width
         let height = cellGlobalPosition.size.height
         
-        let shadowColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
-        let shadowPath = UIBezierPath()
-        let shadowLayer = CAShapeLayer()
+        let cellCentrPoint = CGPoint(x: xPosition + width / 2, y: yPosition + height / 2)
+        let highlightedAreaRadius = height * 0.9 / 2
         
-        let startX: CGFloat = 0
-        var startY: CGFloat = 0
-        
-        shadowPath.move(to: CGPoint(x: startX, y: startY))
-       
-        shadowPath.addLine(to: CGPoint(x: width, y: startY))
-        shadowPath.addLine(to: CGPoint(x: width, y: yPosition))
-        shadowPath.addLine(to: CGPoint(x: startX, y: yPosition))
-        shadowPath.addLine(to: CGPoint(x: startX, y: startY))
-        
-        startY = yPosition + height
-        
-        shadowPath.move(to: CGPoint(x: startX, y: startY))
-
-        shadowPath.addLine(to: CGPoint(x: width, y: startY))
-        shadowPath.addLine(to: CGPoint(x: width, y: viewHeight))
-        shadowPath.addLine(to: CGPoint(x: startX, y: viewHeight))
-        shadowPath.addLine(to: CGPoint(x: startX, y: startY))
-        
-        shadowPath.close()
-        
-        shadowLayer.path = shadowPath.cgPath
-        shadowLayer.fillColor = shadowColor.cgColor
-        shadowLayer.fillRule = CAShapeLayerFillRule.nonZero
-        shadowLayer.lineCap = CAShapeLayerLineCap.butt
-        shadowLayer.lineDashPattern = nil
-        shadowLayer.lineDashPhase = 0.0
-        shadowLayer.lineJoin = CAShapeLayerLineJoin.miter
-        shadowLayer.lineWidth = 1.0
-        shadowLayer.miterLimit = 10.0
-        shadowLayer.strokeColor = shadowColor.cgColor
-        
-        shadowView!.layer.addSublayer(shadowLayer)
-
+        return (centr:cellCentrPoint, radius: highlightedAreaRadius)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if true { // TODO: add boolean variable for tapped state
             UIView.transition(with: self.view, duration: 1.5,
                               options: .transitionCrossDissolve,
-                              animations: { self.shadowView.isHidden = false },
+                              animations: { self.shadowView.highlightedArea = self.calculateCoordinatesForSelectedArea(at: indexPath) },
                               completion: nil)
         } else {
             let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)

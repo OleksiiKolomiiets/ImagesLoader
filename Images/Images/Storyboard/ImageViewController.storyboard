@@ -110,7 +110,7 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="266"/>
                                 <color key="backgroundColor" red="0.22102877500000001" green="0.76200133560000005" blue="0.84233474730000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0un-16-oP2">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0un-16-oP2" customClass="ShadowView" customModule="Images" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -144,7 +144,7 @@
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="dropZoneView" destination="9c9-WG-hgN" id="0Ae-yf-vfX"/>
-                        <outlet property="shadowView" destination="0un-16-oP2" id="NDX-PL-QmM"/>
+                        <outlet property="shadowView" destination="0un-16-oP2" id="XDG-eY-aRE"/>
                         <outlet property="tableView" destination="H1M-TR-gbN" id="LXr-hm-3HK"/>
                     </connections>
                 </viewController>

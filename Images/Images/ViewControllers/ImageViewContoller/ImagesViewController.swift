@@ -33,11 +33,11 @@ class ImagesViewControllerSettings {
 protocol ImageServiceDelegate: class {
     func onDataLoaded(service: ImageService, data: [ImagesViewSource])
 }
-//
-//// MARK: - Delegate for animate view cover
-//protocol ImageServiceDelegate: class {
-//    func onDataLoaded(service: ImageService, data: [ImagesViewSource])
-//}
+
+// MARK: - Delegate for animate view cover
+protocol ShadowViewDelegate: class {
+    var isSuccess: Bool { get }
+}
 
 // MARK: - CLASS
 class ImagesViewController: UIViewController, ImageServiceDelegate {
@@ -47,7 +47,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     // ================
     
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet var shadowView: UIView!
+    @IBOutlet weak var shadowView: ShadowView!
     @IBOutlet weak var dropZoneView: UIView! {
         didSet {
             dropZoneView.addInteraction(UIDropInteraction(delegate: self))
