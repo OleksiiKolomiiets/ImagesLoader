@@ -11,36 +11,26 @@ import UIKit
 //MARK: - CONSTANTS
 class ImagesViewControllerSettings {
     
-    //MARK: Uploading images constants
+    //MARK: - Uploading images constants
     static let kNumberOfUploadingImages: Int = 30
     static let kTags = ["sun", "mercury", "venus", "earth", "mars", "jupiter","saturn", "uranus", "neptune", "pluto"]
     static let kDefultTitle = "Title doesn't exist"
     static let kNumberOfTagsInOneLoad = 3
     static let kCellsImageDimension:ImageDimensionType = .small
-    //MARK: Reloading constant
+    //MARK: - Reloading constant
     static let kTimeLimit = 30.0
-    //MARK: Table view constants
+    //MARK: - Table view constants
     static let kHeightForRow: CGFloat = 91
     static let kHeightForHeader: CGFloat = 80
     static let kCellIdentifierForTableView: String = "imageCell"
-    //MARK: Collection view constants
+    //MARK: - Collection view constants
     static let kCellIdentifierForCollectionView: String = "imageCollectionView"
     static let kCellPaddingQuote: CGFloat = 0.1
     static let kCellWidthQuote: CGFloat = 0.8
 }
 
-// MARK: - Delegate for service
-protocol ImageServiceDelegate: class {
-    func onDataLoaded(service: ImageService, data: [ImagesViewSource])
-}
-
-// MARK: - Delegate for animate view cover
-protocol ShadowViewDelegate: class {
-    func tapSubmit(isSuccess: Bool)
-}
-
 // MARK: - CLASS
-class ImagesViewController: UIViewController, ImageServiceDelegate, ShadowViewDelegate {
+class ImagesViewController: UIViewController {
     
     // ================
     // MARK: - Outlets:
@@ -61,10 +51,11 @@ class ImagesViewController: UIViewController, ImageServiceDelegate, ShadowViewDe
     private var service = ImageService()
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
-    private var imagesCollectionViewController: ImagesCollectionViewController!
-    private var proccesingView: UIView?
+    private var proccesingView: UIView?    
+    var imagesCollectionViewController: ImagesCollectionViewController!
     var indexOfCellBeforeDragging = 0
-    var draggedItem: IndexPath?
+    var draggedCellPath: IndexPath?
+    var selectedCellPath: IndexPath!
     var dataSource: [ImagesViewSource]? {
         willSet {
             if dataSource == nil {
@@ -126,17 +117,6 @@ class ImagesViewController: UIViewController, ImageServiceDelegate, ShadowViewDe
         return result
     }
     
-    func tapSubmit(isSuccess: Bool) {
-        switch isSuccess {
-        case true:
-            // TODO: show detail for selected image
-            print(true)
-        case false:
-            // TODO: dismiss shadow view
-            print(false)
-        }
-    }
-    
     // getting random indices for tags collection
     private func getRandomIndices(number: Int, _ max: Int) -> [Int] {
         var result = [Int]()
@@ -155,14 +135,6 @@ class ImagesViewController: UIViewController, ImageServiceDelegate, ShadowViewDe
         }
         
         return result
-    }
-    
-    // setting datasource from delegate method
-    func onDataLoaded(service: ImageService, data: [ImagesViewSource]) {
-        dataSource = data
-        imagesCollectionViewController.dataSourceCollectionView = data.first
-        tableView.reloadData()
-        imagesCollectionViewController.collectionView.reloadData()
     }
     
     // start to count time for reload

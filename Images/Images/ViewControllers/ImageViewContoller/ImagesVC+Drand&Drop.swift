@@ -30,7 +30,7 @@ extension ImagesViewController: UIDropInteractionDelegate {
             let stringArray = string.split(separator: " ")
             let section = Int(String(stringArray.first!))
             let row = Int(String(stringArray.last!))
-            self.draggedItem = IndexPath(row: row!, section: section!)
+            self.draggedCellPath = IndexPath(row: row!, section: section!)
             self.enableTabBar()
             
         }
@@ -39,7 +39,7 @@ extension ImagesViewController: UIDropInteractionDelegate {
     private func enableTabBar() {
         self.tabBarController?.viewControllers?.forEach() { viewController in
             if let vc = viewController as? ImageDetailViewController,
-                let draggedItem = self.draggedItem {
+                let draggedItem = self.draggedCellPath {
                 vc.tabButton.isEnabled = true
                 vc.imageData = self.dataSource![draggedItem.section].data![draggedItem.row]
             }

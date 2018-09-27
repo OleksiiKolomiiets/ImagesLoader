@@ -9,35 +9,42 @@
 import UIKit
 
 class ShadowView: UIView {
-
+    
+    //===================
+    // MARK: - Variables:
+    //===================
     
     weak var delegate: ImagesViewController?
-    var highlightedArea: (centr:CGPoint, radius: CGFloat)? {
+    let shadowColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
+    let shadowPath = UIBezierPath()
+    let shadowLayer = CAShapeLayer()
+    var highlightedArea: (centr:CGPoint, radius: CGFloat)! {
         didSet {
             setupView()
         }
     }
     
-    let shadowColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
-    let shadowPath = UIBezierPath()
-    let shadowLayer = CAShapeLayer()
+    //===================
+    // MARK: - Functions:
+    //===================
     
-    
-    // #1
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        let touchGesture = UITapGestureRecognizer(target: self, action: #selector(viewPressed))
+        let touchGesture = UITapGestureRecognizer(target: self, action: #selector(viewPressed(_:)))
         touchGesture.numberOfTapsRequired = 1
         isUserInteractionEnabled = true
         addGestureRecognizer(touchGesture)
-        //        setupView()
     }
     
-    @objc func viewPressed() {
-        
+    @objc func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {
         shadowPath.removeAllPoints()
-        isHidden = true
-        delegate?.tapSubmit(isSuccess: true)
+        let circlePath = UIBezierPath(arcCenter: highlightedArea.centr,
+                                      radius: highlightedArea.radius,
+                                      startAngle: CGFloat(0),
+                                      endAngle:CGFloat(Double.pi * 2),
+                                      clockwise: true)
+        
+        delegate?.tapSubmit(isSuccess: circlePath.contains(gestureRecognizer.location(in: self)))
     }
     
     private func setupView() {
@@ -65,12 +72,7 @@ class ShadowView: UIView {
         shadowPath.close()
     }
     
-    private func setArcPath() {
-        guard let highlightedArea = highlightedArea else {
-            print("highlightedArea doesn't exist.")
-            return
-        }
-        
+    private func setArcPath() {        
         shadowPath.move(to: highlightedArea.centr)
         
         shadowPath.addArc(withCenter: highlightedArea.centr,

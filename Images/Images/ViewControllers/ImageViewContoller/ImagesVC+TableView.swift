@@ -101,19 +101,13 @@ extension ImagesViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if true { // TODO: add boolean variable for tapped state
-            UIView.transition(with: self.view, duration: 1.5,
-                              options: .transitionCrossDissolve,
-                              animations: { self.shadowView.highlightedArea = self.calculateCoordinatesForSelectedArea(at: indexPath) },
-                              completion: nil)
-        } else {
-            let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
-            if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {
-                detailVC.imageData = self.dataSource![indexPath.section].data![indexPath.row]
-                detailVC.doneButtonisHidden = false
-                self.present(detailVC, animated: true)
-            }
-        }
+        selectedCellPath = indexPath
+        
+        UIView.transition(with: self.view, duration: 0.5,
+                          options: .transitionCrossDissolve,
+                          animations: { self.shadowView.highlightedArea = self.calculateCoordinatesForSelectedArea(at: indexPath) },
+                          completion: nil)
+       
     }
     
 }
