@@ -14,10 +14,10 @@ class ShadowView: UIView {
     // MARK: - Variables:
     //===================
     
-    weak var delegate: ImagesViewController?
-    let shadowColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
-    let shadowPath = UIBezierPath()
-    let shadowLayer = CAShapeLayer()
+    weak var delegate: ImagesViewController!
+    private let shadowColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
+    private let shadowPath = UIBezierPath()
+    private let shadowLayer = CAShapeLayer()
     var highlightedArea: (centr:CGPoint, radius: CGFloat)! {
         didSet {
             setupView()
@@ -44,7 +44,7 @@ class ShadowView: UIView {
                                       endAngle:CGFloat(Double.pi * 2),
                                       clockwise: true)
         
-        delegate?.tapSubmit(isSuccess: circlePath.contains(gestureRecognizer.location(in: self)))
+        delegate.tapSubmit(isSuccess: circlePath.contains(gestureRecognizer.location(in: self)))
     }
     
     private func setupView() {
