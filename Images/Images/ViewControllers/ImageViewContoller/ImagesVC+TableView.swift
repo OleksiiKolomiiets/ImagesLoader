@@ -101,13 +101,8 @@ extension ImagesViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCellPath = indexPath
-        
-        UIView.transition(with: self.view, duration: 0.5,
-                          options: .transitionCrossDissolve,
-                          animations: { self.shadowView.highlightedArea = self.calculateCoordinatesForSelectedArea(at: indexPath) },
-                          completion: nil)
-       
+        selectedCellPath = indexPath        
+        self.shadowView.highlightedArea = self.calculateCoordinatesForSelectedArea(at: indexPath)
     }
     
 }
