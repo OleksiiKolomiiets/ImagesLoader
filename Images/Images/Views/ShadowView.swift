@@ -10,26 +10,18 @@ import UIKit
 
 class ShadowView: UIView, CAAnimationDelegate {
     
-    //===================
     // MARK: - Variables:
-    //===================
-    
     weak var delegate: ShadowViewDelegate!
     private let shadowColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
     private let shadowPath = UIBezierPath()
     private let shadowLayer = CAShapeLayer()
-    var highlightedArea: (centr:CGPoint, radius: CGFloat)! {
+    var highlightedArea: CircleArea! {
         didSet {
             setupView(for: .open)
         }
     }
     
-    
-    
-    //===================
     // MARK: - Functions:
-    //===================
-    
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         // Adding guesture recognizer for dealing with view taps
@@ -40,15 +32,14 @@ class ShadowView: UIView, CAAnimationDelegate {
     }
     
     @objc func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {
-        setupView(for: .close)
         shadowPath.removeAllPoints()
-        let circlePath = UIBezierPath(arcCenter: highlightedArea.centr,
-                                      radius: highlightedArea.radius,
-                                      startAngle: CGFloat(0),
-                                      endAngle:CGFloat(Double.pi * 2),
-                                      clockwise: true)
+        let highlightedAreaCirclePath = UIBezierPath(arcCenter: highlightedArea.centr,
+                                                     radius: highlightedArea.radius,
+                                                     startAngle: CGFloat(0),
+                                                     endAngle:CGFloat(Double.pi * 2),
+                                                     clockwise: true)
         // Sending centre of tapped area to vc through delegate method
-        delegate.tapSubmit(isSuccess: circlePath.contains(gestureRecognizer.location(in: self)))
+        delegate.tapSubmit(isSuccess: highlightedAreaCirclePath.contains(gestureRecognizer.location(in: self)))
     }
     
     private func setupView(for state: ShadowViewState) {
@@ -69,14 +60,9 @@ class ShadowView: UIView, CAAnimationDelegate {
         
         // Adding animation
         var layerAnimation = CABasicAnimation()
-        switch state {
-        case .open:
-            shadowLayer.path = finishingPath.cgPath
-            layerAnimation = setUpAnimation(startingPath, finishingPath)
-        case .close:
-            shadowLayer.path = startingPath.cgPath
-            layerAnimation = setUpAnimation(finishingPath, startingPath)
-        }
+        
+        shadowLayer.path = finishingPath.cgPath
+        layerAnimation = setUpAnimation(startingPath, finishingPath)
         shadowLayer.add(layerAnimation, forKey: "path")
         
         isHidden.toggle()

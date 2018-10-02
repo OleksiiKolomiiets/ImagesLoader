@@ -57,9 +57,7 @@ class ImagesCollectionViewController: UICollectionViewController {
         return inset
     }
 
-    // =================================
     // MARK: UICollectionViewDataSource:
-    // =================================
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -98,10 +96,8 @@ class ImagesCollectionViewController: UICollectionViewController {
             self.collectionView.reloadData()
         }
     }
-    // ===============================
-    // MARK: UICollectionViewDelegate:
-    // ===============================
     
+    // MARK: UICollectionViewDelegate:
     override func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         indexOfCellBeforeDragging = indexOfMajorCell()
     }

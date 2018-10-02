@@ -19,21 +19,15 @@ class ImageDetailViewControllerSettings {
 //MARK: - CLASS
 
 class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
-
-    //=================
-    // MARK: - Outlets:
-    //=================
     
+    // MARK: - Outlets:
     @IBOutlet weak var scrollView           : UIScrollView!
     @IBOutlet weak var imageView            : UIImageView!
     @IBOutlet weak var loadActivityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tabButton            : UITabBarItem!
     @IBOutlet weak var doneButton           : UIButton!
     
-    //===================
     // MARK: - Variables:
-    //===================
-    
     var imageData: ImageViewEntity! {
         willSet {
             if imageData == nil {
@@ -58,10 +52,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     var doneButtonisHidden = true
     var isImageDataSetted = false
     
-    //=================
     // MARK: - Actions:
-    //=================
-    
     // action for ending display selected image
     @IBAction func done(_ sender: UIButton) {
         self.dismiss(animated: true)
@@ -76,10 +67,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    //===================
     // MARK: - Functions:
-    //===================
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // adding double tap gesture recognizer
@@ -131,8 +119,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         scrollView.contentInset = UIEdgeInsets(top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset) 
     }
     
-    // Calculating minimum and maximum zoom scale for scroll view according to image sizes   
-    
+    // Calculating minimum and maximum zoom scale for scroll view according to image sizes
     fileprivate func setZoomScale() {
         let width = image!.size.width
         let height = image!.size.height
