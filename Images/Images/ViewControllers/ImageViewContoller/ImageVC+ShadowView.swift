@@ -18,12 +18,13 @@ protocol ShadowViewDelegate: class {
 
 extension ImagesViewController: ShadowViewDelegate {
     func tapSubmit(isSuccess: Bool) {
-        shadowView.isHidden = true
+        shadowView.isHidden.toggle()
         
         if case true = isSuccess {
             let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
-            if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {
-                detailVC.imageData = self.dataSource![selectedCellPath.section].data![selectedCellPath.row]
+            if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
+                let dataSource = self.dataSource?[selectedCellPath.section], let data = dataSource.data?[selectedCellPath.row] {
+                detailVC.imageData = data
                 detailVC.doneButtonisHidden = false
                 self.present(detailVC, animated: true)
             }

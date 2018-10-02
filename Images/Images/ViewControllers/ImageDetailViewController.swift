@@ -35,7 +35,10 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     //===================
     
     var imageData: ImageViewEntity! {
-        didSet {
+        willSet {
+            if imageData == nil {
+                tabButton.isEnabled = true
+            }
             isImageDataSetted = true
             if imageView != nil,
                 imageView.image != nil {

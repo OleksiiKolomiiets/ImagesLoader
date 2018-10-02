@@ -40,7 +40,6 @@ extension ImagesViewController: UIDropInteractionDelegate {
         self.tabBarController?.viewControllers?.forEach() { viewController in
             if let vc = viewController as? ImageDetailViewController,
                 let draggedItem = self.draggedCellPath {
-                vc.tabButton.isEnabled = true
                 vc.imageData = self.dataSource![draggedItem.section].data![draggedItem.row]
             }
         }
@@ -58,11 +57,11 @@ extension ImagesViewController: UITableViewDragDelegate {
     }
     
     func tableView(_ tableView: UITableView, dragSessionDidEnd session: UIDragSession) {
-        dropZoneView.isHidden = true
+        dropZoneView.isHidden.toggle()
     }
     
     func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
-        dropZoneView.isHidden = false
+        dropZoneView.isHidden.toggle()
     }
     
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {

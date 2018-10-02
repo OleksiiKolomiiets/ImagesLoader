@@ -83,8 +83,7 @@ extension ImagesViewController: UITableViewDelegate {
         return ImagesViewControllerSettings.kHeightForRow
     }
     
-    // Send selected data to ImageDetailViewController and present it
-    
+    // Send selected data to ImageDetailViewController and present it    
     private func calculateCoordinatesForSelectedArea(at indexPath: IndexPath) -> (centr: CGPoint, radius: CGFloat) {        
         let cellRect = tableView.rectForRow(at: indexPath)
         let cellGlobalPosition = tableView.convert(cellRect, to: view)
@@ -97,12 +96,12 @@ extension ImagesViewController: UITableViewDelegate {
         let cellCentrPoint = CGPoint(x: xPosition + width / 2, y: yPosition + height / 2)
         let highlightedAreaRadius = height * 0.9 / 2
         
-        return (centr:cellCentrPoint, radius: highlightedAreaRadius)
+        return (centr: cellCentrPoint, radius: highlightedAreaRadius)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCellPath = indexPath        
-        self.shadowView.highlightedArea = self.calculateCoordinatesForSelectedArea(at: indexPath)
+        self.shadowView.highlightedArea = calculateCoordinatesForSelectedArea(at: indexPath)
     }
     
 }

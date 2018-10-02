@@ -71,7 +71,7 @@ class ShadowView: UIView, CAAnimationDelegate {
         let layerAnimation = setUpAnimation(startingPath, finishingPath)
         shadowLayer.add(layerAnimation, forKey: "path")
         
-        isHidden = false
+        isHidden.toggle()
     }
     
     private func setUpAnimation(_ from: UIBezierPath, _ to: UIBezierPath) -> CABasicAnimation {
