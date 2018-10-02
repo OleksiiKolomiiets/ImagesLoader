@@ -32,6 +32,7 @@ class ShadowView: UIView, CAAnimationDelegate {
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        // Adding guesture recognizer for dealing with view taps
         let touchGesture = UITapGestureRecognizer(target: self, action: #selector(viewPressed(_:)))
         touchGesture.numberOfTapsRequired = 1
         isUserInteractionEnabled = true
@@ -45,24 +46,28 @@ class ShadowView: UIView, CAAnimationDelegate {
                                       startAngle: CGFloat(0),
                                       endAngle:CGFloat(Double.pi * 2),
                                       clockwise: true)
-        
+        // Sending centre of tapped area to vc through delegate method
         delegate.tapSubmit(isSuccess: circlePath.contains(gestureRecognizer.location(in: self)))
     }
     
     private func setupView() {
+        // Creating starting path with big circle inside
         let startingPath = getPath(by: highlightedArea.centr, radius: longestDistanceToTheCorner)
         let bigCircle = getPath(by: highlightedArea.centr, radius: longestDistanceToTheCorner - 1)
         startingPath.append(bigCircle)
         
+        // Creating ending path with small circle inside
         let finishingPath =  getPath(by: highlightedArea.centr, radius: longestDistanceToTheCorner)
         let smallCircle = getPath(by: highlightedArea.centr, radius: highlightedArea.radius)
         finishingPath.append(smallCircle)
         
+        // Setting animation layer
         shadowLayer.path = finishingPath.cgPath
         setUp(layer: shadowLayer)
         
         layer.addSublayer(shadowLayer)
         
+        // Adding animation
         let layerAnimation = setUpAnimation(startingPath, finishingPath)
         shadowLayer.add(layerAnimation, forKey: "path")
         
