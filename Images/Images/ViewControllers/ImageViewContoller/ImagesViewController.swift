@@ -239,11 +239,8 @@ extension ImagesViewController: UITableViewDelegate {
     
     // Configurate header section view
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let bundle = Bundle(for: type(of: self))
-        let nibName = "CustomSectionHeaderView"
-        let nib = UINib(nibName: nibName, bundle: bundle)
-        let view = nib.instantiate(withOwner: self, options: nil).first as? CustomSectionHeaderView
-        view?.setTitle(dataSource?[section].tag)
+        let view = CustomSectionHeaderView.instantiate(with: self)
+        view.setTitle(dataSource?[section].tag)
         return view
     }
     
