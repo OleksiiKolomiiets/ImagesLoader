@@ -100,7 +100,7 @@ extension ImagesViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedCellPath = indexPath        
+        selectedCellPath = indexPath
         self.shadowView.highlightedArea = calculateCoordinatesForSelectedArea(at: indexPath)
     }
     

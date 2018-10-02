@@ -20,7 +20,7 @@ class ShadowView: UIView, CAAnimationDelegate {
     private let shadowLayer = CAShapeLayer()
     var highlightedArea: (centr:CGPoint, radius: CGFloat)! {
         didSet {
-            setupView()
+            setupView(for: .open)
         }
     }
     
@@ -40,6 +40,7 @@ class ShadowView: UIView, CAAnimationDelegate {
     }
     
     @objc func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {
+        setupView(for: .close)
         shadowPath.removeAllPoints()
         let circlePath = UIBezierPath(arcCenter: highlightedArea.centr,
                                       radius: highlightedArea.radius,
@@ -50,7 +51,7 @@ class ShadowView: UIView, CAAnimationDelegate {
         delegate.tapSubmit(isSuccess: circlePath.contains(gestureRecognizer.location(in: self)))
     }
     
-    private func setupView() {
+    private func setupView(for state: ShadowViewState) {
         // Creating starting path with big circle inside
         let startingPath = getPath(by: highlightedArea.centr, radius: longestDistanceToTheCorner)
         let bigCircle = getPath(by: highlightedArea.centr, radius: longestDistanceToTheCorner - 1)
@@ -62,16 +63,28 @@ class ShadowView: UIView, CAAnimationDelegate {
         finishingPath.append(smallCircle)
         
         // Setting animation layer
-        shadowLayer.path = finishingPath.cgPath
         setUp(layer: shadowLayer)
         
         layer.addSublayer(shadowLayer)
         
         // Adding animation
-        let layerAnimation = setUpAnimation(startingPath, finishingPath)
+        var layerAnimation = CABasicAnimation()
+        switch state {
+        case .open:
+            shadowLayer.path = finishingPath.cgPath
+            layerAnimation = setUpAnimation(startingPath, finishingPath)
+        case .close:
+            shadowLayer.path = startingPath.cgPath
+            layerAnimation = setUpAnimation(finishingPath, startingPath)
+        }
         shadowLayer.add(layerAnimation, forKey: "path")
         
         isHidden.toggle()
+    }
+    
+    enum ShadowViewState {
+        case open
+        case close
     }
     
     private func setUpAnimation(_ from: UIBezierPath, _ to: UIBezierPath) -> CABasicAnimation {
