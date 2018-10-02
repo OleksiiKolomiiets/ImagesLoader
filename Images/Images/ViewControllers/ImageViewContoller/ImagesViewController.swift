@@ -74,8 +74,8 @@ class ImagesViewController: UIViewController {
         service.delegate = self
         service.imageTags = getRandomTags()
         service.reload()
-        tableView.dragDelegate = self
-        tableView.dragInteractionEnabled = true
+        tableView.dragDelegate = self           // didn't find its setting on Storyboard
+        tableView.dragInteractionEnabled = true // didn't find its setting on Storyboard
         
     }
     
@@ -211,14 +211,12 @@ extension ImagesViewController: UITableViewDataSource {
                 cellImage = image
             } else {
                 ImageLoadHelper.getImage(by: url, completion: { image in
-                    let data = CellViewModel(image: image, title: title!)
-                    self.setTableViewCell(by: indexPath, with: data)
+                    self.setTableViewCell(by: indexPath, image: image, title: title!)
                 })
             }
         }
         
-        let data = CellViewModel(image: cellImage, title: title!)
-        cell.configure(with: data) // cell alway should be init  cel.imageView.image = nil
+        cell.configure(with: cellImage, title!) // cell alway should be init  cel.imageView.image = nil
         
         return cell
     }
@@ -228,9 +226,9 @@ extension ImagesViewController: UITableViewDataSource {
         return dataSource?.count ?? 0
     }
     
-    private func setTableViewCell(by indexPath: IndexPath, with data: CellViewModel) {
+    private func setTableViewCell(by indexPath: IndexPath, image: UIImage?, title: String) {
         if let cell = tableView.cellForRow(at: indexPath) as? ImageTableViewCell {
-            cell.configure(with: data)
+            cell.configure(with: image, title)
         }
     }
     

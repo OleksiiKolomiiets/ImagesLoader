@@ -29,16 +29,15 @@ class ImageTableViewCell: UITableViewCell {
     }
     
     // cell configuration
-    func configure(with data: CellViewModel) {
-        let title = data.title.isEmpty ? ImagesViewControllerSettings.kDefultTitle : data.title
-        titleLabel.text = title        
+    func configure(with image: UIImage?,_ title: String) {
+        titleLabel.text = title.isEmpty ? ImagesViewControllerSettings.kDefultTitle : title
         
-        if data.image != nil  {
+        if image != nil  {
             spinner.stopAnimating()
         } else {
             spinner.startAnimating()
         }
-        pictureImageView.image = data.image
+        pictureImageView.image = image
     }
     
 }

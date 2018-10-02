@@ -12,7 +12,6 @@
 		792348CD214024C2007903E1 /* MutableCollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792348CC214024C2007903E1 /* MutableCollectionExtension.swift */; };
 		792348D521429A87007903E1 /* ImageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792348D421429A87007903E1 /* ImageDetailViewController.swift */; };
 		792388F021391929007E0948 /* ImagesViewSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792388EF21391929007E0948 /* ImagesViewSource.swift */; };
-		7926554B213D82350094DE50 /* CellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7926554A213D82350094DE50 /* CellViewModel.swift */; };
 		794C9D6B212D53D40034E77F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C9D6A212D53D40034E77F /* AppDelegate.swift */; };
 		794C9D6D212D53D40034E77F /* ImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C9D6C212D53D40034E77F /* ImagesViewController.swift */; };
 		794C9D70212D53D40034E77F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 794C9D6E212D53D40034E77F /* Main.storyboard */; };
@@ -42,7 +41,6 @@
 		792348CC214024C2007903E1 /* MutableCollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableCollectionExtension.swift; sourceTree = "<group>"; };
 		792348D421429A87007903E1 /* ImageDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailViewController.swift; sourceTree = "<group>"; };
 		792388EF21391929007E0948 /* ImagesViewSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesViewSource.swift; sourceTree = "<group>"; };
-		7926554A213D82350094DE50 /* CellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellViewModel.swift; sourceTree = "<group>"; };
 		794C9D67212D53D40034E77F /* Images.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Images.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		794C9D6A212D53D40034E77F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		794C9D6C212D53D40034E77F /* ImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesViewController.swift; sourceTree = "<group>"; };
@@ -80,14 +78,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		792348BD213E87D4007903E1 /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				7926554A213D82350094DE50 /* CellViewModel.swift */,
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
 		792348CE214024D0007903E1 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
@@ -132,7 +122,6 @@
 				7967344E2133F13D008AC1DA /* Models */,
 				7967344F2133F145008AC1DA /* Utilities */,
 				794C9D7D212D60D70034E77F /* ViewControllers */,
-				792348BD213E87D4007903E1 /* ViewModels */,
 				795B8B79212D804D00E18F16 /* Views */,
 				792348CE214024D0007903E1 /* Extensions */,
 				79545932214A8B36004191EE /* Storyboard */,
@@ -382,7 +371,6 @@
 				7967344D2133F120008AC1DA /* ImageViewEntity.swift in Sources */,
 				79734CCA214FF7A300A4DAD2 /* ImagesVC+Drand&Drop.swift in Sources */,
 				792348CD214024C2007903E1 /* MutableCollectionExtension.swift in Sources */,
-				7926554B213D82350094DE50 /* CellViewModel.swift in Sources */,
 				794C9D7F212D61000034E77F /* ImageTableViewCell.swift in Sources */,
 				79C1563C212EE53F00E486C1 /* CustomSectionHeaderView.swift in Sources */,
 				79D368C8213577AD007E14AE /* ImageLoadHelper.swift in Sources */,
