@@ -13,7 +13,7 @@ protocol ImageServiceDelegate: class {
     func onDataLoaded(service: ImageService, data: [ImagesViewSource])
 }
 protocol ShadowViewDelegate: class {
-    func tapSubmit(isSuccess: Bool)
+    func tapSubmit(isSuccess: Bool, completion: @escaping () -> Void)
 }
 
 
@@ -69,7 +69,7 @@ class ImagesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        coverTheScreen()
+        coverTheScreen() // cover the screen while content is downloading
         shadowView.delegate = self
         service.delegate = self
         service.imageTags = getRandomTags()
@@ -178,8 +178,10 @@ extension ImagesViewController: ImageServiceDelegate {
 
 // MARK: - ShadowViewDelegate:
 extension ImagesViewController: ShadowViewDelegate {
-    func tapSubmit(isSuccess: Bool) {
-        shadowView.isHidden.toggle()        
+    func tapSubmit(isSuccess: Bool, completion: @escaping () -> Void) {
+        shadowView.dismissShadow(animated: true)        
+        shadowView.isHidden = true
+        completion()
         if case true = isSuccess {
             let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
             if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
@@ -257,25 +259,18 @@ extension ImagesViewController: UITableViewDelegate {
     }
     
     // Send selected data to ImageDetailViewController and present it
-    private func calculateCoordinatesForSelectedArea(at indexPath: IndexPath) -> CircleArea {
+    private func getCircleAreaForCell(at indexPath: IndexPath) -> CircleArea {
         let cellRect = tableView.rectForRow(at: indexPath)
-        let cellGlobalPosition = tableView.convert(cellRect, to: view)
+        let cellGlobalPosition = tableView.convert(cellRect, to: shadowView)
         
-        let yPosition = cellGlobalPosition.origin.y
-        let xPosition = cellGlobalPosition.origin.x
-        let width = cellGlobalPosition.size.width
-        let height = cellGlobalPosition.size.height
-        
-        let cellCentrPoint = CGPoint(x: xPosition + width / 2, y: yPosition + height / 2)
-        let highlightedAreaRadius = height * 0.9 / 2
-        
-        return CircleArea(centr: cellCentrPoint, radius: highlightedAreaRadius)
+        return CircleArea(with: cellGlobalPosition)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCellPath = indexPath
-        let circleArea = calculateCoordinatesForSelectedArea(at: indexPath)
-        self.shadowView.highlightedArea = circleArea
+        let circleArea = getCircleAreaForCell(at: indexPath)
+        shadowView.isHidden = false
+        shadowView.showShadow(for: circleArea, animated: true)
     }
     
 }
