@@ -15,14 +15,7 @@ struct CircleArea {
 
 extension CircleArea {
     init(with rect: CGRect) {
-        let yPosition   = rect.origin.y
-        let xPosition   = rect.origin.x
-        let width       = rect.size.width
-        let height      = rect.size.height
-        let centr = CGPoint(x: xPosition + width / 2,
-                            y: yPosition + height / 2)
-        let radius = height * 0.9 / 2
-        
-        self.init(centr: centr, radius: radius)
+        let radius = rect.size.height * 0.9 / 2
+        self.init(centr: rect.centr, radius: radius)
     }
 }

@@ -12,18 +12,18 @@ class ShadowView: UIView, CAAnimationDelegate {
     
     // MARK: - Variables:
     weak var delegate: ShadowViewDelegate!
-    private let shadowColor = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 0.5)
-    private let shadowPath = UIBezierPath()
     private let shadowLayer = CAShapeLayer()
-    private let maskLayerAnimation = CABasicAnimation(keyPath: "path")
     private var isOpenShadow = false
     private var touchGesture: UITapGestureRecognizer!
-    private var startingPath = UIBezierPath()
-    private var finishingPath = UIBezierPath()
     private var highlightedArea: CircleArea!
-    private var tappedPoint: CGPoint!
     
     // MARK: - Functions:
+    public required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        
+        addTapGestureRecognizer(for: self)
+    }
+    
     private func addTapGestureRecognizer(for view: UIView) {
         // Adding gesture recognizer for dealing with view taps
         touchGesture = UITapGestureRecognizer(target: view, action: #selector(viewPressed(_:)))
@@ -31,28 +31,19 @@ class ShadowView: UIView, CAAnimationDelegate {
         addGestureRecognizer(touchGesture)
     }
     
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-        addTapGestureRecognizer(for: self)
-    }
-    
-    @objc func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {
-        shadowPath.removeAllPoints()
-        startingPath.removeAllPoints()
-        finishingPath.removeAllPoints()
+    @objc private func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {
         shadowLayer.removeAllAnimations()
-        shadowLayer.removeFromSuperlayer()
-        
+        layer.mask = nil
         let highlightedAreaCirclePath = UIBezierPath(arcCenter: highlightedArea.centr,
                                                      radius: highlightedArea.radius,
                                                      startAngle: CGFloat(0),
                                                      endAngle:CGFloat(Double.pi * 2),
                                                      clockwise: true)
-        // Sending centre of tapped area to vc through delegate method
-        delegate.tapSubmit(isSuccess: highlightedAreaCirclePath.contains(gestureRecognizer.location(in: self))) {
-            
-        }
+        let tappedLocation = gestureRecognizer.location(in: self)
+        let isTapedOnArea = highlightedAreaCirclePath.contains(tappedLocation)
+        
+        // Sending result of tap through delegate method
+        delegate.shadowView(self, onUserConfirm: isTapedOnArea)
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
@@ -68,96 +59,67 @@ class ShadowView: UIView, CAAnimationDelegate {
     
     /// Showing shadow for selected area
     func showShadow(for area: CircleArea, animated: Bool) {
-        isOpenShadow = true
+        
         highlightedArea = area
         
-         // Setting pathes by area
-        let startingArea = CircleArea.init(centr: area.centr, radius: longestDistanceToTheCorner)
-        setStartingPath(by: startingArea)
-        setFinishingPath(by: area)
+        isOpenShadow = true
         
+        // Setting pathes by area
+        let shadowedPath = getCirclePath(by: area, inverse: true)
+       
         // Setting animation layer
-        setUp(layer: shadowLayer)
+        shadowLayer.fillRule = .evenOdd
+        shadowLayer.path = shadowedPath.cgPath
+        layer.mask = shadowLayer
         
         // Adding animation
         if animated {
-            setUpAnimation(from: startingPath.cgPath, to: finishingPath.cgPath)
-            shadowLayer.add(maskLayerAnimation, forKey: "path")
+            let unshadowedPath = getCirclePath(inverse: true)
+            setUpAnimation(from: unshadowedPath.cgPath, to: shadowedPath.cgPath)
         }
     }
     
     func dismissShadow(animated: Bool) {
         isOpenShadow = false
         
-         // Setting pathes by area
-        let finishingArea = CircleArea.init(centr: highlightedArea.centr, radius: longestDistanceToTheCorner)
-        setStartingPath(by: highlightedArea)
-        setFinishingPath(by: finishingArea)
+        // Setting pathes by area
+        let unshadowedPath = getCirclePath(inverse: true)
         
         // Setting animation layer
-        setUp(layer: shadowLayer)
+        shadowLayer.fillRule = .evenOdd
+        shadowLayer.path = unshadowedPath.cgPath
+        layer.mask = shadowLayer
         
         // Adding animation
         if animated {
-            setUpAnimation(from: startingPath.cgPath, to: finishingPath.cgPath)
-            shadowLayer.add(maskLayerAnimation, forKey: "path")
+            let shadowedPath = getCirclePath(by: highlightedArea, inverse: true)
+            setUpAnimation(from: shadowedPath.cgPath, to: unshadowedPath.cgPath)
         }
         
     }
     
-    private func setStartingPath(by area: CircleArea) {
-        let circle = getPath(by: area.centr, radius: area.radius)
-        startingPath = getPath(by: area.centr, radius: longestDistanceToTheCorner)
-        startingPath.append(circle)
-        
-    }
-    
-    private func setFinishingPath(by area: CircleArea) {
-        let smallCircle = getPath(by: area.centr, radius: area.radius)
-        finishingPath = getPath(by: area.centr, radius: longestDistanceToTheCorner)
-        finishingPath.append(smallCircle)
-    }
-    
-    
-    private func setUpAnimation(from: CGPath, to: CGPath) {
-        maskLayerAnimation.fromValue = from
-        maskLayerAnimation.toValue = to
-        maskLayerAnimation.delegate = self
-        maskLayerAnimation.duration = isOpenShadow ? 0.7 : 0.3
-        maskLayerAnimation.fillMode = .both
-        maskLayerAnimation.isRemovedOnCompletion = true
-    }
-    
-    private var longestDistanceToTheCorner: CGFloat {
-        let firstCatet = max(highlightedArea.centr.y, frame.size.height - highlightedArea.centr.y)
-        let secondCatet = max(highlightedArea.centr.x, frame.size.width - highlightedArea.centr.x)
-        return sqrt(pow(firstCatet, 2.0) + pow(secondCatet, 2.0))
-    }
-    
-    private func getPath(by centr: CGPoint, radius: CGFloat) -> UIBezierPath {
-        let path = UIBezierPath()
-        path.move(to: centr)
-        path.addArc(withCenter: centr,
-                    radius    : radius,
-                    startAngle: 0,
-                    endAngle  : 2.0 * CGFloat.pi,
-                    clockwise : true)
-        path.close()
+    private func getCirclePath(by area: CircleArea? = nil, inverse: Bool = false) -> UIBezierPath {
+        let upperCoefficient: CGFloat = 1.5 //
+        let path = UIBezierPath(arcCenter   : area != nil ? area!.centr  : self.frame.centr,
+                                radius      : area != nil ? area!.radius : self.frame.height * upperCoefficient,
+                                startAngle  : 0,
+                                endAngle    : 2.0 * CGFloat.pi,
+                                clockwise   : true)
+        if inverse {
+            path.append(UIBezierPath(rect: self.frame))
+        }
         return path
     }
     
-    private func setUp(layer shadowLayer: CAShapeLayer) {
-        shadowLayer.path = finishingPath.cgPath
-        shadowLayer.fillColor = shadowColor.cgColor
-        shadowLayer.fillRule = .evenOdd
-        shadowLayer.lineCap = .butt
-        shadowLayer.lineDashPattern = nil
-        shadowLayer.lineDashPhase = 0.0
-        shadowLayer.lineJoin = .miter
-        shadowLayer.lineWidth = 0.0
-        shadowLayer.miterLimit = 10.0
-        shadowLayer.strokeColor = shadowColor.cgColor
-        layer.addSublayer(shadowLayer)
+    private func setUpAnimation(from: CGPath, to: CGPath) {
+        let animate = CABasicAnimation(keyPath: "path")
+        
+        animate.fromValue = from
+        animate.toValue   = to
+        animate.duration  = isOpenShadow ? 0.7 : 0.3
+        animate.delegate  = self
+        
+        shadowLayer.add(animate, forKey: "Shadow for selected area")
     }
-
+    
 }

@@ -13,7 +13,7 @@ protocol ImageServiceDelegate: class {
     func onDataLoaded(service: ImageService, data: [ImagesViewSource])
 }
 protocol ShadowViewDelegate: class {
-    func tapSubmit(isSuccess: Bool, completion: @escaping () -> Void)
+    func shadowView(_ shadowView: ShadowView, onUserConfirm: Bool)
 }
 
 
@@ -178,11 +178,10 @@ extension ImagesViewController: ImageServiceDelegate {
 
 // MARK: - ShadowViewDelegate:
 extension ImagesViewController: ShadowViewDelegate {
-    func tapSubmit(isSuccess: Bool, completion: @escaping () -> Void) {
-        shadowView.dismissShadow(animated: true)        
-        shadowView.isHidden = true
-        completion()
-        if case true = isSuccess {
+    func shadowView(_ shadowView: ShadowView, onUserConfirm: Bool) {
+        shadowView.dismissShadow(animated: true)
+//        shadowView.isHidden = true
+        if onUserConfirm {
             let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
             if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
                 let dataSource = self.dataSource?[selectedCellPath.section], let data = dataSource.data?[selectedCellPath.row] {
@@ -192,6 +191,21 @@ extension ImagesViewController: ShadowViewDelegate {
             }
         }
     }
+//
+//    func tapSubmit(isSuccess: Bool, completion: @escaping () -> Void) {
+//        shadowView.dismissShadow(animated: true)
+//        shadowView.isHidden = true
+//        completion()
+//        if case true = isSuccess {
+//            let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
+//            if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
+//                let dataSource = self.dataSource?[selectedCellPath.section], let data = dataSource.data?[selectedCellPath.row] {
+//                detailVC.imageData = data
+//                detailVC.doneButtonisHidden = false
+//                self.present(detailVC, animated: true)
+//            }
+//        }
+//    }
 }
 
 // MARK: - Table view data source:
@@ -283,7 +297,7 @@ extension ImagesViewController: UIDropInteractionDelegate {
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        return UIDropProposal(operation: .copy)
+        return UIDropProposal(operation: .move)
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
