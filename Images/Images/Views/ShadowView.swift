@@ -99,14 +99,13 @@ class ShadowView: UIView, CAAnimationDelegate {
     }
     
     private func getCirclePath(by area: CircleArea? = nil, inverse: Bool = false) -> UIBezierPath {
-        let upperCoefficient: CGFloat = 1.5 //
-        let path = UIBezierPath(arcCenter   : area != nil ? area!.centr  : self.frame.centr,
-                                radius      : area != nil ? area!.radius : self.frame.height * upperCoefficient,
+        let path = UIBezierPath(arcCenter   : area != nil ? area!.centr  : superview!.frame.centr,
+                                radius      : area != nil ? area!.radius : superview!.frame.height,
                                 startAngle  : 0,
                                 endAngle    : 2.0 * CGFloat.pi,
                                 clockwise   : true)
         if inverse {
-            path.append(UIBezierPath(rect: self.frame))
+            path.append(UIBezierPath(rect: superview!.frame))
         }
         return path
     }
