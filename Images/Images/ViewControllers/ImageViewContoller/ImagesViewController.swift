@@ -294,7 +294,7 @@ extension ImagesViewController: UIDropInteractionDelegate {
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        return UIDropProposal(operation: .move)
+        return UIDropProposal(operation: .copy)
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
@@ -328,11 +328,11 @@ extension ImagesViewController: UITableViewDragDelegate {
     }
     
     func tableView(_ tableView: UITableView, dragSessionDidEnd session: UIDragSession) {
-        dropZoneView.isHidden.toggle()
+        dropZoneView.isHidden = true
     }
     
     func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
-        dropZoneView.isHidden.toggle()
+        dropZoneView.isHidden = false
     }
     
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
