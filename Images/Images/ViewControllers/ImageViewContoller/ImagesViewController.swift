@@ -13,7 +13,8 @@ protocol ImageServiceDelegate: class {
     func onDataLoaded(service: ImageService, data: [ImagesViewSource])
 }
 protocol ShadowViewDelegate: class {
-    func shadowView(_ shadowView: ShadowView, onUserConfirm: Bool)
+    func shadowView(_ shadowView: ShadowView, didUserTappedOn: CGPoint)
+    func didTappedShadowView(_ shadowView: ShadowView)
 }
 
 
@@ -178,10 +179,21 @@ extension ImagesViewController: ImageServiceDelegate {
 
 // MARK: - ShadowViewDelegate:
 extension ImagesViewController: ShadowViewDelegate {
-    func shadowView(_ shadowView: ShadowView, onUserConfirm: Bool) {
+    
+    func didTappedShadowView(_ shadowView: ShadowView) {
         shadowView.dismissShadow(animated: true)
-//        shadowView.isHidden = true
-        if onUserConfirm {
+    }
+    
+    func shadowView(_ shadowView: ShadowView, didUserTappedOn area: CGPoint) {
+        shadowView.isHidden = true
+        let selectedArea = getCircleAreaForCell(at: selectedCellPath)
+        let highlightedAreaCirclePath = UIBezierPath(arcCenter: selectedArea.centr,
+                                                     radius: selectedArea.radius,
+                                                     startAngle: CGFloat(0),
+                                                     endAngle:CGFloat(Double.pi * 2),
+                                                     clockwise: true)
+        let isTapedOnArea = highlightedAreaCirclePath.contains(area)
+        if isTapedOnArea {
             let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
             if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
                 let dataSource = self.dataSource?[selectedCellPath.section], let data = dataSource.data?[selectedCellPath.row] {
@@ -189,23 +201,8 @@ extension ImagesViewController: ShadowViewDelegate {
                 detailVC.doneButtonisHidden = false
                 self.present(detailVC, animated: true)
             }
-        }
+        }        
     }
-//
-//    func tapSubmit(isSuccess: Bool, completion: @escaping () -> Void) {
-//        shadowView.dismissShadow(animated: true)
-//        shadowView.isHidden = true
-//        completion()
-//        if case true = isSuccess {
-//            let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
-//            if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
-//                let dataSource = self.dataSource?[selectedCellPath.section], let data = dataSource.data?[selectedCellPath.row] {
-//                detailVC.imageData = data
-//                detailVC.doneButtonisHidden = false
-//                self.present(detailVC, animated: true)
-//            }
-//        }
-//    }
 }
 
 // MARK: - Table view data source:

@@ -16,6 +16,7 @@ class ShadowView: UIView, CAAnimationDelegate {
     private var isOpenShadow = false
     private var touchGesture: UITapGestureRecognizer!
     private var highlightedArea: CircleArea!
+    private var tappedLocation: CGPoint!
     
     // MARK: - Functions:
     public required init?(coder aDecoder: NSCoder) {
@@ -34,22 +35,17 @@ class ShadowView: UIView, CAAnimationDelegate {
     @objc private func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {
         shadowLayer.removeAllAnimations()
         layer.mask = nil
-        let highlightedAreaCirclePath = UIBezierPath(arcCenter: highlightedArea.centr,
-                                                     radius: highlightedArea.radius,
-                                                     startAngle: CGFloat(0),
-                                                     endAngle:CGFloat(Double.pi * 2),
-                                                     clockwise: true)
-        let tappedLocation = gestureRecognizer.location(in: self)
-        let isTapedOnArea = highlightedAreaCirclePath.contains(tappedLocation)
         
-        // Sending result of tap through delegate method
-        delegate.shadowView(self, onUserConfirm: isTapedOnArea)
+        tappedLocation = gestureRecognizer.location(in: self)
+        
+        // Signalizing delegate that view was tapped
+        delegate.didTappedShadowView(self)
     }
     
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         touchGesture.isEnabled = true
         if !isOpenShadow {
-            self.isHidden.toggle()
+            delegate.shadowView(self, didUserTappedOn: tappedLocation)
         }
     }
     
@@ -95,7 +91,6 @@ class ShadowView: UIView, CAAnimationDelegate {
             let shadowedPath = getCirclePath(by: highlightedArea, inverse: true)
             setUpAnimation(from: shadowedPath.cgPath, to: unshadowedPath.cgPath)
         }
-        
     }
     
     private func getCirclePath(by area: CircleArea? = nil, inverse: Bool = false) -> UIBezierPath {
