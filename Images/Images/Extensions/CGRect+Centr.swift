@@ -12,11 +12,11 @@ extension CGRect {
     var centr: CGPoint {
         let startX: CGFloat = self.origin.x
         let startY: CGFloat = self.origin.y
-        let width = self.size.width
-        let height = self.size.height
+        let width : CGFloat = self.size.width
+        let height: CGFloat = self.size.height
         
-        let centrX = startX + width / 2
-        let centrY = startY + height / 2
+        let centrX: CGFloat = startX + width / 2
+        let centrY: CGFloat = startY + height / 2
         return CGPoint(x: centrX, y: centrY)
     }
 }

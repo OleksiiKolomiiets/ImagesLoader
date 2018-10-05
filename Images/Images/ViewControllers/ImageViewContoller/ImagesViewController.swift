@@ -13,7 +13,7 @@ protocol ImageServiceDelegate: class {
     func onDataLoaded(service: ImageService, data: [ImagesViewSource])
 }
 protocol ShadowViewDelegate: class {
-    func shadowView(_ shadowView: ShadowView, didUserTappedOn: CGPoint)
+    func shadowView(_ shadowView: ShadowView, userTappedOn: CGPoint)
     func didTappedShadowView(_ shadowView: ShadowView)
 }
 
@@ -53,7 +53,8 @@ class ImagesViewController: UIViewController {
     private var service = ImageService()
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
-    private var proccesingView: UIView?    
+    private var proccesingView: UIView?
+    private var parser =  DragItemParser()
     var imagesCollectionViewController: ImagesCollectionViewController!
     var indexOfCellBeforeDragging = 0
     var draggedCellPath: IndexPath?
@@ -184,7 +185,7 @@ extension ImagesViewController: ShadowViewDelegate {
         shadowView.dismissShadow(animated: true)
     }
     
-    func shadowView(_ shadowView: ShadowView, didUserTappedOn area: CGPoint) {
+    func shadowView(_ shadowView: ShadowView, userTappedOn area: CGPoint) {
         shadowView.isHidden = true
         let selectedArea = getCircleAreaForCell(at: selectedCellPath)
         let highlightedAreaCirclePath = UIBezierPath(arcCenter: selectedArea.centr,
@@ -229,7 +230,7 @@ extension ImagesViewController: UITableViewDataSource {
             }
         }
         
-        cell.configure(with: cellImage, title!) // cell alway should be init  cel.imageView.image = nil
+        cell.configure(with: cellImage, title!) // cell always should be init  cell.imageView.image = nil
         
         return cell
     }
@@ -299,14 +300,8 @@ extension ImagesViewController: UIDropInteractionDelegate {
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
         session.loadObjects(ofClass: NSString.self) { nsstrings in
-            // parsing sended string
-            let string = nsstrings.first as! String
-            let stringArray = string.split(separator: " ")
-            let section = Int(String(stringArray.first!))
-            let row = Int(String(stringArray.last!))
-            self.draggedCellPath = IndexPath(row: row!, section: section!)
+            self.draggedCellPath = self.parser.encode(nsstrings.first as! NSString)
             self.enableTabBar()
-            
         }
     }
     
@@ -336,8 +331,8 @@ extension ImagesViewController: UITableViewDragDelegate {
     }
     
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
-        let item = "\(indexPath.section) \(indexPath.row)" // create string to send via drag
-        let itemProvider = NSItemProvider(object: item as NSString)
+        let item = parser.decode(indexPath)
+        let itemProvider = NSItemProvider(object: item)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = item
         return [dragItem]

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ShadowView: UIView, CAAnimationDelegate {
+class ShadowView: UIView {
     
     // MARK: - Variables:
     weak var delegate: ShadowViewDelegate!
@@ -40,17 +40,6 @@ class ShadowView: UIView, CAAnimationDelegate {
         
         // Signalizing delegate that view was tapped
         delegate.didTappedShadowView(self)
-    }
-    
-    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        touchGesture.isEnabled = true
-        if !isOpenShadow {
-            delegate.shadowView(self, didUserTappedOn: tappedLocation)
-        }
-    }
-    
-    func animationDidStart(_ anim: CAAnimation) {
-        touchGesture.isEnabled = false
     }
     
     /// Showing shadow for selected area
@@ -116,4 +105,19 @@ class ShadowView: UIView, CAAnimationDelegate {
         shadowLayer.add(animate, forKey: "Shadow for selected area")
     }
     
+}
+
+extension ShadowView: CAAnimationDelegate {
+    
+    // MARK: - Animation delegate:
+    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        touchGesture.isEnabled = true
+        if !isOpenShadow {
+            delegate.shadowView(self, userTappedOn: tappedLocation)
+        }
+    }
+    
+    func animationDidStart(_ anim: CAAnimation) {
+        touchGesture.isEnabled = false
+    }
 }
