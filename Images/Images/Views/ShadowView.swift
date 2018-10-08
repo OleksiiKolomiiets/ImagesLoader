@@ -8,6 +8,11 @@
 
 import UIKit
 
+protocol ShadowViewDelegate: class {
+    func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedArea: Bool)
+    func didTappedShadowView(_ shadowView: ShadowView)
+}
+
 class ShadowView: UIView {
     
     // MARK: - Variables:
@@ -16,7 +21,7 @@ class ShadowView: UIView {
     private var isOpenShadow = false
     private var touchGesture: UITapGestureRecognizer!
     private var highlightedArea: CircleArea!
-    private var tappedLocation: CGPoint!
+    private var isTapedOnArea: Bool!
     
     // MARK: - Functions:
     public required init?(coder aDecoder: NSCoder) {
@@ -36,7 +41,13 @@ class ShadowView: UIView {
         shadowLayer.removeAllAnimations()
         layer.mask = nil
         
-        tappedLocation = gestureRecognizer.location(in: self)
+        let tappedLocation = gestureRecognizer.location(in: self)
+        let highlightedAreaCirclePath = UIBezierPath(arcCenter: highlightedArea.centr,
+                                                     radius: highlightedArea.radius,
+                                                     startAngle: CGFloat(0),
+                                                     endAngle:CGFloat(Double.pi * 2),
+                                                     clockwise: true)
+        isTapedOnArea = highlightedAreaCirclePath.contains(tappedLocation)
         
         // Signalizing delegate that view was tapped
         delegate.didTappedShadowView(self)
@@ -113,7 +124,8 @@ extension ShadowView: CAAnimationDelegate {
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         touchGesture.isEnabled = true
         if !isOpenShadow {
-            delegate.shadowView(self, userTappedOn: tappedLocation)
+            // Signalizing delegate where view was tap
+            delegate.shadowView(self, didUserTapOnHighlightedArea: isTapedOnArea)
         }
     }
     

@@ -9,6 +9,10 @@
 import Foundation
 import FlickrKit
 
+protocol ImageServiceDelegate: class {
+    func onDataLoaded(service: ImageService, data: [ImagesViewSource])
+}
+
 class ImageService {
     
     //===================

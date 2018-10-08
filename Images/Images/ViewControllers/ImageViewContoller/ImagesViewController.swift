@@ -9,15 +9,6 @@
 import UIKit
 import MobileCoreServices
 
-protocol ImageServiceDelegate: class {
-    func onDataLoaded(service: ImageService, data: [ImagesViewSource])
-}
-protocol ShadowViewDelegate: class {
-    func shadowView(_ shadowView: ShadowView, userTappedOn: CGPoint)
-    func didTappedShadowView(_ shadowView: ShadowView)
-}
-
-
 class ImagesViewControllerSettings {
     //MARK: - CONSTANTS
     //Uploading images constants
@@ -185,16 +176,10 @@ extension ImagesViewController: ShadowViewDelegate {
         shadowView.dismissShadow(animated: true)
     }
     
-    func shadowView(_ shadowView: ShadowView, userTappedOn area: CGPoint) {
+    func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedArea: Bool) {
         shadowView.isHidden = true
-        let selectedArea = getCircleAreaForCell(at: selectedCellPath)
-        let highlightedAreaCirclePath = UIBezierPath(arcCenter: selectedArea.centr,
-                                                     radius: selectedArea.radius,
-                                                     startAngle: CGFloat(0),
-                                                     endAngle:CGFloat(Double.pi * 2),
-                                                     clockwise: true)
-        let isTapedOnArea = highlightedAreaCirclePath.contains(area)
-        if isTapedOnArea {
+        
+        if didUserTapOnHighlightedArea {
             let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
             if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
                 let dataSource = self.dataSource?[selectedCellPath.section], let data = dataSource.data?[selectedCellPath.row] {
