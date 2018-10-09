@@ -156,7 +156,7 @@ class ImagesViewController: UIViewController {
         
     }
     
-    func addBadSignalImage(at view: UIView) {
+     private lazy var badSignalImageView: UIImageView = {
         let badSignalImage = UIImage(named: "badSignal")!
         let imageWidth: CGFloat = badSignalImage.size.width
         let imageHeight: CGFloat = badSignalImage.size.height
@@ -167,6 +167,19 @@ class ImagesViewController: UIViewController {
                                                            height: imageHeight))
         badSignalImageView.image = badSignalImage
         badSignalImageView.contentMode = .scaleAspectFill
+        return badSignalImageView
+    }()
+    
+    func addBadSignalImage(at view: UIView) {
+        let animation = CABasicAnimation(keyPath: "opacity")
+        
+        animation.fromValue = 0.5
+        animation.toValue = 0.7
+        animation.duration = 0.7
+        animation.repeatCount = Float.infinity
+        animation.autoreverses = true
+        
+        badSignalImageView.layer.add(animation, forKey: "ss")
         
         view.addSubview(badSignalImageView)
     }
@@ -179,8 +192,8 @@ extension ImagesViewController: ImageServiceDelegate {
         addBadSignalImage(at: proccesingView!)
     }
     
-    
     func onDataLoaded(service: ImageService, data: [ImagesViewSource]) {
+        badSignalImageView.removeFromSuperview()
         dataSource = data
         imagesCollectionViewController.dataSourceCollectionView = data.first
         tableView.reloadData()
@@ -192,22 +205,24 @@ extension ImagesViewController: ImageServiceDelegate {
 // MARK: - ShadowViewDelegate:
 extension ImagesViewController: ShadowViewDelegate {
     
-    func didTappedShadowView(_ shadowView: ShadowView) {
-        shadowView.dismissShadow(animated: true)
-    }
-    
     func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedArea: Bool) {
-        shadowView.isHidden = true
         
-        if didUserTapOnHighlightedArea {
-            let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
-            if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
-                let dataSource = self.dataSource?[selectedCellPath.section], let data = dataSource.data?[selectedCellPath.row] {
-                detailVC.imageData = data
-                detailVC.doneButtonisHidden = false
-                self.present(detailVC, animated: true)
+        shadowView.dismissShadow(animated: true, finished: {
+            shadowView.isHidden = true
+            
+            if didUserTapOnHighlightedArea {
+                let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
+                if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
+                    let dataSource = self.dataSource?[self.selectedCellPath.section],
+                    let data = dataSource.data?[self.selectedCellPath.row] {
+                    detailVC.imageData = data
+                    detailVC.doneButtonisHidden = false
+                    self.present(detailVC, animated: true)
+                }
             }
-        }        
+        })
+        
+        
     }
 }
 

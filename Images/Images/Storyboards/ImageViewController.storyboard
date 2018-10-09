@@ -161,7 +161,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="flickr_logo" width="960" height="480"/>
+        <image name="flickr_logo" width="320" height="160"/>
         <image name="space" width="520" height="612"/>
     </resources>
 </document>

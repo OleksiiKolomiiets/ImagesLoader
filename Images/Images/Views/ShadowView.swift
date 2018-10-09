@@ -10,7 +10,6 @@ import UIKit
 
 protocol ShadowViewDelegate: class {
     func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedArea: Bool)
-    func didTappedShadowView(_ shadowView: ShadowView)
 }
 
 class ShadowView: UIView {
@@ -22,6 +21,9 @@ class ShadowView: UIView {
     private var touchGesture: UITapGestureRecognizer!
     private var highlightedArea: CircleArea!
     private var isTapedOnArea: Bool!
+    private var  duration: Double {
+       return isOpenShadow ? 0.7 : 0.3
+    }
     
     // MARK: - Functions:
     public required init?(coder aDecoder: NSCoder) {
@@ -50,7 +52,7 @@ class ShadowView: UIView {
         isTapedOnArea = highlightedAreaCirclePath.contains(tappedLocation)
         
         // Signalizing delegate that view was tapped
-        delegate.didTappedShadowView(self)
+        delegate.shadowView(self, didUserTapOnHighlightedArea: isTapedOnArea)
     }
     
     /// Showing shadow for selected area
@@ -71,11 +73,11 @@ class ShadowView: UIView {
         // Adding animation
         if animated {
             let unshadowedPath = getCirclePath(inverse: true)
-            setUpAnimation(from: unshadowedPath.cgPath, to: shadowedPath.cgPath)
+            setUpAnimation(from: unshadowedPath.cgPath, to: shadowedPath.cgPath, duration: duration)
         }
     }
     
-    func dismissShadow(animated: Bool) {
+    func dismissShadow(animated: Bool, finished: @escaping () -> Void) {
         isOpenShadow = false
         
         // Setting pathes by area
@@ -89,7 +91,12 @@ class ShadowView: UIView {
         // Adding animation
         if animated {
             let shadowedPath = getCirclePath(by: highlightedArea, inverse: true)
-            setUpAnimation(from: shadowedPath.cgPath, to: unshadowedPath.cgPath)
+            setUpAnimation(from: shadowedPath.cgPath, to: unshadowedPath.cgPath, duration: duration)
+            DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+                finished()
+            }
+        } else {
+            finished()
         }
     }
     
@@ -105,15 +112,17 @@ class ShadowView: UIView {
         return path
     }
     
-    private func setUpAnimation(from: CGPath, to: CGPath) {
+    private func setUpAnimation(from: CGPath, to: CGPath, duration: Double) {
         let animate = CABasicAnimation(keyPath: "path")
         
         animate.fromValue = from
         animate.toValue   = to
-        animate.duration  = isOpenShadow ? 0.7 : 0.3
+        animate.duration  = duration
         animate.delegate  = self
+        animate.repeatCount = 0
         
         shadowLayer.add(animate, forKey: "Shadow for selected area")
+        
     }
     
 }
@@ -123,10 +132,12 @@ extension ShadowView: CAAnimationDelegate {
     // MARK: - Animation delegate:
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         touchGesture.isEnabled = true
-        if !isOpenShadow {
-            // Signalizing delegate where view was tap
-            delegate.shadowView(self, didUserTapOnHighlightedArea: isTapedOnArea)
-        }
+//        if !isOpenShadow {
+//            // Signalizing delegate where view was tap
+//            delegate.shadowView(self, didUserTapOnHighlightedArea: isTapedOnArea) {
+//
+//            }
+//        }
     }
     
     func animationDidStart(_ anim: CAAnimation) {
