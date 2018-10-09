@@ -7,58 +7,49 @@
 //
 
 import UIKit
+import MobileCoreServices
 
-//MARK: - CONSTANTS
 class ImagesViewControllerSettings {
-    
-    //MARK: Uploading images constants
+    //MARK: - CONSTANTS
+    //Uploading images constants
     static let kNumberOfUploadingImages: Int = 30
     static let kTags = ["sun", "mercury", "venus", "earth", "mars", "jupiter","saturn", "uranus", "neptune", "pluto"]
     static let kDefultTitle = "Title doesn't exist"
     static let kNumberOfTagsInOneLoad = 3
     static let kCellsImageDimension:ImageDimensionType = .small
-    //MARK: Reloading constant
+    //Reloading constant
     static let kTimeLimit = 30.0
-    //MARK: Table view constants
+    //Table view constants
     static let kHeightForRow: CGFloat = 91
     static let kHeightForHeader: CGFloat = 80
     static let kCellIdentifierForTableView: String = "imageCell"
-    //MARK: Collection view constants
+    //Collection view constants
     static let kCellIdentifierForCollectionView: String = "imageCollectionView"
     static let kCellPaddingQuote: CGFloat = 0.1
     static let kCellWidthQuote: CGFloat = 0.8
 }
 
-// MARK: - Delegate for service
-protocol ImageServiceDelegate: class {
-    func onDataLoaded(service: ImageService, data: [ImagesViewSource])
-}
-
-// MARK: - CLASS
-class ImagesViewController: UIViewController, ImageServiceDelegate {
+class ImagesViewController: UIViewController {
     
-    // ================
     // MARK: - Outlets:
-    // ================
-    
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var shadowView: ShadowView!
     @IBOutlet weak var dropZoneView: UIView! {
         didSet {
             dropZoneView.addInteraction(UIDropInteraction(delegate: self))
         }
     }
     
-    // ====================
     // MARK:  - Properties:
-    // ====================
-    
-    private var service: ImageService!
+    private var service = ImageService()
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
-    private var imagesCollectionViewController: ImagesCollectionViewController!
     private var proccesingView: UIView?
+    private var parser =  DragItemParser()
+    var imagesCollectionViewController: ImagesCollectionViewController!
     var indexOfCellBeforeDragging = 0
-    var draggedItem: IndexPath?
+    var draggedCellPath: IndexPath?
+    var selectedCellPath: IndexPath!
     var dataSource: [ImagesViewSource]? {
         willSet {
             if dataSource == nil {
@@ -71,17 +62,15 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        coverTheScreen()
-        service = ImageService()
-        service.delegate = self        
+        coverTheScreen() // cover the screen while content is downloading
+        shadowView.delegate = self
+        service.delegate = self
         service.imageTags = getRandomTags()
         service.reload()
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.dragDelegate = self
-        tableView.dragInteractionEnabled = true
+        tableView.dragDelegate = self           // didn't find its setting on Storyboard
+        tableView.dragInteractionEnabled = true // didn't find its setting on Storyboard
         
     }
-    
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
@@ -102,10 +91,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         }
     }
     
-    // ==================
     // MARK: - Functions:
-    // ==================
-    
     // getting random tags
     private func getRandomTags() -> [String] {
         var result = [String]()
@@ -123,7 +109,7 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
     // getting random indices for tags collection
     private func getRandomIndices(number: Int, _ max: Int) -> [Int] {
         var result = [Int]()
-    
+        
         for _ in 0 ..< number {
             var index = Int(arc4random_uniform(UInt32(max)))
             
@@ -133,19 +119,10 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
                     index = 0
                 }
             }
-            
             result.append(index)
         }
         
         return result
-    }
-    
-    // setting datasource from delegate method
-    func onDataLoaded(service: ImageService, data: [ImagesViewSource]) {
-        dataSource = data
-        imagesCollectionViewController.dataSourceCollectionView = data.first
-        tableView.reloadData()
-        imagesCollectionViewController.collectionView.reloadData()
     }
     
     // start to count time for reload
@@ -153,10 +130,10 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         let reloadTimeInterval = ImagesViewControllerSettings.kTimeLimit
         if reloadingTimer == nil {
             reloadingTimer = Timer.scheduledTimer(timeInterval: reloadTimeInterval,
-                                         target: self,
-                                         selector: #selector(onTimerTick),
-                                         userInfo: nil,
-                                         repeats: true)
+                                                  target: self,
+                                                  selector: #selector(onTimerTick),
+                                                  userInfo: nil,
+                                                  repeats: true)
         }
     }
     
@@ -176,6 +153,208 @@ class ImagesViewController: UIViewController, ImageServiceDelegate {
         tabBarController?.tabBar.isHidden = true
         proccesingView?.addSubview(imageView)
         view.addSubview(proccesingView!)
+        
     }
     
+     private lazy var badSignalImageView: UIImageView = {
+        let badSignalImage = UIImage(named: "badSignal")!
+        let imageWidth: CGFloat = badSignalImage.size.width
+        let imageHeight: CGFloat = badSignalImage.size.height
+        let superViewCentr  = view.frame.centr
+        let badSignalImageView = UIImageView(frame: CGRect(x: superViewCentr.x - imageWidth / 2,
+                                                           y: superViewCentr.y - imageHeight / 2,
+                                                           width: imageWidth,
+                                                           height: imageHeight))
+        badSignalImageView.image = badSignalImage
+        badSignalImageView.contentMode = .scaleAspectFill
+        return badSignalImageView
+    }()
+    
+    func addBadSignalImage(at view: UIView) {
+        let animation = CABasicAnimation(keyPath: "opacity")
+        
+        animation.fromValue = 0.5
+        animation.toValue = 0.7
+        animation.duration = 0.7
+        animation.repeatCount = Float.infinity
+        animation.autoreverses = true
+        
+        badSignalImageView.layer.add(animation, forKey: "ss")
+        
+        view.addSubview(badSignalImageView)
+    }
+    
+}
+
+// MARK: - ImageServiceDelegate:
+extension ImagesViewController: ImageServiceDelegate {
+    func onErrorCatched(service: ImageService, error: Error) {
+        addBadSignalImage(at: proccesingView!)
+    }
+    
+    func onDataLoaded(service: ImageService, data: [ImagesViewSource]) {
+        badSignalImageView.removeFromSuperview()
+        dataSource = data
+        imagesCollectionViewController.dataSourceCollectionView = data.first
+        tableView.reloadData()
+        imagesCollectionViewController.collectionView.reloadData()
+    }
+    
+}
+
+// MARK: - ShadowViewDelegate:
+extension ImagesViewController: ShadowViewDelegate {
+    
+    func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedArea: Bool) {
+        
+        shadowView.dismissShadow(animated: true, finished: {
+            shadowView.isHidden = true
+            
+            if didUserTapOnHighlightedArea {
+                let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
+                if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
+                    let dataSource = self.dataSource?[self.selectedCellPath.section],
+                    let data = dataSource.data?[self.selectedCellPath.row] {
+                    detailVC.imageData = data
+                    detailVC.doneButtonisHidden = false
+                    self.present(detailVC, animated: true)
+                }
+            }
+        })
+        
+        
+    }
+}
+
+// MARK: - Table view data source:
+extension ImagesViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let identifier = ImagesViewControllerSettings.kCellIdentifierForTableView
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ImageTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        var cellImage: UIImage?
+        let section = indexPath.section
+        let row = indexPath.row
+        let title = dataSource?[section].data?[row].title
+        
+        if let url = dataSource?[section].data?[row].url {
+            if let image = ImageLoadHelper.getImageFromCache(by: url) {
+                cellImage = image
+            } else {
+                ImageLoadHelper.getImage(by: url, completion: { image in
+                    self.setTableViewCell(by: indexPath, image: image, title: title!)
+                })
+            }
+        }
+        
+        cell.configure(with: cellImage, title!) // cell always should be init  cell.imageView.image = nil
+        
+        return cell
+    }
+    
+    // Configurate reusable cells
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return dataSource?.count ?? 0
+    }
+    
+    private func setTableViewCell(by indexPath: IndexPath, image: UIImage?, title: String) {
+        if let cell = tableView.cellForRow(at: indexPath) as? ImageTableViewCell {
+            cell.configure(with: image, title)
+        }
+    }
+    
+}
+
+// MARK: - Table view delegate:
+extension ImagesViewController: UITableViewDelegate {
+    
+    // Configurate header section view
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = CustomSectionHeaderView.instantiate(with: self)
+        view.setTitle(dataSource?[section].tag)
+        return view
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return ImagesViewControllerSettings.kHeightForHeader
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataSource?[section].data?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return ImagesViewControllerSettings.kHeightForRow
+    }
+    
+    // Send selected data to ImageDetailViewController and present it
+    private func getCircleAreaForCell(at indexPath: IndexPath) -> CircleArea {
+        let cellRect = tableView.rectForRow(at: indexPath)
+        let cellGlobalPosition = tableView.convert(cellRect, to: shadowView)
+        
+        return CircleArea(with: cellGlobalPosition)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedCellPath = indexPath
+        let circleArea = getCircleAreaForCell(at: indexPath)
+        shadowView.isHidden = false
+        shadowView.showShadow(for: circleArea, animated: true)
+    }
+    
+}
+
+// MARK: - Drop interaction delegate:
+extension ImagesViewController: UIDropInteractionDelegate {
+    
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: NSString.self)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        session.loadObjects(ofClass: NSString.self) { nsstrings in
+            self.draggedCellPath = self.parser.encode(nsstrings.first as! NSString)
+            self.enableTabBar()
+        }
+    }
+    
+    private func enableTabBar() {
+        self.tabBarController?.viewControllers?.forEach() { viewController in
+            if let vc = viewController as? ImageDetailViewController,
+                let draggedItem = self.draggedCellPath {
+                vc.imageData = self.dataSource![draggedItem.section].data![draggedItem.row]
+            }
+        }
+    }
+}
+
+// MARK: - Drag interaction delegate:
+extension ImagesViewController: UITableViewDragDelegate {
+    
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        return dragItem(at: indexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, dragSessionDidEnd session: UIDragSession) {
+        dropZoneView.isHidden = true
+    }
+    
+    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
+        dropZoneView.isHidden = false
+    }
+    
+    private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
+        let item = parser.decode(indexPath)
+        let itemProvider = NSItemProvider(object: item)
+        let dragItem = UIDragItem(itemProvider: itemProvider)
+        dragItem.localObject = item
+        return [dragItem]
+    }
 }

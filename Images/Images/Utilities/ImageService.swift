@@ -9,6 +9,11 @@
 import Foundation
 import FlickrKit
 
+protocol ImageServiceDelegate: class {
+    func onDataLoaded(service: ImageService, data: [ImagesViewSource])
+    func onErrorCatched(service: ImageService, error: Error)
+}
+
 class ImageService {
     
     //===================
@@ -43,7 +48,12 @@ class ImageService {
                     let response = response,
                     let topPhotos = response["photos"] as? [String: Any],
                     let photoArray = topPhotos["photo"] as? [[String: Any]]
-                else { return }
+                    else {
+                        DispatchQueue.main.async { () -> Void  in
+                            self.delegate?.onErrorCatched(service: self, error: error!)
+                        }
+                        return
+                }
                 self.getImageEntities(from: photoArray, to: images)
             }
         }
