@@ -153,12 +153,32 @@ class ImagesViewController: UIViewController {
         tabBarController?.tabBar.isHidden = true
         proccesingView?.addSubview(imageView)
         view.addSubview(proccesingView!)
+        
+    }
+    
+    func addBadSignalImage(at view: UIView) {
+        let badSignalImage = UIImage(named: "badSignal")!
+        let imageWidth: CGFloat = badSignalImage.size.width
+        let imageHeight: CGFloat = badSignalImage.size.height
+        let superViewCentr  = view.frame.centr
+        let badSignalImageView = UIImageView(frame: CGRect(x: superViewCentr.x - imageWidth / 2,
+                                                           y: superViewCentr.y - imageHeight / 2,
+                                                           width: imageWidth,
+                                                           height: imageHeight))
+        badSignalImageView.image = badSignalImage
+        badSignalImageView.contentMode = .scaleAspectFill
+        
+        view.addSubview(badSignalImageView)
     }
     
 }
 
 // MARK: - ImageServiceDelegate:
 extension ImagesViewController: ImageServiceDelegate {
+    func onErrorCatched(service: ImageService, error: Error) {
+        addBadSignalImage(at: proccesingView!)
+    }
+    
     
     func onDataLoaded(service: ImageService, data: [ImagesViewSource]) {
         dataSource = data
