@@ -31,8 +31,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     var imageURL: URL! {
         willSet {
             isImageDataSetted = true
-            if imageView != nil,
-                imageView.image != nil {
+            if imageView != nil {
                 imageView.image = nil
             }
         }

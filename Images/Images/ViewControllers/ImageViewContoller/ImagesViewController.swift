@@ -324,27 +324,26 @@ extension ImagesViewController: UIDropInteractionDelegate {
     }
     
     private func setTabBar(with url: URL) {
-        if (self.tabBarController?.viewControllers?.count)! < 4 {
+        guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
+        
+        if tabBarViewControllers.count < 4 {
             let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
-            if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {
-                detailVC.imageURL = url
-                detailVC.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
-                self.tabBarController?.viewControllers?.append(detailVC)
-            }
-        } else {
-            let tabBarVCs = self.tabBarController!.viewControllers!
+            guard let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController else { return }
             
-            for (index, viewController) in tabBarVCs.enumerated() {
-                if let vc = viewController as? ImageDetailViewController {
-                    if index < tabBarVCs.count - 1 {
-                        let nextIndex = tabBarVCs.index(after: index)
-                        if let nextVC = tabBarVCs[nextIndex] as? ImageDetailViewController {
-                            vc.imageURL = nextVC.imageURL
-                        }
-                    } else {
-                        vc.imageURL = url
-                    }
+            detailVC.imageURL = url
+            detailVC.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
+            self.tabBarController?.viewControllers?.append(detailVC)
+        } else {
+            for (viewControllerIndex, viewController) in tabBarViewControllers.enumerated() {
+                guard let vc = viewController as? ImageDetailViewController else { continue }
+                
+                if viewControllerIndex < tabBarViewControllers.count - 1 {
+                    guard let nextVC = tabBarViewControllers[viewControllerIndex + 1] as? ImageDetailViewController else { return }
+                    vc.imageURL = nextVC.imageURL
+                } else {
+                    vc.imageURL = url
                 }
+                
             }
         }
     }
