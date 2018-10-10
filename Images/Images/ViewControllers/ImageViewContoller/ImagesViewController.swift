@@ -45,10 +45,8 @@ class ImagesViewController: UIViewController {
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
     private var proccesingView: UIView?
-    private var parser =  DragItemParser()
     var imagesCollectionViewController: ImagesCollectionViewController!
     var indexOfCellBeforeDragging = 0
-    var draggedCellPath: IndexPath?
     var selectedCellPath: IndexPath!
     var dataSource: [ImagesViewSource]? {
         willSet {
@@ -215,8 +213,9 @@ extension ImagesViewController: ShadowViewDelegate {
                 if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
                     let dataSource = self.dataSource?[self.selectedCellPath.section],
                     let data = dataSource.data?[self.selectedCellPath.row] {
-                    detailVC.imageData = data
-                    detailVC.doneButtonisHidden = false
+                    let url = ImageService.getUrlForPhoto(using: data)
+                    detailVC.imageURL = url
+                    detailVC.isDoneButtonHidden = false
                     self.present(detailVC, animated: true)
                 }
             }
@@ -311,7 +310,7 @@ extension ImagesViewController: UITableViewDelegate {
 extension ImagesViewController: UIDropInteractionDelegate {
     
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        return session.canLoadObjects(ofClass: NSString.self)
+        return session.canLoadObjects(ofClass: NSURL.self)
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
@@ -319,17 +318,32 @@ extension ImagesViewController: UIDropInteractionDelegate {
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        session.loadObjects(ofClass: NSString.self) { nsstrings in
-            self.draggedCellPath = self.parser.encode(nsstrings.first as! NSString)
-            self.enableTabBar()
+        session.loadObjects(ofClass: NSURL.self) { nsurl in
+            self.setTabBar(with: nsurl.first as! URL)
         }
     }
     
-    private func enableTabBar() {
-        self.tabBarController?.viewControllers?.forEach() { viewController in
-            if let vc = viewController as? ImageDetailViewController,
-                let draggedItem = self.draggedCellPath {
-                vc.imageData = self.dataSource![draggedItem.section].data![draggedItem.row]
+    private func setTabBar(with url: URL) {
+        guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
+        
+        if tabBarViewControllers.count < 4 {
+            let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
+            guard let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController else { return }
+            
+            detailVC.imageURL = url
+            detailVC.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
+            self.tabBarController?.viewControllers?.append(detailVC)
+        } else {
+            for (viewControllerIndex, viewController) in tabBarViewControllers.enumerated() {
+                guard let vc = viewController as? ImageDetailViewController else { continue }
+                
+                if viewControllerIndex < tabBarViewControllers.count - 1 {
+                    guard let nextVC = tabBarViewControllers[viewControllerIndex + 1] as? ImageDetailViewController else { return }
+                    vc.imageURL = nextVC.imageURL
+                } else {
+                    vc.imageURL = url
+                }
+                
             }
         }
     }
@@ -339,6 +353,7 @@ extension ImagesViewController: UIDropInteractionDelegate {
 extension ImagesViewController: UITableViewDragDelegate {
     
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        
         return dragItem(at: indexPath)
     }
     
@@ -351,10 +366,10 @@ extension ImagesViewController: UITableViewDragDelegate {
     }
     
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
-        let item = parser.decode(indexPath)
-        let itemProvider = NSItemProvider(object: item)
+        let url = ImageService.getUrlForPhoto(using: dataSource![indexPath.section].data![indexPath.row])
+        let itemProvider = NSItemProvider(contentsOf: url)!
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = item
+        dragItem.localObject = url
         return [dragItem]
     }
 }

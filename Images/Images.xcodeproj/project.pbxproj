@@ -27,7 +27,6 @@
 		79A225B721638F3A00C08D7B /* CircleArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A225B621638F3A00C08D7B /* CircleArea.swift */; };
 		79A225B9216642C200C08D7B /* CGRect+Centr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A225B8216642C200C08D7B /* CGRect+Centr.swift */; };
 		79A225BB2167B24B00C08D7B /* Parsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A225BA2167B24B00C08D7B /* Parsable.swift */; };
-		79A225C02167B2CB00C08D7B /* DragItemParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A225BF2167B2CB00C08D7B /* DragItemParser.swift */; };
 		79C1563C212EE53F00E486C1 /* CustomSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C1563B212EE53F00E486C1 /* CustomSectionHeaderView.swift */; };
 		79D368C6213545DB007E14AE /* CustomSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79D368C5213545DB007E14AE /* CustomSectionHeaderView.xib */; };
 		79D368C8213577AD007E14AE /* ImageLoadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D368C7213577AD007E14AE /* ImageLoadHelper.swift */; };
@@ -60,7 +59,6 @@
 		79A225B621638F3A00C08D7B /* CircleArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleArea.swift; sourceTree = "<group>"; };
 		79A225B8216642C200C08D7B /* CGRect+Centr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Centr.swift"; sourceTree = "<group>"; };
 		79A225BA2167B24B00C08D7B /* Parsable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parsable.swift; sourceTree = "<group>"; };
-		79A225BF2167B2CB00C08D7B /* DragItemParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragItemParser.swift; sourceTree = "<group>"; };
 		79C1563B212EE53F00E486C1 /* CustomSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSectionHeaderView.swift; sourceTree = "<group>"; };
 		79D368C5213545DB007E14AE /* CustomSectionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomSectionHeaderView.xib; sourceTree = "<group>"; };
 		79D368C7213577AD007E14AE /* ImageLoadHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadHelper.swift; sourceTree = "<group>"; };
@@ -193,7 +191,6 @@
 			children = (
 				797E9738212D9B2F0016985D /* ImageService.swift */,
 				79D368C7213577AD007E14AE /* ImageLoadHelper.swift */,
-				79A225BF2167B2CB00C08D7B /* DragItemParser.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -388,7 +385,6 @@
 				795B8B7B212D815A00E18F16 /* ImageCollectionViewCell.swift in Sources */,
 				792388F021391929007E0948 /* ImagesViewSource.swift in Sources */,
 				797E9739212D9B2F0016985D /* ImageService.swift in Sources */,
-				79A225C02167B2CB00C08D7B /* DragItemParser.swift in Sources */,
 				79545938214BA5BC004191EE /* ImageDimensionType.swift in Sources */,
 				794C9D6B212D53D40034E77F /* AppDelegate.swift in Sources */,
 			);

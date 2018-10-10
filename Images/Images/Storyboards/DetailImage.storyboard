@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Item-->
+        <!-- -->
         <scene sceneID="Hvb-np-ZLi">
             <objects>
                 <viewController storyboardIdentifier="ImageDetailViewController" automaticallyAdjustsScrollViewInsets="NO" id="qYG-6m-VhN" customClass="ImageDetailViewController" customModule="Images" customModuleProvider="target" sceneMemberID="viewController">
@@ -68,7 +68,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="MTn-No-ISH"/>
                     </view>
-                    <tabBarItem key="tabBarItem" enabled="NO" title="Item" springLoaded="YES" id="yMO-jB-Ws3"/>
+                    <tabBarItem key="tabBarItem" title=" " image="painting" springLoaded="YES" id="yMO-jB-Ws3"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <outlet property="doneButton" destination="u38-O6-q7G" id="dhe-Ff-Y0o"/>
@@ -83,4 +83,7 @@
             <point key="canvasLocation" x="94" y="-149"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="painting" width="32" height="32"/>
+    </resources>
 </document>

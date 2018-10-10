@@ -28,14 +28,10 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var doneButton           : UIButton!
     
     // MARK: - Variables:
-    var imageData: ImageViewEntity! {
+    var imageURL: URL! {
         willSet {
-            if imageData == nil {
-                tabButton.isEnabled = true
-            }
             isImageDataSetted = true
-            if imageView != nil,
-                imageView.image != nil {
+            if imageView != nil {
                 imageView.image = nil
             }
         }
@@ -49,7 +45,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
         }
     }
-    var doneButtonisHidden = true
+    var isDoneButtonHidden = true
     var isImageDataSetted = false
     
     // MARK: - Actions:
@@ -70,12 +66,9 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     // MARK: - Functions:
     override func viewDidLoad() {
         super.viewDidLoad()
-        // adding double tap gesture recognizer
-        let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped(sender:)))
-        tap.numberOfTapsRequired = 2
-        view.addGestureRecognizer(tap)
         
-        doneButton.isHidden = doneButtonisHidden
+        addDoubleTapGesture(for: view)
+        doneButton.isHidden = isDoneButtonHidden
         
     }
     
@@ -95,6 +88,12 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         isImageDataSetted = false
     }
     
+    private func addDoubleTapGesture(for view: UIView) {
+        // adding double tap gesture recognizer
+        let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped(sender:)))
+        tap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(tap)
+    }
     
     // Making bar content light on black background
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -111,7 +110,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         setImageCentred()
     }
     
-    fileprivate func setImageCentred() {
+    private func setImageCentred() {
         let imageViewSize = imageView.frame.size
         let scrollViewSize = scrollView.bounds.size
         let verticalInset = imageViewSize.height < scrollViewSize.height ? (scrollViewSize.height - imageViewSize.height) / 2 : 1
@@ -120,7 +119,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     }
     
     // Calculating minimum and maximum zoom scale for scroll view according to image sizes
-    fileprivate func setZoomScale() {
+    private func setZoomScale() {
         let width = image!.size.width
         let height = image!.size.height
         
@@ -136,13 +135,11 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     // Getting image to display
     private func fetchImage() {
-        let sizedPhotoUrl = ImageService.getUrlForPhoto(using: imageData)
-        
-        if let cachedImage = ImageLoadHelper.getImageFromCache(by: sizedPhotoUrl) {
+        if let cachedImage = ImageLoadHelper.getImageFromCache(by: imageURL) {
             self.image = cachedImage
         } else {
             loadActivityIndicator.startAnimating()
-            ImageLoadHelper.getImage(by: sizedPhotoUrl) { loadedImage in
+            ImageLoadHelper.getImage(by: imageURL) { loadedImage in
                 self.loadActivityIndicator.stopAnimating()
                 self.image = loadedImage
             }
