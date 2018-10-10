@@ -22,6 +22,7 @@
 		7954593D214BF8F4004191EE /* DetailImage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7954593C214BF8F4004191EE /* DetailImage.storyboard */; };
 		795B8B7B212D815A00E18F16 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795B8B7A212D815A00E18F16 /* ImageCollectionViewCell.swift */; };
 		7967344D2133F120008AC1DA /* ImageViewEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7967344C2133F120008AC1DA /* ImageViewEntity.swift */; };
+		7978A444216DD9E700B0464E /* DraggedItems.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7978A443216DD9E700B0464E /* DraggedItems.swift */; };
 		797E9739212D9B2F0016985D /* ImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 797E9738212D9B2F0016985D /* ImageService.swift */; };
 		798EF883215CF98D0060452C /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798EF882215CF98D0060452C /* ShadowView.swift */; };
 		79A225B721638F3A00C08D7B /* CircleArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A225B621638F3A00C08D7B /* CircleArea.swift */; };
@@ -55,6 +56,7 @@
 		7954593C214BF8F4004191EE /* DetailImage.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailImage.storyboard; sourceTree = "<group>"; };
 		795B8B7A212D815A00E18F16 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		7967344C2133F120008AC1DA /* ImageViewEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewEntity.swift; sourceTree = "<group>"; };
+		7978A443216DD9E700B0464E /* DraggedItems.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DraggedItems.swift; sourceTree = "<group>"; };
 		797E9738212D9B2F0016985D /* ImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageService.swift; sourceTree = "<group>"; };
 		798EF882215CF98D0060452C /* ShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
 		79A225B621638F3A00C08D7B /* CircleArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleArea.swift; sourceTree = "<group>"; };
@@ -182,6 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				7967344C2133F120008AC1DA /* ImageViewEntity.swift */,
+				7978A443216DD9E700B0464E /* DraggedItems.swift */,
 				792388EF21391929007E0948 /* ImagesViewSource.swift */,
 				79A225B621638F3A00C08D7B /* CircleArea.swift */,
 			);
@@ -385,6 +388,7 @@
 				79E06D892154E11B004266C0 /* ImagesCollectionViewController.swift in Sources */,
 				794C9D6D212D53D40034E77F /* ImagesViewController.swift in Sources */,
 				792348D521429A87007903E1 /* ImageDetailViewController.swift in Sources */,
+				7978A444216DD9E700B0464E /* DraggedItems.swift in Sources */,
 				795B8B7B212D815A00E18F16 /* ImageCollectionViewCell.swift in Sources */,
 				792388F021391929007E0948 /* ImagesViewSource.swift in Sources */,
 				797E9739212D9B2F0016985D /* ImageService.swift in Sources */,

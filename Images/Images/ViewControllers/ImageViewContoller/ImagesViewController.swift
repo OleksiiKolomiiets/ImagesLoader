@@ -326,13 +326,18 @@ extension ImagesViewController: UIDropInteractionDelegate {
     }
     
     private func enableTabBar() {
-        self.tabBarController?.viewControllers?.forEach() { viewController in
-            if let vc = viewController as? ImageDetailViewController,
-                let draggedItem = self.draggedCellPath {
-                vc.imageData = self.dataSource![draggedItem.section].data![draggedItem.row]
+        let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
+        if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
+            let draggedItem = self.draggedCellPath {
+            detailVC.imageData = self.dataSource![draggedItem.section].data![draggedItem.row]
+            self.tabBarController?.viewControllers = [self.tabBarController?.viewControllers?.first] as? [UIViewController]
+            DragedItems.add(item: detailVC)
+            DragedItems.source.forEach() {
+                self.tabBarController?.viewControllers?.append($0)
             }
         }
     }
+    
 }
 
 // MARK: - Drag interaction delegate:
