@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Images View Controller-->
+        <!--Images-->
         <scene sceneID="dJk-aA-NRa">
             <objects>
                 <viewController id="ZaQ-Wu-06e" customClass="ImagesViewController" customModule="Images" customModuleProvider="target" sceneMemberID="viewController">
@@ -140,7 +140,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="KH4-IR-CVc"/>
                     </view>
-                    <tabBarItem key="tabBarItem" springLoaded="YES" systemItem="more" id="BSE-e8-cd4"/>
+                    <tabBarItem key="tabBarItem" title="Images" image="inbox" springLoaded="YES" id="BSE-e8-cd4"/>
                     <connections>
                         <outlet property="dropZoneView" destination="9c9-WG-hgN" id="0Ae-yf-vfX"/>
                         <outlet property="shadowView" destination="0un-16-oP2" id="XDG-eY-aRE"/>
@@ -162,6 +162,7 @@
     </scenes>
     <resources>
         <image name="flickr_logo" width="320" height="160"/>
+        <image name="inbox" width="32" height="32"/>
         <image name="space" width="520" height="612"/>
     </resources>
 </document>

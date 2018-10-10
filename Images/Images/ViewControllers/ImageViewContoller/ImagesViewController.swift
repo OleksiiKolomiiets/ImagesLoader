@@ -45,10 +45,8 @@ class ImagesViewController: UIViewController {
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
     private var proccesingView: UIView?
-    private var parser =  DragItemParser()
     var imagesCollectionViewController: ImagesCollectionViewController!
     var indexOfCellBeforeDragging = 0
-    var draggedCellPath: IndexPath?
     var selectedCellPath: IndexPath!
     var dataSource: [ImagesViewSource]? {
         willSet {
@@ -215,8 +213,9 @@ extension ImagesViewController: ShadowViewDelegate {
                 if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
                     let dataSource = self.dataSource?[self.selectedCellPath.section],
                     let data = dataSource.data?[self.selectedCellPath.row] {
-                    detailVC.imageData = data
-                    detailVC.doneButtonisHidden = false
+                    let url = ImageService.getUrlForPhoto(using: data)
+                    detailVC.imageURL = url
+                    detailVC.isDoneButtonHidden = false
                     self.present(detailVC, animated: true)
                 }
             }
@@ -311,7 +310,7 @@ extension ImagesViewController: UITableViewDelegate {
 extension ImagesViewController: UIDropInteractionDelegate {
     
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        return session.canLoadObjects(ofClass: NSString.self)
+        return session.canLoadObjects(ofClass: NSURL.self)
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
@@ -319,31 +318,43 @@ extension ImagesViewController: UIDropInteractionDelegate {
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        session.loadObjects(ofClass: NSString.self) { nsstrings in
-            self.draggedCellPath = self.parser.encode(nsstrings.first as! NSString)
-            self.enableTabBar()
+        session.loadObjects(ofClass: NSURL.self) { nsurl in
+            self.setTabBar(with: nsurl.first as! URL)
         }
     }
     
-    private func enableTabBar() {
-        let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
-        if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
-            let draggedItem = self.draggedCellPath {
-            detailVC.imageData = self.dataSource![draggedItem.section].data![draggedItem.row]
-            self.tabBarController?.viewControllers = [self.tabBarController?.viewControllers?.first] as? [UIViewController]
-            DragedItems.add(item: detailVC)
-            DragedItems.source.forEach() {
-                self.tabBarController?.viewControllers?.append($0)
+    private func setTabBar(with url: URL) {
+        if (self.tabBarController?.viewControllers?.count)! < 4 {
+            let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
+            if let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController {
+                detailVC.imageURL = url
+                detailVC.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
+                self.tabBarController?.viewControllers?.append(detailVC)
+            }
+        } else {
+            let tabBarVCs = self.tabBarController!.viewControllers!
+            
+            for (index, viewController) in tabBarVCs.enumerated() {
+                if let vc = viewController as? ImageDetailViewController {
+                    if index < tabBarVCs.count - 1 {
+                        let nextIndex = tabBarVCs.index(after: index)
+                        if let nextVC = tabBarVCs[nextIndex] as? ImageDetailViewController {
+                            vc.imageURL = nextVC.imageURL
+                        }
+                    } else {
+                        vc.imageURL = url
+                    }
+                }
             }
         }
     }
-    
 }
 
 // MARK: - Drag interaction delegate:
 extension ImagesViewController: UITableViewDragDelegate {
     
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        
         return dragItem(at: indexPath)
     }
     
@@ -356,10 +367,10 @@ extension ImagesViewController: UITableViewDragDelegate {
     }
     
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
-        let item = parser.decode(indexPath)
-        let itemProvider = NSItemProvider(object: item)
+        let url = ImageService.getUrlForPhoto(using: dataSource![indexPath.section].data![indexPath.row])
+        let itemProvider = NSItemProvider(contentsOf: url)!
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = item
+        dragItem.localObject = url
         return [dragItem]
     }
 }

@@ -8,12 +8,9 @@
 
 import UIKit
 
-struct ImageViewEntity: Codable {
+struct ImageViewEntity {    
     
-    //===================
     // MARK: - Variables:
-    //===================
-    
     let url     : URL
     let title   : String
     let photoID : String
@@ -30,10 +27,7 @@ struct ImageViewEntity: Codable {
         case farm
     }
     
-    //==================
-    // MARK: - Function:
-    //==================
-    
+    // MARK: - Function:    
     // Constructor to create instance using dictionary from api and existing url
     init(from dictionary: [String: Any], with url: URL) {
         self.url = url
