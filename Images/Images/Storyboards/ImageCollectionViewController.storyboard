@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1XA-NL-6uK">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -18,38 +18,35 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="MBE-B0-m9c">
-                            <size key="itemSize" width="283" height="172"/>
+                            <size key="itemSize" width="283" height="175"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
                             <size key="footerReferenceSize" width="0.0" height="0.0"/>
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" misplaced="YES" reuseIdentifier="imageCollectionView" id="nvR-CH-ANp" customClass="ImageCollectionViewCell" customModule="Images" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="2" width="283" height="172"/>
+                                <rect key="frame" x="0.0" y="1" width="283" height="174"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                    <rect key="frame" x="0.0" y="0.0" width="283" height="172"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="283" height="174"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aY2-ec-WB0">
-                                            <rect key="frame" x="10" y="0.0" width="206" height="0.0"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="243" placeholderIntrinsicHeight="152" translatesAutoresizingMaskIntoConstraints="NO" id="aY2-ec-WB0">
+                                            <rect key="frame" x="8" y="8" width="267" height="152"/>
                                         </imageView>
-                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="MMV-n2-aI5">
-                                            <rect key="frame" x="95.5" y="-18.5" width="37" height="37"/>
+                                        <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="MMV-n2-aI5">
+                                            <rect key="frame" x="123" y="72.5" width="37" height="37"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <color key="color" name="selectedKnobColor" catalog="System" colorSpace="catalog"/>
                                         </activityIndicatorView>
                                     </subviews>
                                 </view>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="aY2-ec-WB0" secondAttribute="bottom" id="46A-ZH-wgF"/>
-                                    <constraint firstItem="aY2-ec-WB0" firstAttribute="top" secondItem="nvR-CH-ANp" secondAttribute="top" id="JLZ-5c-ymm"/>
-                                    <constraint firstAttribute="bottom" secondItem="aY2-ec-WB0" secondAttribute="bottom" id="JON-x6-cNE"/>
-                                    <constraint firstAttribute="trailing" secondItem="aY2-ec-WB0" secondAttribute="trailing" constant="12" id="RgJ-Pl-OXf"/>
-                                    <constraint firstItem="aY2-ec-WB0" firstAttribute="top" secondItem="nvR-CH-ANp" secondAttribute="top" id="ZFL-04-q0o"/>
-                                    <constraint firstItem="aY2-ec-WB0" firstAttribute="leading" secondItem="nvR-CH-ANp" secondAttribute="leading" constant="10" id="acT-Gj-gDJ"/>
-                                    <constraint firstItem="MMV-n2-aI5" firstAttribute="centerX" secondItem="nvR-CH-ANp" secondAttribute="centerX" id="qgc-P2-GRJ"/>
-                                    <constraint firstItem="MMV-n2-aI5" firstAttribute="centerY" secondItem="nvR-CH-ANp" secondAttribute="centerY" id="wyb-ot-oMm"/>
+                                    <constraint firstItem="aY2-ec-WB0" firstAttribute="trailing" secondItem="nvR-CH-ANp" secondAttribute="trailingMargin" id="Uq7-eA-lZH"/>
+                                    <constraint firstItem="aY2-ec-WB0" firstAttribute="top" secondItem="nvR-CH-ANp" secondAttribute="top" constant="8" id="adk-dR-oVY"/>
+                                    <constraint firstItem="aY2-ec-WB0" firstAttribute="leading" secondItem="nvR-CH-ANp" secondAttribute="leading" constant="8" id="iqy-1M-xkv"/>
                                 </constraints>
+                                <size key="customSize" width="283" height="174"/>
                                 <connections>
                                     <outlet property="pictureImageView" destination="aY2-ec-WB0" id="4d6-cp-bSJ"/>
                                     <outlet property="spinner" destination="MMV-n2-aI5" id="cgu-kh-tIa"/>
@@ -68,7 +65,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gdy-C0-ddI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3768" y="111.54422788605699"/>
+            <point key="canvasLocation" x="3766.875" y="110.91549295774648"/>
         </scene>
     </scenes>
 </document>

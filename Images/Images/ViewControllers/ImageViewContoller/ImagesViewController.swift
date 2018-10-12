@@ -36,9 +36,10 @@ class ImagesViewController: UIViewController {
     @IBOutlet weak var shadowView: ShadowView!
     @IBOutlet weak var dropZoneView: UIView! {
         didSet {
-            dropZoneView.addInteraction(UIDropInteraction(delegate: self))
+//            dropZoneView.addInteraction(UIDropInteraction(delegate: self))
         }
     }
+    @IBOutlet weak var proposeForDropLable: UILabel!
     
     // MARK:  - Properties:
     private var service = ImageService()
@@ -70,6 +71,33 @@ class ImagesViewController: UIViewController {
         
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+//        if dropZoneView.layer.sublayers == nil {
+//            let yourViewBorder = CAShapeLayer()
+//            yourViewBorder.strokeColor = UIColor.black.cgColor
+//            yourViewBorder.lineDashPattern = [8, 6]
+//            print(dropZoneView.bounds)
+//
+//            yourViewBorder.frame = dropZoneView.bounds
+//
+//            print(yourViewBorder.frame)
+//            yourViewBorder.fillColor = nil
+//            yourViewBorder.path = UIBezierPath(roundedRect: dropZoneView.bounds, byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 20, height: 20)).cgPath
+//            //        yourViewBorder.path = UIBezierPath(rect: dropZoneView.bounds).cgPath
+//            dropZoneView.layer.addSublayer(yourViewBorder)
+//
+//            let animation = CABasicAnimation(keyPath: "lineDashPhase")
+//            animation.fromValue = 0
+//            animation.toValue = yourViewBorder.lineDashPattern?.reduce(0) { $0 - $1.intValue } ?? 0
+//            animation.duration = 1
+//            animation.repeatCount = .infinity
+//            yourViewBorder.add(animation, forKey: "line")
+//        }
+    }
+    
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         // ending timer work when user go to anothe screen
@@ -85,6 +113,7 @@ class ImagesViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let embededCV = segue.destination as? ImagesCollectionViewController {
+            embededCV.superViewController = self
             self.imagesCollectionViewController = embededCV
         }
     }
@@ -174,7 +203,7 @@ class ImagesViewController: UIViewController {
         animation.fromValue = 0.5
         animation.toValue = 0.7
         animation.duration = 0.7
-        animation.repeatCount = Float.infinity
+        animation.repeatCount = .infinity
         animation.autoreverses = true
         
         badSignalImageView.layer.add(animation, forKey: "ss")
@@ -193,7 +222,9 @@ extension ImagesViewController: ImageServiceDelegate {
     func onDataLoaded(service: ImageService, data: [ImagesViewSource]) {
         badSignalImageView.removeFromSuperview()
         dataSource = data
-        imagesCollectionViewController.dataSourceCollectionView = data.first
+//        imagesCollectionViewController.imageURLs = data.first?.data?.map({ (images) in
+//            images.url
+//        })
         tableView.reloadData()
         imagesCollectionViewController.collectionView.reloadData()
     }
@@ -319,8 +350,34 @@ extension ImagesViewController: UIDropInteractionDelegate {
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
         session.loadObjects(ofClass: NSURL.self) { nsurl in
+            if var imageURLs = self.imagesCollectionViewController.imageURLs {
+                imageURLs.append(nsurl.first as! URL)                
+            } else {
+                self.imagesCollectionViewController.imageURLs = [nsurl.first as! URL]
+            }
+        }
+        /*
+         For adding dragged item to queue of tab bar controllers(max three items)
+        session.loadObjects(ofClass: NSURL.self) { nsurl in
             self.setTabBar(with: nsurl.first as! URL)
         }
+         */
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, concludeDrop session: UIDropSession) {
+        dropZoneView.isHidden = true
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnter session: UIDropSession) {
+//        if let layer = dropZoneView.layer.sublayers?.first as? CAShapeLayer {
+//            layer.fillColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 0.5)
+//        }
+    }
+    
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidExit session: UIDropSession) {
+//        if let layer = dropZoneView.layer.sublayers?.first as? CAShapeLayer {
+//            layer.fillColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 0.25)
+//        }
     }
     
     private func setTabBar(with url: URL) {
@@ -352,17 +409,21 @@ extension ImagesViewController: UIDropInteractionDelegate {
 // MARK: - Drag interaction delegate:
 extension ImagesViewController: UITableViewDragDelegate {
     
-    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {        
         return dragItem(at: indexPath)
     }
     
     func tableView(_ tableView: UITableView, dragSessionDidEnd session: UIDragSession) {
-        dropZoneView.isHidden = true
+//        if let layer = dropZoneView.layer.sublayers?.first as? CAShapeLayer {
+//            layer.fillColor = nil
+//        }
     }
     
     func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
-        dropZoneView.isHidden = false
+//        dropZoneView.isHidden = false
+//        if let layer = dropZoneView.layer.sublayers?.first as? CAShapeLayer {
+//            layer.fillColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 0.25)
+//        }
     }
     
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {

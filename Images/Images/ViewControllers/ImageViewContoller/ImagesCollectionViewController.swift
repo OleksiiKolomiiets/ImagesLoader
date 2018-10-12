@@ -10,26 +10,25 @@ import UIKit
 
 class ImagesCollectionViewController: UICollectionViewController {
 
-    // ===============
     // MARK: - Outlet:
-    // ===============
     @IBOutlet private weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     
-    // ===================
     // MARK: - Properties:
-    // ===================
+    var superViewController: ImagesViewController!
     private var indexOfCellBeforeDragging = 0
-    var dataSourceCollectionView: ImagesViewSource?
+    var imageURLs: [URL]? {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
-  
-    // ==================
     // MARK: - Functions:
-    // ==================
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         collectionViewFlowLayout.minimumLineSpacing = 0
+        collectionView.dropDelegate = self
+//        collectionView.addInteraction(UIDropInteraction(delegate: self))
     }
     
     override func viewDidLayoutSubviews() {
@@ -64,7 +63,7 @@ class ImagesCollectionViewController: UICollectionViewController {
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSourceCollectionView?.data?.count ?? 0
+        return imageURLs?.count ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -75,7 +74,7 @@ class ImagesCollectionViewController: UICollectionViewController {
         
         var cellImage: UIImage?
         
-        if let url = dataSourceCollectionView?.data?[indexPath.row].url {
+        if let url = imageURLs?[indexPath.row] {
             if let image = ImageLoadHelper.getImageFromCache(by: url) {
                 cellImage = image
             } else {
@@ -104,7 +103,7 @@ class ImagesCollectionViewController: UICollectionViewController {
     
     override func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
-        guard let count = dataSourceCollectionView?.data?.count else { return }
+        guard let count = imageURLs?.count else { return }
         // Stop scrollView sliding:
         targetContentOffset.pointee = scrollView.contentOffset
         
@@ -136,11 +135,111 @@ class ImagesCollectionViewController: UICollectionViewController {
     }
     
     private func indexOfMajorCell() -> Int {
-        guard let count = dataSourceCollectionView?.data?.count else { return 0 }
+        guard let count = imageURLs?.count else { return 0 }
         let itemWidth = collectionViewFlowLayout.itemSize.width
         let proportionalOffset = collectionViewFlowLayout.collectionView!.contentOffset.x / itemWidth
         let index = Int(round(proportionalOffset))
         let safeIndex = max(0, min(count - 1, index))
         return safeIndex
+    }
+}
+
+
+extension ImagesCollectionViewController: UICollectionViewDropDelegate {   
+    
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        superViewController.proposeForDropLable.isHidden = true
+        let destinationIndexPath: IndexPath
+        if let indexPath = coordinator.destinationIndexPath
+        {
+            destinationIndexPath = indexPath
+        }
+        else
+        {
+            // Get last index path of collection view.
+            let section = collectionView.numberOfSections - 1
+            let row = collectionView.numberOfItems(inSection: section)
+            destinationIndexPath = IndexPath(row: row, section: section)
+        }
+        
+        collectionView.performBatchUpdates({
+            var indexPaths = [IndexPath]()
+            
+            for (index, item) in coordinator.items.enumerated()
+            {
+                //Destination index path for each item is calculated separately using the destinationIndexPath fetched from the coordinator
+                let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
+                
+                if self.imageURLs != nil {
+                    self.imageURLs!.append(item.dragItem.localObject as! URL)
+                    let insertIndex = destinationIndexPath.row
+                    let lastIndex = self.imageURLs!.endIndex
+                    for i in (insertIndex + 1 ..< lastIndex).reversed() {
+                        self.imageURLs?.swapAt(i, i - 1)
+                    }
+                    
+                } else {
+                    self.imageURLs = [item.dragItem.localObject as! URL]
+                }
+                
+                indexPaths.append(indexPath)
+                
+            }
+            collectionView.insertItems(at: indexPaths)
+        })
+        
+//        session.loadObjects(ofClass: NSURL.self) { nsurl in
+//            if var imageURLs = self.imagesCollectionViewController.imageURLs {
+//                imageURLs.append(nsurl.first as! URL)
+//            } else {
+//                self.imagesCollectionViewController.imageURLs = [nsurl.first as! URL]
+//            }
+//        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal
+    {
+        if session.localDragSession != nil
+        {
+            if collectionView.hasActiveDrag
+            {
+                return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+            }
+            else
+            {
+                return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
+            }
+        }
+        else
+        {
+            return UICollectionViewDropProposal(operation: .forbidden)
+        }
+    }
+    
+}
+
+class URLListNode: Equatable {
+    
+    var value: URL
+    var next: URLListNode?
+    weak var previous: URLListNode?
+    
+    public init(value: URL) {
+        self.value = value
+    }    
+    
+    static func == (lhs: URLListNode, rhs: URLListNode) -> Bool {
+        return lhs.value == rhs.value
+    }
+    
+}
+
+public class LinkedListNode<T> {
+    var value: T
+    var next: LinkedListNode?
+    weak var previous: LinkedListNode?
+    
+    public init(value: T) {
+        self.value = value
     }
 }
