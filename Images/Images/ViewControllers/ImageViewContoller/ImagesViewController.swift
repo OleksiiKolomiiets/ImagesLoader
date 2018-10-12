@@ -71,33 +71,6 @@ class ImagesViewController: UIViewController {
         
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-//        if dropZoneView.layer.sublayers == nil {
-//            let yourViewBorder = CAShapeLayer()
-//            yourViewBorder.strokeColor = UIColor.black.cgColor
-//            yourViewBorder.lineDashPattern = [8, 6]
-//            print(dropZoneView.bounds)
-//
-//            yourViewBorder.frame = dropZoneView.bounds
-//
-//            print(yourViewBorder.frame)
-//            yourViewBorder.fillColor = nil
-//            yourViewBorder.path = UIBezierPath(roundedRect: dropZoneView.bounds, byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 20, height: 20)).cgPath
-//            //        yourViewBorder.path = UIBezierPath(rect: dropZoneView.bounds).cgPath
-//            dropZoneView.layer.addSublayer(yourViewBorder)
-//
-//            let animation = CABasicAnimation(keyPath: "lineDashPhase")
-//            animation.fromValue = 0
-//            animation.toValue = yourViewBorder.lineDashPattern?.reduce(0) { $0 - $1.intValue } ?? 0
-//            animation.duration = 1
-//            animation.repeatCount = .infinity
-//            yourViewBorder.add(animation, forKey: "line")
-//        }
-    }
-    
-    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         // ending timer work when user go to anothe screen

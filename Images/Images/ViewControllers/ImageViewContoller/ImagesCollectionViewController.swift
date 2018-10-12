@@ -16,6 +16,8 @@ class ImagesCollectionViewController: UICollectionViewController {
     // MARK: - Properties:
     var superViewController: ImagesViewController!
     private var indexOfCellBeforeDragging = 0
+    var longPressGesture: UILongPressGestureRecognizer!
+    var longPressedEnabled = false 
     var imageURLs: [URL]? {
         didSet {
             collectionView.reloadData()
@@ -28,7 +30,42 @@ class ImagesCollectionViewController: UICollectionViewController {
         
         collectionViewFlowLayout.minimumLineSpacing = 0
         collectionView.dropDelegate = self
-//        collectionView.addInteraction(UIDropInteraction(delegate: self))
+        
+        longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(self.longTap(_:)))
+        collectionView.addGestureRecognizer(longPressGesture)
+    }
+    
+    @objc func longTap(_ gesture: UIGestureRecognizer){
+        switch(gesture.state) {
+        case .began:
+            if longPressedEnabled {
+                gesture.state = .cancelled
+                longPressedEnabled = false
+            }
+            self.collectionView.reloadData()
+        case .changed:
+            if longPressedEnabled {
+                gesture.state = .cancelled
+                longPressedEnabled = false
+            }
+            collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view!))
+        case .ended:
+            collectionView.endInteractiveMovement()
+            longPressedEnabled = true
+            self.collectionView.reloadData()
+        default:
+            collectionView.cancelInteractiveMovement()
+        }
+    }
+    
+    @IBAction func removeButtonTouch(_ sender: UIButton) {
+        let hitPoint = sender.convert(CGPoint.zero, to: collectionView)
+        let hitIndex = collectionView.indexPathForItem(at: hitPoint)
+        
+        //remove the image and refresh the collection view
+        imageURLs?.remove(at: (hitIndex?.row)!)
+        longPressedEnabled = false
+        collectionView.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -82,6 +119,12 @@ class ImagesCollectionViewController: UICollectionViewController {
                     self.setCellForCollectionView(by: indexPath, with: image)
                 }
             }
+        }
+        
+        if longPressedEnabled {
+            view.startAnimate()
+        } else {
+            view.stopAnimate()
         }
         
         view.configure(with: cellImage)
@@ -148,10 +191,6 @@ class ImagesCollectionViewController: UICollectionViewController {
 extension ImagesCollectionViewController: UICollectionViewDropDelegate {   
     
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        
-       
-            
-            
             superViewController.proposeForDropLable.isHidden = true
             let destinationIndexPath: IndexPath
             if let indexPath = coordinator.destinationIndexPath
@@ -210,5 +249,4 @@ extension ImagesCollectionViewController: UICollectionViewDropDelegate {
             return UICollectionViewDropProposal(operation: .forbidden)
         }
     }
-    
 }

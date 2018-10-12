@@ -48,10 +48,6 @@
                                 <color key="textColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9c9-WG-hgN">
-                                <rect key="frame" x="76" y="132" width="88" height="45.5"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
                             <imageView userInteractionEnabled="NO" alpha="0.90000000000000002" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flickr_logo" translatesAutoresizingMaskIntoConstraints="NO" id="j0g-xs-tP2">
                                 <rect key="frame" x="35" y="20" width="250" height="60"/>
                                 <constraints>
@@ -126,14 +122,10 @@
                             <constraint firstItem="0un-16-oP2" firstAttribute="top" secondItem="umi-wv-8HL" secondAttribute="top" id="3i5-Vx-13H"/>
                             <constraint firstItem="H1M-TR-gbN" firstAttribute="top" secondItem="6cP-V6-eD9" secondAttribute="bottom" id="7y8-k5-7l7"/>
                             <constraint firstItem="KH4-IR-CVc" firstAttribute="trailing" secondItem="H1M-TR-gbN" secondAttribute="trailing" id="8Hs-PB-dK6"/>
-                            <constraint firstItem="9c9-WG-hgN" firstAttribute="top" secondItem="j0g-xs-tP2" secondAttribute="bottom" constant="52" id="DZW-va-Ah4"/>
-                            <constraint firstItem="H1M-TR-gbN" firstAttribute="top" secondItem="9c9-WG-hgN" secondAttribute="bottom" constant="66" id="EEv-cf-hRS"/>
                             <constraint firstItem="GAs-cC-siT" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" constant="105" id="FvG-Ct-nUH"/>
                             <constraint firstItem="H1M-TR-gbN" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" id="Hac-Ln-fUr"/>
                             <constraint firstItem="6cP-V6-eD9" firstAttribute="width" secondItem="umi-wv-8HL" secondAttribute="width" id="Jhx-9Q-O2h"/>
-                            <constraint firstItem="9c9-WG-hgN" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" constant="76" id="LRr-OR-r3A"/>
                             <constraint firstItem="j0g-xs-tP2" firstAttribute="top" secondItem="KH4-IR-CVc" secondAttribute="top" id="LUg-3N-JFU"/>
-                            <constraint firstItem="KH4-IR-CVc" firstAttribute="trailing" secondItem="9c9-WG-hgN" secondAttribute="trailing" constant="156" id="N8o-dI-5uA"/>
                             <constraint firstAttribute="bottom" secondItem="0un-16-oP2" secondAttribute="bottom" id="NW9-SM-ba1"/>
                             <constraint firstItem="xIE-UK-YMh" firstAttribute="top" secondItem="j0g-xs-tP2" secondAttribute="bottom" constant="4" id="Njv-Yq-5h6"/>
                             <constraint firstItem="j0g-xs-tP2" firstAttribute="centerX" secondItem="6cP-V6-eD9" secondAttribute="centerX" id="Ozc-fJ-Aag"/>
@@ -152,7 +144,6 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Images" image="inbox" springLoaded="YES" id="BSE-e8-cd4"/>
                     <connections>
-                        <outlet property="dropZoneView" destination="9c9-WG-hgN" id="bG5-Tz-IP0"/>
                         <outlet property="proposeForDropLable" destination="GAs-cC-siT" id="aMG-GR-Y1S"/>
                         <outlet property="shadowView" destination="0un-16-oP2" id="XDG-eY-aRE"/>
                         <outlet property="tableView" destination="H1M-TR-gbN" id="LXr-hm-3HK"/>

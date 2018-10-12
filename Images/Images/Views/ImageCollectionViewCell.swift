@@ -13,8 +13,11 @@ class ImageCollectionViewCell: UICollectionViewCell {
     // MARK: - Outlets:
     @IBOutlet private weak var pictureImageView: UIImageView!
     @IBOutlet private weak var spinner: UIActivityIndicatorView!
-    @IBOutlet weak var dropZoneAnimatedView: UIView!
+    @IBOutlet private weak var removeButton: UIButton!
     
+    
+    
+    var isAnimate: Bool! = true
     // MARK: - Functions:
     // cleaning cell before reuse
     override func prepareForReuse() {
@@ -44,27 +47,35 @@ class ImageCollectionViewCell: UICollectionViewCell {
         pictureImageView.layer.borderColor = UIColor.white.cgColor
     }
     
-    func setAnimationForDropZone() {
-        if dropZoneAnimatedView.layer.sublayers == nil {
-            let yourViewBorder = CAShapeLayer()
-            yourViewBorder.strokeColor = UIColor.black.cgColor
-            yourViewBorder.lineDashPattern = [8, 6]
-            
-            yourViewBorder.frame = dropZoneAnimatedView.bounds
-            
-            print(yourViewBorder.frame)
-            yourViewBorder.fillColor = nil
-            yourViewBorder.path = UIBezierPath(roundedRect: dropZoneAnimatedView.bounds, byRoundingCorners: .allCorners, cornerRadii: CGSize(width: 20, height: 20)).cgPath
-            //        yourViewBorder.path = UIBezierPath(rect: dropZoneView.bounds).cgPath
-            dropZoneAnimatedView.layer.addSublayer(yourViewBorder)
-            
-            let animation = CABasicAnimation(keyPath: "lineDashPhase")
-            animation.fromValue = 0
-            animation.toValue = yourViewBorder.lineDashPattern?.reduce(0) { $0 - $1.intValue } ?? 0
-            animation.duration = 1
-            animation.repeatCount = .infinity
-            yourViewBorder.add(animation, forKey: "line")
-        }
+    func startAnimate() {
+        removeButton.isHidden = false
+        
+        let shakeAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        shakeAnimation.duration = 0.05
+        shakeAnimation.repeatCount = 4
+        shakeAnimation.autoreverses = true
+        shakeAnimation.duration = 0.2
+        shakeAnimation.repeatCount = .infinity
+        
+        let startAngle: Float = (-2) * 3.14159/180
+        let stopAngle = -startAngle
+        
+        shakeAnimation.fromValue = NSNumber(value: startAngle as Float)
+        shakeAnimation.toValue = NSNumber(value: 2 * stopAngle as Float)
+        shakeAnimation.autoreverses = true
+        shakeAnimation.timeOffset = 290 * drand48()
+        
+        let layer: CALayer = self.layer
+        layer.add(shakeAnimation, forKey:"animate")
+        isAnimate = true
+    }
+    
+    func stopAnimate() {
+        removeButton.isHidden = true
+        
+        let layer: CALayer = self.layer
+        layer.removeAnimation(forKey: "animate")
+        isAnimate = false
     }
 }
 
