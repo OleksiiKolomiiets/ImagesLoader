@@ -193,12 +193,9 @@ extension ImagesCollectionViewController: UICollectionViewDropDelegate {
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
             superViewController.proposeForDropLable.isHidden = true
             let destinationIndexPath: IndexPath
-            if let indexPath = coordinator.destinationIndexPath
-            {
+            if let indexPath = coordinator.destinationIndexPath {
                 destinationIndexPath = indexPath
-            }
-            else
-            {
+            } else {
                 // Get last index path of collection view.
                 let section = collectionView.numberOfSections - 1
                 let row = collectionView.numberOfItems(inSection: section)
@@ -233,19 +230,13 @@ extension ImagesCollectionViewController: UICollectionViewDropDelegate {
     }
     
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        if session.localDragSession != nil
-        {
-            if collectionView.hasActiveDrag
-            {
+        if session.localDragSession != nil {
+            if collectionView.hasActiveDrag {
                 return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-            }
-            else
-            {
+            } else {
                 return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
             }
-        }
-        else
-        {
+        } else {
             return UICollectionViewDropProposal(operation: .forbidden)
         }
     }
