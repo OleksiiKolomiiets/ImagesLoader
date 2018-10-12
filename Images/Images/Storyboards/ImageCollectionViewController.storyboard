@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1XA-NL-6uK">
-    <device id="retina4_0" orientation="portrait">
+    <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -25,14 +25,14 @@
                         </collectionViewFlowLayout>
                         <cells>
                             <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFill" misplaced="YES" reuseIdentifier="imageCollectionView" id="nvR-CH-ANp" customClass="ImageCollectionViewCell" customModule="Images" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="1" width="283" height="174"/>
+                                <rect key="frame" x="0.0" y="0.5" width="283" height="175"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                    <rect key="frame" x="0.0" y="0.0" width="283" height="174"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="283" height="175"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="243" placeholderIntrinsicHeight="152" translatesAutoresizingMaskIntoConstraints="NO" id="aY2-ec-WB0">
-                                            <rect key="frame" x="8" y="8" width="267" height="152"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="267" placeholderIntrinsicHeight="152" translatesAutoresizingMaskIntoConstraints="NO" id="aY2-ec-WB0">
+                                            <rect key="frame" x="8" y="8" width="212" height="152"/>
                                         </imageView>
                                         <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="MMV-n2-aI5">
                                             <rect key="frame" x="123" y="72.5" width="37" height="37"/>
@@ -46,7 +46,6 @@
                                     <constraint firstItem="aY2-ec-WB0" firstAttribute="top" secondItem="nvR-CH-ANp" secondAttribute="top" constant="8" id="adk-dR-oVY"/>
                                     <constraint firstItem="aY2-ec-WB0" firstAttribute="leading" secondItem="nvR-CH-ANp" secondAttribute="leading" constant="8" id="iqy-1M-xkv"/>
                                 </constraints>
-                                <size key="customSize" width="283" height="174"/>
                                 <connections>
                                     <outlet property="pictureImageView" destination="aY2-ec-WB0" id="4d6-cp-bSJ"/>
                                     <outlet property="spinner" destination="MMV-n2-aI5" id="cgu-kh-tIa"/>

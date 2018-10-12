@@ -46,11 +46,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Images/ViewControllers/ImageViewContoller/ImagesCollectionViewController.swift"
-            timestampString = "561020715.0218821"
+            timestampString = "561027121.312065"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
+            startingLineNumber = "181"
+            endingLineNumber = "181"
             landmarkName = "collectionView(_:performDropWith:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,12 +62,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Images/Views/ImageCollectionViewCell.swift"
-            timestampString = "561020715.0224071"
+            timestampString = "561027121.312673"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "48"
             endingLineNumber = "48"
             landmarkName = "setAnimationForDropZone()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Images/ViewControllers/ImageViewContoller/ImagesCollectionViewController.swift"
+            timestampString = "561027121.312741"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
+            landmarkName = "collectionView(_:performDropWith:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

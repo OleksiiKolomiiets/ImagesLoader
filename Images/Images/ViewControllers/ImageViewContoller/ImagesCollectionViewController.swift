@@ -148,57 +148,52 @@ class ImagesCollectionViewController: UICollectionViewController {
 extension ImagesCollectionViewController: UICollectionViewDropDelegate {   
     
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        superViewController.proposeForDropLable.isHidden = true
-        let destinationIndexPath: IndexPath
-        if let indexPath = coordinator.destinationIndexPath
-        {
-            destinationIndexPath = indexPath
-        }
-        else
-        {
-            // Get last index path of collection view.
-            let section = collectionView.numberOfSections - 1
-            let row = collectionView.numberOfItems(inSection: section)
-            destinationIndexPath = IndexPath(row: row, section: section)
-        }
         
-        collectionView.performBatchUpdates({
-            var indexPaths = [IndexPath]()
+       
             
-            for (index, item) in coordinator.items.enumerated()
+            
+            superViewController.proposeForDropLable.isHidden = true
+            let destinationIndexPath: IndexPath
+            if let indexPath = coordinator.destinationIndexPath
             {
-                //Destination index path for each item is calculated separately using the destinationIndexPath fetched from the coordinator
-                let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
+                destinationIndexPath = indexPath
+            }
+            else
+            {
+                // Get last index path of collection view.
+                let section = collectionView.numberOfSections - 1
+                let row = collectionView.numberOfItems(inSection: section)
+                destinationIndexPath = IndexPath(row: row, section: section)
+            }
+            
+            collectionView.performBatchUpdates({
+                var indexPaths = [IndexPath]()
                 
-                if self.imageURLs != nil {
-                    self.imageURLs!.append(item.dragItem.localObject as! URL)
-                    let insertIndex = destinationIndexPath.row
-                    let lastIndex = self.imageURLs!.endIndex
-                    for i in (insertIndex + 1 ..< lastIndex).reversed() {
-                        self.imageURLs?.swapAt(i, i - 1)
+                for (index, item) in coordinator.items.enumerated() {
+                    //Destination index path for each item is calculated separately using the destinationIndexPath fetched from the coordinator
+                    let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
+                    
+                    if let imageURLs = imageURLs {
+                        if !imageURLs.contains(coordinator.items.first?.dragItem.localObject as! URL) {
+                            self.imageURLs!.append(item.dragItem.localObject as! URL)
+                            let insertIndex = destinationIndexPath.row
+                            let lastIndex = self.imageURLs!.endIndex
+                            for i in (insertIndex + 1 ..< lastIndex).reversed() {
+                                self.imageURLs?.swapAt(i, i - 1)
+                            }
+                            indexPaths.append(indexPath)
+                        }
+                    } else {
+                        self.imageURLs = [item.dragItem.localObject as! URL]
+                        indexPaths.append(indexPath)
                     }
                     
-                } else {
-                    self.imageURLs = [item.dragItem.localObject as! URL]
                 }
-                
-                indexPaths.append(indexPath)
-                
-            }
-            collectionView.insertItems(at: indexPaths)
-        })
-        
-//        session.loadObjects(ofClass: NSURL.self) { nsurl in
-//            if var imageURLs = self.imagesCollectionViewController.imageURLs {
-//                imageURLs.append(nsurl.first as! URL)
-//            } else {
-//                self.imagesCollectionViewController.imageURLs = [nsurl.first as! URL]
-//            }
-//        }
+                collectionView.insertItems(at: indexPaths)
+            })
     }
     
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal
-    {
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
         if session.localDragSession != nil
         {
             if collectionView.hasActiveDrag
@@ -216,30 +211,4 @@ extension ImagesCollectionViewController: UICollectionViewDropDelegate {
         }
     }
     
-}
-
-class URLListNode: Equatable {
-    
-    var value: URL
-    var next: URLListNode?
-    weak var previous: URLListNode?
-    
-    public init(value: URL) {
-        self.value = value
-    }    
-    
-    static func == (lhs: URLListNode, rhs: URLListNode) -> Bool {
-        return lhs.value == rhs.value
-    }
-    
-}
-
-public class LinkedListNode<T> {
-    var value: T
-    var next: LinkedListNode?
-    weak var previous: LinkedListNode?
-    
-    public init(value: T) {
-        self.value = value
-    }
 }
