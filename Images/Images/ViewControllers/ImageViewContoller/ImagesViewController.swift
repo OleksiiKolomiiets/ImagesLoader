@@ -34,11 +34,6 @@ class ImagesViewController: UIViewController {
     // MARK: - Outlets:
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var shadowView: ShadowView!
-    @IBOutlet weak var dropZoneView: UIView! {
-        didSet {
-//            dropZoneView.addInteraction(UIDropInteraction(delegate: self))
-        }
-    }
     @IBOutlet weak var proposeForDropLable: UILabel!
     
     // MARK:  - Properties:
@@ -68,6 +63,7 @@ class ImagesViewController: UIViewController {
         service.reload()
         tableView.dragDelegate = self           // didn't find its setting on Storyboard
         tableView.dragInteractionEnabled = true // didn't find its setting on Storyboard
+        setCustomOpacityAnimation(for: proposeForDropLable)
         
     }
     
@@ -171,6 +167,13 @@ class ImagesViewController: UIViewController {
     }()
     
     func addBadSignalImage(at view: UIView) {
+        setCustomOpacityAnimation(for: badSignalImageView)
+        
+        view.addSubview(badSignalImageView)
+    }
+    
+    private func setCustomOpacityAnimation(for view: UIView) {
+        // add opacity animation
         let animation = CABasicAnimation(keyPath: "opacity")
         
         animation.fromValue = 0.5
@@ -179,9 +182,7 @@ class ImagesViewController: UIViewController {
         animation.repeatCount = .infinity
         animation.autoreverses = true
         
-        badSignalImageView.layer.add(animation, forKey: "ss")
-        
-        view.addSubview(badSignalImageView)
+        view.layer.add(animation, forKey: "Propose opacity")
     }
     
 }
@@ -195,9 +196,6 @@ extension ImagesViewController: ImageServiceDelegate {
     func onDataLoaded(service: ImageService, data: [ImagesViewSource]) {
         badSignalImageView.removeFromSuperview()
         dataSource = data
-//        imagesCollectionViewController.imageURLs = data.first?.data?.map({ (images) in
-//            images.url
-//        })
         tableView.reloadData()
         imagesCollectionViewController.collectionView.reloadData()
     }
@@ -331,27 +329,13 @@ extension ImagesViewController: UIDropInteractionDelegate {
         }
         /*
          For adding dragged item to queue of tab bar controllers(max three items)
+         
         session.loadObjects(ofClass: NSURL.self) { nsurl in
             self.setTabBar(with: nsurl.first as! URL)
         }
          */
     }
-    
-    func dropInteraction(_ interaction: UIDropInteraction, concludeDrop session: UIDropSession) {
-        dropZoneView.isHidden = true
-    }
-    
-    func dropInteraction(_ interaction: UIDropInteraction, sessionDidEnter session: UIDropSession) {
-//        if let layer = dropZoneView.layer.sublayers?.first as? CAShapeLayer {
-//            layer.fillColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 0.5)
-//        }
-    }
-    
-    func dropInteraction(_ interaction: UIDropInteraction, sessionDidExit session: UIDropSession) {
-//        if let layer = dropZoneView.layer.sublayers?.first as? CAShapeLayer {
-//            layer.fillColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 0.25)
-//        }
-    }
+
     
     private func setTabBar(with url: URL) {
         guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
@@ -385,20 +369,7 @@ extension ImagesViewController: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {        
         return dragItem(at: indexPath)
     }
-    
-    func tableView(_ tableView: UITableView, dragSessionDidEnd session: UIDragSession) {
-//        if let layer = dropZoneView.layer.sublayers?.first as? CAShapeLayer {
-//            layer.fillColor = nil
-//        }
-    }
-    
-    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
-//        dropZoneView.isHidden = false
-//        if let layer = dropZoneView.layer.sublayers?.first as? CAShapeLayer {
-//            layer.fillColor = #colorLiteral(red: 0, green: 0.9914394021, blue: 1, alpha: 0.25)
-//        }
-    }
-    
+     
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
         let url = ImageService.getUrlForPhoto(using: dataSource![indexPath.section].data![indexPath.row])
         let itemProvider = NSItemProvider(contentsOf: url)!

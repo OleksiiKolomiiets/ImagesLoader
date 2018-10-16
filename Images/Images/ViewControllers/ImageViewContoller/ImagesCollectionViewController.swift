@@ -20,14 +20,9 @@ class ImagesCollectionViewController: UICollectionViewController {
     var longPressedEnabled = false 
     var imageURLs: [URL]? {
         didSet {
-            if let imageURLs = imageURLs, imageURLs.isEmpty {
-                superViewController.proposeForDropLable.isHidden = false
-            }
-            collectionView.reloadData()
-        }
-        willSet {
-            if imageURLs == nil {
-                superViewController.proposeForDropLable.isHidden = false
+            if let imageURLs = imageURLs {
+                superViewController.proposeForDropLable.isHidden = !imageURLs.isEmpty                
+                collectionView.reloadData()
             }
         }
     }
