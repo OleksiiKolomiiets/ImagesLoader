@@ -1,5 +1,5 @@
 //
-//  Images.swift
+//  ImagesViewSource.swift
 //  Images
 //
 //  Created by Oleksii  Kolomiets on 8/31/18.

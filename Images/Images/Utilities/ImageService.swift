@@ -16,19 +16,13 @@ protocol ImageServiceDelegate: class {
 
 class ImageService {
     
-    //===================
     // MARK: - Variables:
-    //===================
-    
     weak var delegate: ImageServiceDelegate?
     var imageTags: [String]?
     private let imageDataLoader = DispatchQueue(label: "ImageService")
     private var imagesData = [ImagesViewSource]()
     
-    //===================
     // MARK: - Functions:
-    //===================
-    
     // Start to upload images data
     func reload() {
         imagesData.removeAll()

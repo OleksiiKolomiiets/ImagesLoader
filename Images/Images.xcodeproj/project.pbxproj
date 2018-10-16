@@ -26,7 +26,6 @@
 		798EF883215CF98D0060452C /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 798EF882215CF98D0060452C /* ShadowView.swift */; };
 		79A225B721638F3A00C08D7B /* CircleArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A225B621638F3A00C08D7B /* CircleArea.swift */; };
 		79A225B9216642C200C08D7B /* CGRect+Centr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A225B8216642C200C08D7B /* CGRect+Centr.swift */; };
-		79A225BB2167B24B00C08D7B /* Parsable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A225BA2167B24B00C08D7B /* Parsable.swift */; };
 		79C1563C212EE53F00E486C1 /* CustomSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C1563B212EE53F00E486C1 /* CustomSectionHeaderView.swift */; };
 		79D368C6213545DB007E14AE /* CustomSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79D368C5213545DB007E14AE /* CustomSectionHeaderView.xib */; };
 		79D368C8213577AD007E14AE /* ImageLoadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D368C7213577AD007E14AE /* ImageLoadHelper.swift */; };
@@ -58,7 +57,6 @@
 		798EF882215CF98D0060452C /* ShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
 		79A225B621638F3A00C08D7B /* CircleArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleArea.swift; sourceTree = "<group>"; };
 		79A225B8216642C200C08D7B /* CGRect+Centr.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGRect+Centr.swift"; sourceTree = "<group>"; };
-		79A225BA2167B24B00C08D7B /* Parsable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parsable.swift; sourceTree = "<group>"; };
 		79C1563B212EE53F00E486C1 /* CustomSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSectionHeaderView.swift; sourceTree = "<group>"; };
 		79D368C5213545DB007E14AE /* CustomSectionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomSectionHeaderView.xib; sourceTree = "<group>"; };
 		79D368C7213577AD007E14AE /* ImageLoadHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadHelper.swift; sourceTree = "<group>"; };
@@ -207,7 +205,6 @@
 		79A225BC2167B28200C08D7B /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				79A225BA2167B24B00C08D7B /* Parsable.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -374,7 +371,6 @@
 				792348CB21402480007903E1 /* SequenceExtension.swift in Sources */,
 				7967344D2133F120008AC1DA /* ImageViewEntity.swift in Sources */,
 				79A225B721638F3A00C08D7B /* CircleArea.swift in Sources */,
-				79A225BB2167B24B00C08D7B /* Parsable.swift in Sources */,
 				792348CD214024C2007903E1 /* MutableCollectionExtension.swift in Sources */,
 				794C9D7F212D61000034E77F /* ImageTableViewCell.swift in Sources */,
 				79C1563C212EE53F00E486C1 /* CustomSectionHeaderView.swift in Sources */,

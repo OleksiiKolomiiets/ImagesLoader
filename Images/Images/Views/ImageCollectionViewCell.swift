@@ -15,13 +15,14 @@ class ImageCollectionViewCell: UICollectionViewCell {
     @IBOutlet private weak var spinner: UIActivityIndicatorView!
     @IBOutlet private weak var removeButton: UIButton!
     
-    
-    
+    // MARK: - Variables:
     var isAnimate: Bool! = true
+    
     // MARK: - Functions:
-    // cleaning cell before reuse
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        // cleaning cell before reuse
         pictureImageView.image = nil
     }
     
@@ -35,19 +36,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
         pictureImageView.image = image
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-    
-    // method for testing
-    func setCell() {
-        spinner.startAnimating()
-        pictureImageView.layer.borderWidth = 1
-        pictureImageView.layer.cornerRadius = 15
-        pictureImageView.layer.borderColor = UIColor.white.cgColor
-    }
-    
-    func startAnimate() {
+    func startAnimateCellRemoving() {
         removeButton.isHidden = false
         
         let shakeAnimation = CABasicAnimation(keyPath: "transform.rotation")
@@ -57,7 +46,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
         shakeAnimation.duration = 0.2
         shakeAnimation.repeatCount = .infinity
         
-        let startAngle: Float = (-2) * 3.14159/180
+        let startAngle: Float = (-2) * Float.pi/180
         let stopAngle = -startAngle
         
         shakeAnimation.fromValue = NSNumber(value: startAngle as Float)
@@ -70,7 +59,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
         isAnimate = true
     }
     
-    func stopAnimate() {
+    func stopAnimateCellRemoving() {
         removeButton.isHidden = true
         
         let layer: CALayer = self.layer

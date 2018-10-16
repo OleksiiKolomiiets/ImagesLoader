@@ -132,12 +132,6 @@ extension ShadowView: CAAnimationDelegate {
     // MARK: - Animation delegate:
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         touchGesture.isEnabled = true
-//        if !isOpenShadow {
-//            // Signalizing delegate where view was tap
-//            delegate.shadowView(self, didUserTapOnHighlightedArea: isTapedOnArea) {
-//
-//            }
-//        }
     }
     
     func animationDidStart(_ anim: CAAnimation) {

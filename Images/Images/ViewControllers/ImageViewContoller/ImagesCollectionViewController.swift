@@ -20,7 +20,15 @@ class ImagesCollectionViewController: UICollectionViewController {
     var longPressedEnabled = false 
     var imageURLs: [URL]? {
         didSet {
+            if let imageURLs = imageURLs, imageURLs.isEmpty {
+                superViewController.proposeForDropLable.isHidden = false
+            }
             collectionView.reloadData()
+        }
+        willSet {
+            if imageURLs == nil {
+                superViewController.proposeForDropLable.isHidden = false
+            }
         }
     }
     
@@ -75,7 +83,7 @@ class ImagesCollectionViewController: UICollectionViewController {
     }
     
     private func configureCollectionViewLayoutItemSize() {
-        let inset: CGFloat = calculateSectionInset() // This inset calculation is some magic so the next and the previous cells will peek from the sides. Don't worry about it
+        let inset: CGFloat = calculateSectionInset() // This inset calculation is some magic so the next and the previous cells will peek from the sides
         collectionViewFlowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: inset)
         
         collectionViewFlowLayout.itemSize = CGSize(width: collectionViewLayout.collectionView!.frame.size.width - inset * 2,
@@ -122,9 +130,9 @@ class ImagesCollectionViewController: UICollectionViewController {
         }
         
         if longPressedEnabled {
-            view.startAnimate()
+            view.startAnimateCellRemoving()
         } else {
-            view.stopAnimate()
+            view.stopAnimateCellRemoving()
         }
         
         view.configure(with: cellImage)
@@ -191,7 +199,6 @@ class ImagesCollectionViewController: UICollectionViewController {
 extension ImagesCollectionViewController: UICollectionViewDropDelegate {   
     
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-            superViewController.proposeForDropLable.isHidden = true
             let destinationIndexPath: IndexPath
             if let indexPath = coordinator.destinationIndexPath {
                 destinationIndexPath = indexPath
@@ -206,7 +213,7 @@ extension ImagesCollectionViewController: UICollectionViewDropDelegate {
                 var indexPaths = [IndexPath]()
                 
                 for (index, item) in coordinator.items.enumerated() {
-                    //Destination index path for each item is calculated separately using the destinationIndexPath fetched from the coordinator
+                    // Destination index path for each item is calculated separately using the destinationIndexPath fetched from the coordinator
                     let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
                     
                     if let imageURLs = imageURLs {
@@ -229,7 +236,9 @@ extension ImagesCollectionViewController: UICollectionViewDropDelegate {
             })
     }
     
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+    func collectionView(_ collectionView: UICollectionView,
+                        dropSessionDidUpdate session: UIDropSession,
+                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
         if session.localDragSession != nil {
             if collectionView.hasActiveDrag {
                 return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)

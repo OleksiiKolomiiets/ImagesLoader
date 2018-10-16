@@ -11,17 +11,11 @@ import UIKit
 
 class ImageLoadHelper {
     
-    //===================
     // MARK: - Variables:
-    //===================
-    
     static private var loaderQueue = DispatchQueue(label: "ImageLoadHelper") // Custom thread for uploading images
     static private var cache = [URL: UIImage]()  // Cache for uploaded images
     
-    //===================
     // MARK: - Functions:
-    //===================
-    
     // Method for getting mages from cache
     static func getImageFromCache(by url: URL) -> UIImage? {
         return ImageLoadHelper.cache[url]
