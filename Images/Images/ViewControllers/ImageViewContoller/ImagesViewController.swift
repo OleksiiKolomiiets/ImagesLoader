@@ -16,7 +16,7 @@ class ImagesViewControllerSettings {
     static let kTags = ["sun", "mercury", "venus", "earth", "mars", "jupiter","saturn", "uranus", "neptune", "pluto"]
     static let kDefultTitle = "Title doesn't exist"
     static let kNumberOfTagsInOneLoad = 3
-    static let kCellsImageDimension:ImageDimensionType = .small
+    static let kCellsImageDimension:ImageDimensionType = .small240
     //Reloading constant
     static let kTimeLimit = 30.0
     //Table view constants
@@ -371,10 +371,13 @@ extension ImagesViewController: UITableViewDragDelegate {
     }
      
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
-        let url = ImageService.getUrlForPhoto(using: dataSource![indexPath.section].data![indexPath.row])
-        let itemProvider = NSItemProvider(contentsOf: url)!
+        let imageData = dataSource![indexPath.section].data![indexPath.row]
+        let itemProvider = NSItemProvider(object: imageData)
+        print(itemProvider)
+//        let url = ImageService.getUrlForPhoto(using: dataSource![indexPath.section].data![indexPath.row])
+//        let itemProvider = NSItemProvider(contentsOf: url)!
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = url
+        dragItem.localObject = imageData.url
         return [dragItem]
     }
 }

@@ -159,7 +159,7 @@
                 <viewControllerPlaceholder storyboardName="ImageCollectionViewController" id="4K1-Xf-mDH" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ciX-PJ-wtz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3626" y="-20"/>
+            <point key="canvasLocation" x="3571" y="194"/>
         </scene>
     </scenes>
     <resources>

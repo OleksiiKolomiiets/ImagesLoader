@@ -73,8 +73,14 @@ class ImageService {
     }
     
     // Getting images URL using Flikr image data
-    static func getUrlForPhoto(using imageData: ImageViewEntity) -> URL {
+    static func getUrlForPhoto(sizeType: ImageDimensionType = ImageDetailViewControllerSettings.kDetailImageDimension,
+                               using imageData: ImageViewEntity) -> URL {
+        return FlickrKit.shared().photoURL(for: sizeType.size, photoID: imageData.id, server: imageData.server, secret: imageData.secret, farm: String(imageData.farm))
+    }
+    
+    // Getting images URL using Flikr image data
+    static func getUrlForPhoto(photoID: String, server: String, secret: String, farm: String) -> URL {        
         let size = ImageDetailViewControllerSettings.kDetailImageDimension.size
-        return FlickrKit.shared().photoURL(for: size, photoID: imageData.photoID, server: imageData.server, secret: imageData.secret, farm: String(imageData.farm))
+        return FlickrKit.shared().photoURL(for: size, photoID: photoID, server: server, secret: secret, farm: farm)
     }
 }
