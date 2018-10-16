@@ -28,6 +28,8 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var doneButton           : UIButton!
     
     // MARK: - Variables:
+    var isDoneButtonHidden = true
+    var isImageDataSetted = false
     var imageURL: URL! {
         willSet {
             isImageDataSetted = true
@@ -45,8 +47,6 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
         }
     }
-    var isDoneButtonHidden = true
-    var isImageDataSetted = false
     
     // MARK: - Actions:
     // action for ending display selected image
@@ -72,6 +72,11 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         
     }
     
+    // Making bar content light on black background
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -82,32 +87,28 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
+    // Using scroll delegate method for zooming the image
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
+    }
+    
+    // set image to the center of view
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        setImageCentred()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         isImageDataSetted = false
     }
     
+    
     private func addDoubleTapGesture(for view: UIView) {
         // adding double tap gesture recognizer
         let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped(sender:)))
         tap.numberOfTapsRequired = 2
         view.addGestureRecognizer(tap)
-    }
-    
-    // Making bar content light on black background
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
-    // Using scroll delegate method for zooming the image
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return imageView
-    }
-    
-     // set image to the center of view
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        setImageCentred()
     }
     
     private func setImageCentred() {

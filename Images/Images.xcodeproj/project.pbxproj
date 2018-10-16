@@ -41,7 +41,7 @@
 		792348CC214024C2007903E1 /* MutableCollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableCollectionExtension.swift; sourceTree = "<group>"; };
 		792348D421429A87007903E1 /* ImageDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailViewController.swift; sourceTree = "<group>"; };
 		792388EF21391929007E0948 /* ImagesViewSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesViewSource.swift; sourceTree = "<group>"; };
-		794C9D67212D53D40034E77F /* Images.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Images.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		794C9D67212D53D40034E77F /* iOS Application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iOS Application.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		794C9D6A212D53D40034E77F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		794C9D6C212D53D40034E77F /* ImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesViewController.swift; sourceTree = "<group>"; };
 		794C9D6F212D53D40034E77F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -101,7 +101,7 @@
 		794C9D68212D53D40034E77F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				794C9D67212D53D40034E77F /* Images.app */,
+				794C9D67212D53D40034E77F /* iOS Application.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -237,9 +237,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		794C9D66212D53D40034E77F /* Images */ = {
+		794C9D66212D53D40034E77F /* iOS Application */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 794C9D79212D53D50034E77F /* Build configuration list for PBXNativeTarget "Images" */;
+			buildConfigurationList = 794C9D79212D53D50034E77F /* Build configuration list for PBXNativeTarget "iOS Application" */;
 			buildPhases = (
 				4001CC2A501879A756807070 /* [CP] Check Pods Manifest.lock */,
 				794C9D63212D53D40034E77F /* Sources */,
@@ -252,9 +252,9 @@
 			);
 			dependencies = (
 			);
-			name = Images;
+			name = "iOS Application";
 			productName = Images;
-			productReference = 794C9D67212D53D40034E77F /* Images.app */;
+			productReference = 794C9D67212D53D40034E77F /* iOS Application.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -287,7 +287,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				794C9D66212D53D40034E77F /* Images */,
+				794C9D66212D53D40034E77F /* iOS Application */,
 			);
 		};
 /* End PBXProject section */
@@ -530,7 +530,7 @@
 				DEVELOPMENT_TEAM = MAY262PPKP;
 				INFOPLIST_FILE = "$(SRCROOT)/Images/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = test.Images;
+				PRODUCT_BUNDLE_IDENTIFIER = com.flickr.images;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -546,7 +546,7 @@
 				DEVELOPMENT_TEAM = MAY262PPKP;
 				INFOPLIST_FILE = "$(SRCROOT)/Images/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = test.Images;
+				PRODUCT_BUNDLE_IDENTIFIER = com.flickr.images;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -565,7 +565,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		794C9D79212D53D50034E77F /* Build configuration list for PBXNativeTarget "Images" */ = {
+		794C9D79212D53D50034E77F /* Build configuration list for PBXNativeTarget "iOS Application" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				794C9D7A212D53D50034E77F /* Debug */,

@@ -16,9 +16,9 @@ enum ImageDimensionType {
     var size: FKPhotoSize {
         switch self {
         case .small:
-            return .small320
+            return .small240
         case .large:
-            return .large1024
+            return .medium640
         }
     }
 }
