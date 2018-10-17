@@ -14,18 +14,53 @@ class ImagesCollectionViewController: UICollectionViewController {
     @IBOutlet private weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     
     // MARK: - Properties:
-    var superViewController: ImagesViewController!
     private var indexOfCellBeforeDragging = 0
-    var longPressGesture: UILongPressGestureRecognizer!
-    var longPressedEnabled = false 
-    var imageURLs: [URL]? {
+    private var removingLongPressGesture: UILongPressGestureRecognizer!
+    private var removingStarts = false
+    
+    public var superViewController: ImagesViewController!
+    public var imageURLs: [URL]? {
         didSet {
             if let imageURLs = imageURLs {
-                longPressedEnabled = false
-                superViewController.proposeForDropLable.isHidden = !imageURLs.isEmpty                
+                superViewController.proposeForDropLable.isHidden = !imageURLs.isEmpty
                 collectionView.reloadData()
+                if imageURLs.isEmpty {
+                    removingStarts = false
+                }
             }
         }
+    }
+    
+    // MARK: - Actions:
+    @objc private func longTap(_ gesture: UIGestureRecognizer){
+        switch gesture.state {
+        case .began:
+            // check if it cenceling tap
+            if removingStarts {
+                gesture.state = .cancelled
+            }
+            
+            // make all cells shaking
+            removingStarts.toggle()
+            self.collectionView.reloadData()
+        case .ended:
+            if removingStarts {
+                gesture.state = .cancelled
+            }
+        default:
+            break
+        }
+    }
+    
+    @IBAction private func removeButtonTouch(_ sender: UIButton) {
+        let hitPoint = sender.convert(CGPoint.zero, to: collectionView)
+        let hitIndex = collectionView.indexPathForItem(at: hitPoint)!
+        
+        // remove the image and refresh the collection view
+        collectionView.performBatchUpdates({
+            collectionView.deleteItems(at: [hitIndex])
+            imageURLs?.remove(at: hitIndex.row)
+        })
     }
     
     // MARK: - Functions:
@@ -35,45 +70,8 @@ class ImagesCollectionViewController: UICollectionViewController {
         collectionViewFlowLayout.minimumLineSpacing = 0
         collectionView.dropDelegate = self
         
-        longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(self.longTap(_:)))
-        collectionView.addGestureRecognizer(longPressGesture)
-    }
-    
-    @objc func longTap(_ gesture: UIGestureRecognizer){
-        switch gesture.state {
-        case .began:
-            if longPressedEnabled {
-                gesture.state = .cancelled
-                longPressedEnabled = false
-            }
-            self.collectionView.reloadData()
-        case .changed:
-            if longPressedEnabled {
-                gesture.state = .cancelled
-                longPressedEnabled = false
-            }
-            collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view!))
-        case .ended:
-            collectionView.endInteractiveMovement()
-            longPressedEnabled = true
-            self.collectionView.reloadData()
-        default:
-            collectionView.cancelInteractiveMovement()
-        }
-    }
-    
-    @IBAction func removeButtonTouch(_ sender: UIButton) {
-        let hitPoint = sender.convert(CGPoint.zero, to: collectionView)
-        let hitIndex = collectionView.indexPathForItem(at: hitPoint)!
-        
-        //remove the image and refresh the collection view
-        
-        
-        collectionView.performBatchUpdates({
-            collectionView.deleteItems(at: [hitIndex])
-            imageURLs?.remove(at: hitIndex.row)
-        })
-//        collectionView.reloadData()
+        removingLongPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(self.longTap(_:)))
+        collectionView.addGestureRecognizer(removingLongPressGesture)
     }
     
     override func viewDidLayoutSubviews() {
@@ -130,7 +128,7 @@ class ImagesCollectionViewController: UICollectionViewController {
             }
         }
         
-        if longPressedEnabled {
+        if removingStarts {
             view.startAnimateCellRemoving()
         } else {
             view.stopAnimateCellRemoving()
@@ -170,15 +168,19 @@ class ImagesCollectionViewController: UICollectionViewController {
         let didUseSwipeToSkipCell = majorCellIsTheCellBeforeDragging && (hasEnoughVelocityToSlideToTheNextCell || hasEnoughVelocityToSlideToThePreviousCell)
         
         if didUseSwipeToSkipCell {
-            
             let snapToIndex = indexOfCellBeforeDragging + (hasEnoughVelocityToSlideToTheNextCell ? 1 : -1)
             let toValue = collectionViewFlowLayout.itemSize.width * CGFloat(snapToIndex)
             
             // Damping equal 1 => no oscillations => decay animation:
-            UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: velocity.x, options: .allowUserInteraction, animations: {
-                scrollView.contentOffset = CGPoint(x: toValue, y: 0)
-                scrollView.layoutIfNeeded()
-            }, completion: nil)
+            UIView.animate(withDuration: 0.3,
+                           delay: 0,
+                           usingSpringWithDamping: 1,
+                           initialSpringVelocity: velocity.x,
+                           options: .allowUserInteraction,
+                           animations: {
+                            scrollView.contentOffset = CGPoint(x: toValue, y: 0)
+                            scrollView.layoutIfNeeded()},
+                           completion: nil)
             
         } else {
             let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
@@ -219,11 +221,10 @@ extension ImagesCollectionViewController: UICollectionViewDropDelegate {
                         guard let self = self else { return }
                         
                         var indexPaths = [IndexPath]()
-                        let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
-                        
+                        let indexPath = IndexPath(row: destinationIndexPath.row + index,
+                                                  section: destinationIndexPath.section)
                         if let imageData = imageData as? ImageViewEntity {
                             let url = ImageService.getUrlForPhoto(sizeType: .small320, using: imageData)
-                            
                             
                             if let imageURLs = self.imageURLs {
                                 if !imageURLs.contains(url) {
@@ -240,8 +241,9 @@ extension ImagesCollectionViewController: UICollectionViewDropDelegate {
                                 self.imageURLs = [url]
                                 indexPaths.append(indexPath)
                             }
-                            collectionView.insertItems(at: indexPaths)
                         }
+                        self.removingStarts = false
+                        collectionView.insertItems(at: indexPaths)
                         
                     })
                 }

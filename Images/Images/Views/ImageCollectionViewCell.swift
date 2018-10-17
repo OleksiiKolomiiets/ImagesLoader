@@ -40,10 +40,8 @@ class ImageCollectionViewCell: UICollectionViewCell {
         removeButton.isHidden = false
         
         let shakeAnimation = CABasicAnimation(keyPath: "transform.rotation")
-        shakeAnimation.duration = 0.05
-        shakeAnimation.repeatCount = 4
         shakeAnimation.autoreverses = true
-        shakeAnimation.duration = 0.2
+        shakeAnimation.duration = 0.25
         shakeAnimation.repeatCount = .infinity
         
         let startAngle: Float = (-2) * Float.pi/180
@@ -51,19 +49,16 @@ class ImageCollectionViewCell: UICollectionViewCell {
         
         shakeAnimation.fromValue = NSNumber(value: startAngle as Float)
         shakeAnimation.toValue = NSNumber(value: 2 * stopAngle as Float)
-        shakeAnimation.autoreverses = true
         shakeAnimation.timeOffset = 290 * drand48()
         
-        let layer: CALayer = self.layer
-        layer.add(shakeAnimation, forKey:"animate")
+        self.layer.add(shakeAnimation, forKey:"animate")
         isAnimate = true
     }
     
     func stopAnimateCellRemoving() {
         removeButton.isHidden = true
         
-        let layer: CALayer = self.layer
-        layer.removeAnimation(forKey: "animate")
+        self.layer.removeAnimation(forKey: "animate")
         isAnimate = false
     }
 }
