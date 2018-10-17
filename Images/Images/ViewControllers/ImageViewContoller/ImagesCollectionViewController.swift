@@ -21,6 +21,7 @@ class ImagesCollectionViewController: UICollectionViewController {
     var imageURLs: [URL]? {
         didSet {
             if let imageURLs = imageURLs {
+                longPressedEnabled = false
                 superViewController.proposeForDropLable.isHidden = !imageURLs.isEmpty                
                 collectionView.reloadData()
             }
@@ -63,12 +64,16 @@ class ImagesCollectionViewController: UICollectionViewController {
     
     @IBAction func removeButtonTouch(_ sender: UIButton) {
         let hitPoint = sender.convert(CGPoint.zero, to: collectionView)
-        let hitIndex = collectionView.indexPathForItem(at: hitPoint)
+        let hitIndex = collectionView.indexPathForItem(at: hitPoint)!
         
         //remove the image and refresh the collection view
-        imageURLs?.remove(at: (hitIndex?.row)!)
-        longPressedEnabled = false
-        collectionView.reloadData()
+        
+        
+        collectionView.performBatchUpdates({
+            collectionView.deleteItems(at: [hitIndex])
+            imageURLs?.remove(at: hitIndex.row)
+        })
+//        collectionView.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -206,76 +211,42 @@ extension ImagesCollectionViewController: UICollectionViewDropDelegate {
             destinationIndexPath = IndexPath(row: row, section: section)
         }
         
-        collectionView.performBatchUpdates({
-            var indexPaths = [IndexPath]()
-            
-            for (index, item) in coordinator.items.enumerated() {
-                let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
-                
-                item.dragItem.itemProvider.loadObject(ofClass: ImageViewEntity.self, completionHandler: { (imageData, error) in
-                    if let imageData = imageData as? ImageViewEntity {
-                        let url = ImageService.getUrlForPhoto(sizeType: .small320, using: imageData)
+        
+        for (index, item) in coordinator.items.enumerated() {
+            item.dragItem.itemProvider.loadObject(ofClass: ImageViewEntity.self, completionHandler: { (imageData, error) in
+                DispatchQueue.main.async {
+                    collectionView.performBatchUpdates({ [weak self] in
+                        guard let self = self else { return }
                         
-                        if let imageURLs = self.imageURLs {
-                            if !imageURLs.contains(url) {
-                                DispatchQueue.main.async {
+                        var indexPaths = [IndexPath]()
+                        let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
+                        
+                        if let imageData = imageData as? ImageViewEntity {
+                            let url = ImageService.getUrlForPhoto(sizeType: .small320, using: imageData)
+                            
+                            
+                            if let imageURLs = self.imageURLs {
+                                if !imageURLs.contains(url) {
                                     self.imageURLs!.append(url)
+                                    
                                     let insertIndex = destinationIndexPath.row
                                     let lastIndex = self.imageURLs!.endIndex
                                     for i in (insertIndex + 1 ..< lastIndex).reversed() {
                                         self.imageURLs?.swapAt(i, i - 1)
                                     }
+                                    indexPaths.append(indexPath)
                                 }
+                            } else {
+                                self.imageURLs = [url]
                                 indexPaths.append(indexPath)
                             }
-                        } else {
-                            DispatchQueue.main.async {
-                                self.imageURLs = [url]
-                            }
-                            indexPaths.append(indexPath)
+                            collectionView.insertItems(at: indexPaths)
                         }
-                    }
-                })
-            }
-            
-            collectionView.insertItems(at: indexPaths)
-        })
-//
-//        collectionView.performBatchUpdates({
-//            var indexPaths = [IndexPath]()
-//
-//            for (index, item) in coordinator.items.enumerated() {
-//                // Destination index path for each item is calculated separately using the destinationIndexPath fetched from the coordinator
-//                let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
-//
-//                item.dragItem.itemProvider.loadObject(ofClass: ImageViewEntity.self, completionHandler: { (imageData, error) in
-//                    if let imageData = imageData as? ImageViewEntity {
-//
-//                        let url = ImageService.getUrlForPhoto(sizeType: .small320, using: imageData)
-//
-//                        DispatchQueue.main.async {
-//                            if let imageURLs = self.imageURLs {
-//                                if !imageURLs.contains(url) {
-//                                    self.imageURLs!.append(url)
-//
-//                                    let insertIndex = destinationIndexPath.row
-//                                    let lastIndex = self.imageURLs!.endIndex
-//                                    for i in (insertIndex + 1 ..< lastIndex).reversed() {
-//                                        self.imageURLs?.swapAt(i, i - 1)
-//                                    }
-//                                    indexPaths.append(indexPath)
-//                                }
-//                            } else {
-//                                self.imageURLs = [url]
-//                                indexPaths.append(indexPath)
-//                            }
-//                        }
-//
-//                    }
-//                })
-//            }
-//            collectionView.insertItems(at: indexPaths)
-//        })
+                        
+                    })
+                }
+            })
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView,

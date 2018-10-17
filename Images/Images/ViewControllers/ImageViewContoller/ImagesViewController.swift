@@ -369,13 +369,15 @@ extension ImagesViewController: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {        
         return dragItem(at: indexPath)
     }
+    
+    func tableView(_ tableView: UITableView, itemsForAddingTo session: UIDragSession, at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
+        return dragItem(at: indexPath)
+    }
      
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
         let imageData = dataSource![indexPath.section].data![indexPath.row]
         let itemProvider = NSItemProvider(object: imageData)
-        print(itemProvider)
-//        let url = ImageService.getUrlForPhoto(using: dataSource![indexPath.section].data![indexPath.row])
-//        let itemProvider = NSItemProvider(contentsOf: url)!
+        print(imageData.url)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = imageData.url
         return [dragItem]
