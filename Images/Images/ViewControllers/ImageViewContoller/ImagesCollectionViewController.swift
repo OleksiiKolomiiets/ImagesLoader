@@ -18,11 +18,9 @@ class ImagesCollectionViewController: UICollectionViewController {
     private var removingLongPressGesture: UILongPressGestureRecognizer!
     private var removingStarts = false
     
-    public var superViewController: ImagesViewController!
     public var imageURLs: [URL]? {
         didSet {
             if let imageURLs = imageURLs {
-                superViewController.proposeForDropLable.isHidden = !imageURLs.isEmpty
                 collectionView.reloadData()
                 if imageURLs.isEmpty {
                     removingStarts = false

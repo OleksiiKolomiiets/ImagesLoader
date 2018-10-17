@@ -48,6 +48,13 @@ class ImagesViewController: UIViewController {
     private var randomIndices = [Int]()
     private var proccesingView: UIView?
     private let headerNibId = ImagesViewControllerSettings.kHeaderIdentifierForTableView
+    private var isDragSessionWillBegin = false {
+        didSet {
+            proposeForDropLable.textColor = isDragSessionWillBegin ? #colorLiteral(red: 0.221028775, green: 0.7620013356, blue: 0.8423347473, alpha: 1) : .white
+            proposeForDropLable.isHidden = !isDragSessionWillBegin
+            dropZoneView.isHidden = !isDragSessionWillBegin
+        }
+    }
     var imagesCollectionViewController: ImagesCollectionViewController!
     var indexOfCellBeforeDragging = 0
     var selectedCellPath: IndexPath!
@@ -63,7 +70,6 @@ class ImagesViewController: UIViewController {
     // MARK: - Functions:
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let embededCV = segue.destination as? ImagesCollectionViewController {
-            embededCV.superViewController = self
             self.imagesCollectionViewController = embededCV
         }
     }
@@ -186,8 +192,8 @@ class ImagesViewController: UIViewController {
         // add opacity animation
         let animation = CABasicAnimation(keyPath: "opacity")
         
-        animation.fromValue = 0.5
-        animation.toValue = 0.7
+        animation.fromValue = 0.7
+        animation.toValue = 1
         animation.duration = 0.7
         animation.repeatCount = .infinity
         animation.autoreverses = true
@@ -372,11 +378,11 @@ extension ImagesViewController: UIDropInteractionDelegate {
 extension ImagesViewController: UITableViewDragDelegate {
     
     func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
-        dropZoneView.isHidden = false
+        isDragSessionWillBegin = true
     }
     
     func tableView(_ tableView: UITableView, dragSessionDidEnd session: UIDragSession) {
-        dropZoneView.isHidden = true
+        isDragSessionWillBegin = false
     }
     
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {        
