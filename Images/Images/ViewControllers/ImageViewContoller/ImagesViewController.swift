@@ -326,7 +326,7 @@ extension ImagesViewController: UITableViewDelegate {
 extension ImagesViewController: UIDropInteractionDelegate {
     
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        return session.canLoadObjects(ofClass: NSURL.self)
+        return session.canLoadObjects(ofClass: ImageViewEntity.self)
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
@@ -335,20 +335,10 @@ extension ImagesViewController: UIDropInteractionDelegate {
     
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        session.loadObjects(ofClass: NSURL.self) { nsurl in
-            if var imageURLs = self.imagesCollectionViewController.imageURLs {
-                imageURLs.append(nsurl.first as! URL)                
-            } else {
-                self.imagesCollectionViewController.imageURLs = [nsurl.first as! URL]
-            }
+        session.loadObjects(ofClass: ImageViewEntity.self) { imageViewEntity in
+            let url = ImageService.getUrlForPhoto(sizeType: .large, using: imageViewEntity.first as! ImageViewEntity)
+            self.setTabBar(with: url)
         }
-        /*
-         For adding dragged item to queue of tab bar controllers(max three items)
-         
-        session.loadObjects(ofClass: NSURL.self) { nsurl in
-            self.setTabBar(with: nsurl.first as! URL)
-        }
-         */
     }
 
     
