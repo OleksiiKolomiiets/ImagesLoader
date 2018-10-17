@@ -120,6 +120,7 @@
 				795B8B79212D804D00E18F16 /* Views */,
 				792348CE214024D0007903E1 /* Extensions */,
 				79545932214A8B36004191EE /* Storyboards */,
+				79A225C12167B3DC00C08D7B /* XIBs */,
 				794C9D7C212D60C70034E77F /* Supporting Files */,
 			);
 			path = Images;
@@ -147,7 +148,6 @@
 		79545932214A8B36004191EE /* Storyboards */ = {
 			isa = PBXGroup;
 			children = (
-				79A225C12167B3DC00C08D7B /* XIBs */,
 				794C9D73212D53D50034E77F /* LaunchScreen.storyboard */,
 				794C9D6E212D53D40034E77F /* Main.storyboard */,
 				7954593C214BF8F4004191EE /* DetailImage.storyboard */,

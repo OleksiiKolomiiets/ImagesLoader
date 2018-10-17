@@ -23,6 +23,7 @@ class ImagesViewControllerSettings {
     static let kHeightForRow: CGFloat = 91
     static let kHeightForHeader: CGFloat = 80
     static let kCellIdentifierForTableView: String = "imageCell"
+    static let kHeaderIdentifierForTableView: String = "CustomSectionHeaderView"
     //Collection view constants
     static let kCellIdentifierForCollectionView: String = "imageCollectionView"
     static let kCellPaddingQuote: CGFloat = 0.1
@@ -41,6 +42,7 @@ class ImagesViewController: UIViewController {
     private var reloadingTimer: Timer?
     private var randomIndices = [Int]()
     private var proccesingView: UIView?
+    private let headerNibId = ImagesViewControllerSettings.kHeaderIdentifierForTableView
     var imagesCollectionViewController: ImagesCollectionViewController!
     var indexOfCellBeforeDragging = 0
     var selectedCellPath: IndexPath!
@@ -61,6 +63,10 @@ class ImagesViewController: UIViewController {
         service.delegate = self
         service.imageTags = getRandomTags()
         service.reload()
+        
+        tableView.register(UINib(nibName: headerNibId, bundle: nil),
+                           forHeaderFooterViewReuseIdentifier: headerNibId)
+        
         tableView.dragDelegate = self           // didn't find its setting on Storyboard
         tableView.dragInteractionEnabled = true // didn't find its setting on Storyboard
         setCustomOpacityAnimation(for: proposeForDropLable)
@@ -276,9 +282,9 @@ extension ImagesViewController: UITableViewDelegate {
     
     // Configurate header section view
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = CustomSectionHeaderView.instantiate(with: self)
-        view.setTitle(dataSource?[section].tag)
-        return view
+        let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerNibId) as! CustomSectionHeaderView
+        headerView.setTitle(dataSource![section].tag)
+        return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
