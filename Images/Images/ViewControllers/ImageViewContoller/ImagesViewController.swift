@@ -36,6 +36,11 @@ class ImagesViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var shadowView: ShadowView!
     @IBOutlet weak var proposeForDropLable: UILabel!
+    @IBOutlet weak var dropZoneView: UIView! {
+        didSet {
+            dropZoneView.addInteraction(UIDropInteraction(delegate: self))
+        }
+    }
     
     // MARK:  - Properties:
     private var service = ImageService()
@@ -52,6 +57,14 @@ class ImagesViewController: UIViewController {
                 proccesingView?.removeFromSuperview()
                 tabBarController?.tabBar.isHidden = false
             }
+        }
+    }
+    
+    // MARK: - Functions:
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let embededCV = segue.destination as? ImagesCollectionViewController {
+            embededCV.superViewController = self
+            self.imagesCollectionViewController = embededCV
         }
     }
     
@@ -73,6 +86,12 @@ class ImagesViewController: UIViewController {
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        startTimer()
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         // ending timer work when user go to anothe screen
@@ -80,20 +99,6 @@ class ImagesViewController: UIViewController {
         reloadingTimer = nil
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        startTimer()
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let embededCV = segue.destination as? ImagesCollectionViewController {
-            embededCV.superViewController = self
-            self.imagesCollectionViewController = embededCV
-        }
-    }
-    
-    // MARK: - Functions:
     // getting random tags
     private func getRandomTags() -> [String] {
         var result = [String]()
@@ -174,7 +179,6 @@ class ImagesViewController: UIViewController {
     
     func addBadSignalImage(at view: UIView) {
         setCustomOpacityAnimation(for: badSignalImageView)
-        
         view.addSubview(badSignalImageView)
     }
     
@@ -190,6 +194,8 @@ class ImagesViewController: UIViewController {
         
         view.layer.add(animation, forKey: "Propose opacity")
     }
+    
+    
     
 }
 
@@ -327,6 +333,7 @@ extension ImagesViewController: UIDropInteractionDelegate {
         return UIDropProposal(operation: .copy)
     }
     
+    
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
         session.loadObjects(ofClass: NSURL.self) { nsurl in
             if var imageURLs = self.imagesCollectionViewController.imageURLs {
@@ -373,6 +380,14 @@ extension ImagesViewController: UIDropInteractionDelegate {
 
 // MARK: - Drag interaction delegate:
 extension ImagesViewController: UITableViewDragDelegate {
+    
+    func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
+        dropZoneView.isHidden = false
+    }
+    
+    func tableView(_ tableView: UITableView, dragSessionDidEnd session: UIDragSession) {
+        dropZoneView.isHidden = true
+    }
     
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {        
         return dragItem(at: indexPath)

@@ -112,6 +112,23 @@
                                     <outlet property="delegate" destination="ZaQ-Wu-06e" id="A0T-fo-H2O"/>
                                 </connections>
                             </tableView>
+                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tdN-RT-arj">
+                                <rect key="frame" x="0.0" y="243.5" width="320" height="80"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="add items" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XNm-Vb-rqS">
+                                        <rect key="frame" x="113.5" y="26.5" width="93" height="27"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.22102877500000001" green="0.76200133560000005" blue="0.84233474730000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="AKL-Wh-7YM"/>
+                                    <constraint firstItem="XNm-Vb-rqS" firstAttribute="centerY" secondItem="tdN-RT-arj" secondAttribute="centerY" id="hvL-Xu-7bz"/>
+                                    <constraint firstItem="XNm-Vb-rqS" firstAttribute="centerX" secondItem="tdN-RT-arj" secondAttribute="centerX" id="sM7-A5-Vzg"/>
+                                </constraints>
+                            </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0un-16-oP2" customClass="ShadowView" customModule="Images" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -122,6 +139,7 @@
                             <constraint firstItem="0un-16-oP2" firstAttribute="top" secondItem="umi-wv-8HL" secondAttribute="top" id="3i5-Vx-13H"/>
                             <constraint firstItem="H1M-TR-gbN" firstAttribute="top" secondItem="6cP-V6-eD9" secondAttribute="bottom" id="7y8-k5-7l7"/>
                             <constraint firstItem="KH4-IR-CVc" firstAttribute="trailing" secondItem="H1M-TR-gbN" secondAttribute="trailing" id="8Hs-PB-dK6"/>
+                            <constraint firstItem="tdN-RT-arj" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" id="CTd-yz-GkO"/>
                             <constraint firstItem="GAs-cC-siT" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" constant="105" id="FvG-Ct-nUH"/>
                             <constraint firstItem="H1M-TR-gbN" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" id="Hac-Ln-fUr"/>
                             <constraint firstItem="6cP-V6-eD9" firstAttribute="width" secondItem="umi-wv-8HL" secondAttribute="width" id="Jhx-9Q-O2h"/>
@@ -135,7 +153,9 @@
                             <constraint firstItem="6cP-V6-eD9" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" id="eeb-oa-dmU"/>
                             <constraint firstItem="GAs-cC-siT" firstAttribute="top" secondItem="j0g-xs-tP2" secondAttribute="bottom" constant="50" id="fAm-Iz-9D0"/>
                             <constraint firstItem="6cP-V6-eD9" firstAttribute="trailing" secondItem="KH4-IR-CVc" secondAttribute="trailing" id="hv1-qs-MPE"/>
+                            <constraint firstItem="H1M-TR-gbN" firstAttribute="top" secondItem="tdN-RT-arj" secondAttribute="top" id="jpl-gV-hCo"/>
                             <constraint firstAttribute="trailing" secondItem="0un-16-oP2" secondAttribute="trailing" id="lhA-oc-DVX"/>
+                            <constraint firstItem="tdN-RT-arj" firstAttribute="trailing" secondItem="KH4-IR-CVc" secondAttribute="trailing" id="nrO-LM-8v0"/>
                             <constraint firstItem="KH4-IR-CVc" firstAttribute="trailing" secondItem="GAs-cC-siT" secondAttribute="trailing" constant="170" id="qqW-Ds-ANL"/>
                             <constraint firstItem="0un-16-oP2" firstAttribute="leading" secondItem="umi-wv-8HL" secondAttribute="leading" id="wB9-fx-9Qr"/>
                             <constraint firstItem="H1M-TR-gbN" firstAttribute="bottom" secondItem="KH4-IR-CVc" secondAttribute="bottom" id="zLZ-hF-FGC"/>
@@ -144,6 +164,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Images" image="inbox" springLoaded="YES" id="BSE-e8-cd4"/>
                     <connections>
+                        <outlet property="dropZoneView" destination="tdN-RT-arj" id="x0Z-B2-PLD"/>
                         <outlet property="proposeForDropLable" destination="GAs-cC-siT" id="aMG-GR-Y1S"/>
                         <outlet property="shadowView" destination="0un-16-oP2" id="XDG-eY-aRE"/>
                         <outlet property="tableView" destination="H1M-TR-gbN" id="LXr-hm-3HK"/>
@@ -151,7 +172,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pvZ-L4-HU0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2896.8000000000002" y="111.0944527736132"/>
+            <point key="canvasLocation" x="2895" y="110.91549295774648"/>
         </scene>
         <!--ImageCollectionViewController-->
         <scene sceneID="ESc-Au-OJE">
