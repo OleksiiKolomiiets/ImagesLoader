@@ -9,58 +9,58 @@
 import UIKit
 import MobileCoreServices
 
-enum ImageViewEntityError: Error, LocalizedError {
-    case invalidData
-    
-    var errorDescription: String? {
-        switch self {
-            
-        case .invalidData:
-            return "ImageViewEntity data invalid"
-        }
-    }
-}
+
 
 /// - Tag: ImageViewEntity
 final class ImageViewEntity: NSObject, NSItemProviderWriting, NSItemProviderReading, Codable {
     
     // MARK: - Variables:
-    let url     : URL
-    let title   : String
-    let id      : String
-    let server  : String
-    let secret  : String
-    let farm    : Int
+    public let title   : String!
+    public let id      : String!
+    public let server  : String!
+    public let secret  : String!
+    public let farm    : Int!
     
+    static private let typeIdentifiersForItemProvider = [kUTTypeData as String]
     
-     // Enumaration for existing feilds(keys in api response dictionry)
-    enum KeyType: String {
+     // Enumeration of existing feilds(keys in dictionry of api response)
+    private enum KeyType: String {
         case title
         case id
         case server
         case secret
         case farm
     }
+    // Enumeration of possible errors when creating an instance of ImageViewEntity
+    private enum ImageViewEntityError: Error, LocalizedError {
+        case invalidData
+        
+        var errorDescription: String? {
+            switch self {
+            case .invalidData:
+                return "ImageViewEntity data invalid"
+            }
+        }
+    }
     
     // MARK: - Function:    
-    // Constructor to create instance using dictionary from api and existing url
-    init(from dictionary: [String: Any], with url: URL) {
-        self.url = url
-        
-        self.title  = dictionary[KeyType.title.rawValue]    as! String
-        self.id     = dictionary[KeyType.id.rawValue]       as! String
-        self.server = dictionary[KeyType.server.rawValue]   as! String
-        self.secret = dictionary[KeyType.secret.rawValue]   as! String
-        self.farm   = dictionary[KeyType.farm.rawValue]     as! Int
+    // Constructor to create instance using dictionary from api response
+    init(from dictionary: [String: Any]) {
+        self.title  = dictionary[KeyType.title.rawValue]    as? String
+        self.id     = dictionary[KeyType.id.rawValue]       as? String
+        self.server = dictionary[KeyType.server.rawValue]   as? String
+        self.secret = dictionary[KeyType.secret.rawValue]   as? String
+        self.farm   = dictionary[KeyType.farm.rawValue]     as? Int
     }
     
     // MARK: - NSItemProviderWriting
     static var writableTypeIdentifiersForItemProvider: [String] {
         // Representing image view entity as a data type
-        return [kUTTypeData as String]
+        return typeIdentifiersForItemProvider
     }
     
-    func loadData(withTypeIdentifier typeIdentifier: String, forItemProviderCompletionHandler completionHandler: @escaping (Data?, Error?) -> Void) -> Progress? {
+    func loadData(withTypeIdentifier typeIdentifier: String,
+                  forItemProviderCompletionHandler completionHandler: @escaping (Data?, Error?) -> Void) -> Progress? {
         let progress = Progress(totalUnitCount: 100)
         do {
             //Here the object is encoded to a JSON data object and sent to the completion handler
@@ -75,11 +75,10 @@ final class ImageViewEntity: NSObject, NSItemProviderWriting, NSItemProviderRead
     
     // MARK: - NSItemProviderReading
     static var readableTypeIdentifiersForItemProvider: [String] {
-        //We know we want to accept our object as a data representation, so we'll specify that here
-        return [kUTTypeData as String]
+        // Specify image view entity as a data type
+        return typeIdentifiersForItemProvider
     }
     
-    //This function actually has a return type of Self, but that really messes things up when you are trying to return your object, so if you mark your class as final as I've done above, the you can change the return type to return your class type.
     static func object(withItemProviderData data: Data, typeIdentifier: String) throws -> ImageViewEntity {
         let decoder = JSONDecoder()
         do {
@@ -89,6 +88,6 @@ final class ImageViewEntity: NSObject, NSItemProviderWriting, NSItemProviderRead
         } catch {
             fatalError(ImageViewEntityError.invalidData.localizedDescription)
         }
-    }    
+    }  
     
 }

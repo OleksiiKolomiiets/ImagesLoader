@@ -241,7 +241,9 @@ extension ImagesViewController: UITableViewDataSource {
         let row = indexPath.row
         let title = dataSource?[section].data?[row].title
         
-        if let url = dataSource?[section].data?[row].url {
+        if let data = dataSource?[section].data?[row] {
+            let url = ImageService.getUrlForPhoto(using: data)
+            
             if let image = ImageLoadHelper.getImageFromCache(by: url) {
                 cellImage = image
             } else {
@@ -377,9 +379,7 @@ extension ImagesViewController: UITableViewDragDelegate {
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
         let imageData = dataSource![indexPath.section].data![indexPath.row]
         let itemProvider = NSItemProvider(object: imageData)
-        print(imageData.url)
         let dragItem = UIDragItem(itemProvider: itemProvider)
-        dragItem.localObject = imageData.url
         return [dragItem]
     }
 }
