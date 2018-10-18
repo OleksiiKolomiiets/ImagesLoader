@@ -11,7 +11,7 @@ import UIKit
 class ImageCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Outlets:
-    @IBOutlet private weak var pictureImageView: UIImageView!
+    @IBOutlet weak var pictureImageView: UIImageView!
     @IBOutlet private weak var spinner: UIActivityIndicatorView!
     @IBOutlet private weak var removeButton: UIButton!
     
