@@ -95,7 +95,6 @@
 		794C9D69212D53D40034E77F /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				79A225BC2167B28200C08D7B /* Protocols */,
 				79545939214BA5C6004191EE /* Enums */,
 				7967344E2133F13D008AC1DA /* Models */,
 				7967344F2133F145008AC1DA /* Utilities */,
@@ -174,13 +173,6 @@
 				79D368C7213577AD007E14AE /* ImageLoadHelper.swift */,
 			);
 			path = Utilities;
-			sourceTree = "<group>";
-		};
-		79A225BC2167B28200C08D7B /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		79A225C12167B3DC00C08D7B /* XIBs */ = {
