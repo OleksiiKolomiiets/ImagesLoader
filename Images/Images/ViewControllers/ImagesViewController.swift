@@ -270,18 +270,16 @@ class ImagesViewController: UIViewController {
     
 }
 
-// MARK: - ImageServiceDelegate:
-extension ImagesViewController: ImageServiceDelegate {
-    func onErrorCatched(service: FlickrImageDataLoader, error: Error) {
+// MARK: - DataLoaderDelegate:
+extension ImagesViewController: DataLoaderDelegate {
+    func onErrorCatched(dataLoader: FlickrImageDataLoader, error: Error) {
         addBadSignalImage(at: proccesingView!)
     }
     
-    func onDataLoaded(service: FlickrImageDataLoader) {
-//        badSignalImageView.removeFromSuperview()
-//        dataSource = data
+    func onDataLoaded(dataLoader: FlickrImageDataLoader) {
         dataSource = [Tag: [FlickrKitImageDictionary]]()
         tagsSource = [Tag]()
-        service.flickrKitImageDictionary.forEach { (tag, flickrKitImageDictionariesCollection) in
+        dataLoader.flickrKitImageDictionary.forEach { (tag, flickrKitImageDictionariesCollection) in
             tagsSource.append(tag)
             dataSource![tag] = [FlickrKitImageDictionary]()
             flickrKitImageDictionariesCollection.forEach({ flickrKitImageDictionary in

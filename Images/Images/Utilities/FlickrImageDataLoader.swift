@@ -1,5 +1,5 @@
 //
-//  ImageService.swift
+//  FlickrImageDataLoader.swift
 //  Images
 //
 //  Created by Oleksii  Kolomiets on 8/22/18.
@@ -9,25 +9,25 @@
 import Foundation
 import FlickrKit
 
-protocol ImageServiceDelegate: class {
-    func onDataLoaded  (service: FlickrImageDataLoader)
-    func onErrorCatched(service: FlickrImageDataLoader, error: Error)
+protocol DataLoaderDelegate: class {
+    func onDataLoaded  (dataLoader: FlickrImageDataLoader)
+    func onErrorCatched(dataLoader: FlickrImageDataLoader, error: Error)
 }
 
 typealias FlickrKitImageDictionary = [String: Any]
 typealias Tag = String
 
-class FlickrImageDataLoader { // previous name -> ImageService
+class FlickrImageDataLoader {
     
     // MARK: - Variables:
-    public weak var delegate: ImageServiceDelegate?
+    public weak var delegate: DataLoaderDelegate?
     public var imageTags: [String]?
     public var imagesQuantity: Int!
     public var flickrKitImageDictionary = [Tag: [FlickrKitImageDictionary]]() {
         didSet {
             if self.flickrKitImageDictionary.count == imageTags?.count{
                 DispatchQueue.main.async { () -> Void  in
-                    self.delegate!.onDataLoaded(service: self)
+                    self.delegate!.onDataLoaded(dataLoader: self)
                 }
             }
         }
@@ -57,7 +57,7 @@ class FlickrImageDataLoader { // previous name -> ImageService
                     let photoArray = topPhotos["photo"] as? [FlickrKitImageDictionary]
                     else {
                         DispatchQueue.main.async { () -> Void  in
-                            self.delegate?.onErrorCatched(service: self, error: error!)
+                            self.delegate?.onErrorCatched(dataLoader: self, error: error!)
                         }
                         return
                 }
