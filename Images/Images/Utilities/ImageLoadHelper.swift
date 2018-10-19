@@ -20,6 +20,7 @@ class ImageLoadHelper {
     static func getImageFromCache(by url: URL) -> UIImage? {
         return ImageLoadHelper.cache[url]
     }
+    
     // Method for getting the image by URL
     static func getImage(by url: URL, completion: @escaping (UIImage?) -> Void) {
         loaderQueue.async {

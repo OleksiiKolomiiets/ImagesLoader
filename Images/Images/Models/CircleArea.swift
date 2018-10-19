@@ -8,14 +8,14 @@
 
 import UIKit
 
-struct CircleArea {
-    let centr   : CGPoint
-    let radius  : CGFloat
-}
-
-extension CircleArea {
-    init(with rect: CGRect) {
-        let radius = rect.size.height * 0.9 / 2
-        self.init(centr: rect.centr, radius: radius)
-    }
-}
+//struct CircleArea {
+//    let centr   : CGPoint
+//    let radius  : CGFloat
+//}
+//
+//extension CircleArea {
+//    init(with rect: CGRect) {
+//        self.radius = min(rect.size.height, rect.size.width) * 0.9 / 2
+//        self.centr = CGPoint(x: rect.midX, y: rect.midY)
+//    }
+//}

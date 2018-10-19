@@ -15,11 +15,11 @@ protocol ShadowViewDelegate: class {
 class ShadowView: UIView {
     
     // MARK: - Variables:
-    weak var delegate: ShadowViewDelegate!
+    public weak var delegate: ShadowViewDelegate!
     private let shadowLayer = CAShapeLayer()
     private var isOpenShadow = false
     private var touchGesture: UITapGestureRecognizer!
-    private var highlightedArea: CircleArea!
+    private var highlightedArea: CGRect!
     private var isTapedOnArea: Bool!
     private var  duration: Double {
        return isOpenShadow ? 0.7 : 0.3
@@ -42,10 +42,12 @@ class ShadowView: UIView {
     @objc private func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {
         shadowLayer.removeAllAnimations()
         layer.mask = nil
+        let radius = min(highlightedArea.size.height, highlightedArea.size.width) * 0.9 / 2
+        let centr = CGPoint(x: highlightedArea.midX, y: highlightedArea.midY)
         
         let tappedLocation = gestureRecognizer.location(in: self)
-        let highlightedAreaCirclePath = UIBezierPath(arcCenter: highlightedArea.centr,
-                                                     radius: highlightedArea.radius,
+        let highlightedAreaCirclePath = UIBezierPath(arcCenter: centr,
+                                                     radius: radius,
                                                      startAngle: CGFloat(0),
                                                      endAngle:CGFloat(Double.pi * 2),
                                                      clockwise: true)
@@ -56,7 +58,7 @@ class ShadowView: UIView {
     }
     
     /// Showing shadow for selected area
-    func showShadow(for area: CircleArea, animated: Bool) {
+    public func showShadow(for area: CGRect, animated: Bool) {
         
         highlightedArea = area
         
@@ -77,7 +79,7 @@ class ShadowView: UIView {
         }
     }
     
-    func dismissShadow(animated: Bool, finished: @escaping () -> Void) {
+    public func dismissShadow(animated: Bool, finished: @escaping () -> Void) {
         isOpenShadow = false
         
         // Setting pathes by area
@@ -100,9 +102,20 @@ class ShadowView: UIView {
         }
     }
     
-    private func getCirclePath(by area: CircleArea? = nil, inverse: Bool = false) -> UIBezierPath {
-        let path = UIBezierPath(arcCenter   : area != nil ? area!.centr  : superview!.frame.centr,
-                                radius      : area != nil ? area!.radius : superview!.frame.height,
+    private func getCirclePath(by area: CGRect? = nil, inverse: Bool = false) -> UIBezierPath {
+        let rectCentr: CGPoint!
+        let radius: CGFloat!
+        
+        if let rect = area {
+            rectCentr = CGPoint(x: rect.midX, y: rect.midY)
+            radius = min(rect.height, rect.width) * 0.9 / 2
+        } else {
+            rectCentr = CGPoint(x: superview!.frame.midX, y: superview!.frame.midY)
+            radius = superview!.frame.height
+        }
+        
+        let path = UIBezierPath(arcCenter   : rectCentr,
+                                radius      : radius,
                                 startAngle  : 0,
                                 endAngle    : 2.0 * CGFloat.pi,
                                 clockwise   : true)

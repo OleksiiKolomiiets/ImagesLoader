@@ -11,12 +11,12 @@ import UIKit
 class ImageCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Outlets:
-    @IBOutlet weak var pictureImageView: UIImageView!
+    @IBOutlet public weak var pictureImageView: UIImageView!
     @IBOutlet private weak var spinner: UIActivityIndicatorView!
     @IBOutlet private weak var removeButton: UIButton!
     
     // MARK: - Variables:
-    var isAnimate: Bool! = true
+    private var isAnimate: Bool! = true
     
     // MARK: - Functions:
     override func prepareForReuse() {
@@ -27,7 +27,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
     }
     
     // cell configuration
-    func configure(with image: UIImage?) {                
+    public func configure(with image: UIImage?) {
         if image != nil {
             spinner.stopAnimating()
         } else {
@@ -36,7 +36,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
         pictureImageView.image = image
     }
     
-    func startAnimateCellRemoving() {
+    public func startAnimateCellRemoving() {
         removeButton.isHidden = false
         
         let shakeAnimation = CABasicAnimation(keyPath: "transform.rotation")
@@ -55,7 +55,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
         isAnimate = true
     }
     
-    func stopAnimateCellRemoving() {
+    public func stopAnimateCellRemoving() {
         removeButton.isHidden = true
         
         self.layer.removeAnimation(forKey: "animate")

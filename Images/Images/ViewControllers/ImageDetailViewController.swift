@@ -8,17 +8,7 @@
 
 import UIKit
 
-//MARK: - CONSTANTS
-
-class ImageDetailViewControllerSettings {
-    
-    // Uploading images constants
-    static let kDetailImageDimension:ImageDimensionType = .large
-}
-
-//MARK: - CLASS
-
-class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
+class ImageDetailViewController: UIViewController {
     
     // MARK: - Outlets:
     @IBOutlet weak var scrollView           : UIScrollView!
@@ -87,22 +77,11 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     
-    // Using scroll delegate method for zooming the image
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return imageView
-    }
-    
-    // set image to the center of view
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        setImageCentred()
-    }
-    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         isImageDataSetted = false
-    }
-    
+    }    
     
     private func addDoubleTapGesture(for view: UIView) {
         // adding double tap gesture recognizer
@@ -147,4 +126,17 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
 
+}
+
+// MARK: - UIScrollViewDelegate:
+extension ImageDetailViewController: UIScrollViewDelegate {
+    // Using scroll delegate method for zooming the image
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return imageView
+    }
+    
+    // set image to the center of view
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        setImageCentred()
+    }
 }

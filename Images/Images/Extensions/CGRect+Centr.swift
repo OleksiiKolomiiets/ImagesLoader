@@ -9,14 +9,14 @@
 import UIKit
 
 extension CGRect {
-    var centr: CGPoint {
-        let startX: CGFloat = self.origin.x
-        let startY: CGFloat = self.origin.y
-        let width : CGFloat = self.size.width
-        let height: CGFloat = self.size.height
-        
-        let centrX: CGFloat = startX + width / 2
-        let centrY: CGFloat = startY + height / 2
-        return CGPoint(x: centrX, y: centrY)
-    }
+//    var centr: CGPoint {
+//        let startX: CGFloat = self.midX
+//        let startY: CGFloat = self.origin.y
+//        let width : CGFloat = self.size.width
+//        let height: CGFloat = self.size.height
+//
+//        let centrX: CGFloat = startX + width / 2
+//        let centrY: CGFloat = startY + height / 2
+//        return CGPoint(x: self.midX, y: self.midY)
+//    }
 }

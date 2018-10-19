@@ -23,8 +23,8 @@ class ImageTableViewCell: UITableViewCell {
     }
     
     // cell configuration
-    func configure(with image: UIImage?,_ title: String) {
-        titleLabel.text = title.isEmpty ? ImagesViewControllerSettings.kDefultTitle : title
+    public func configure(with image: UIImage?, _ title: String) {
+        titleLabel.text = title
         
         if image != nil  {
             spinner.stopAnimating()
