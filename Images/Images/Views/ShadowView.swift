@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ShadowViewDelegate: class {
-    func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedArea: Bool)
+    func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedFrame: Bool)
 }
 
 class ShadowView: UIView {
@@ -19,8 +19,8 @@ class ShadowView: UIView {
     private let shadowLayer = CAShapeLayer()
     private var isOpenShadow = false
     private var touchGesture: UITapGestureRecognizer!
-    private var highlightedArea: CGRect!
-    private var isTapedOnArea: Bool!
+    private var highlightedFrame: CGRect!
+    private var isTapedOnFrame: Bool!
     private var  duration: Double {
        return isOpenShadow ? 0.7 : 0.3
     }
@@ -42,30 +42,29 @@ class ShadowView: UIView {
     @objc private func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {
         shadowLayer.removeAllAnimations()
         layer.mask = nil
-        let radius = min(highlightedArea.size.height, highlightedArea.size.width) * 0.9 / 2
-        let centr = CGPoint(x: highlightedArea.midX, y: highlightedArea.midY)
+        let radius = min(highlightedFrame.size.height, highlightedFrame.size.width) * 0.9 / 2
+        let centr = CGPoint(x: highlightedFrame.midX, y: highlightedFrame.midY)
         
         let tappedLocation = gestureRecognizer.location(in: self)
-        let highlightedAreaCirclePath = UIBezierPath(arcCenter: centr,
+        let highlightedFrameCirclePath = UIBezierPath(arcCenter: centr,
                                                      radius: radius,
                                                      startAngle: CGFloat(0),
                                                      endAngle:CGFloat(Double.pi * 2),
                                                      clockwise: true)
-        isTapedOnArea = highlightedAreaCirclePath.contains(tappedLocation)
-        
+        isTapedOnFrame = highlightedFrameCirclePath.contains(tappedLocation)
         // Signalizing delegate that view was tapped
-        delegate.shadowView(self, didUserTapOnHighlightedArea: isTapedOnArea)
+        delegate.shadowView(self, didUserTapOnHighlightedFrame: isTapedOnFrame)
     }
     
-    /// Showing shadow for selected area
-    public func showShadow(for area: CGRect, animated: Bool) {
+    /// Showing shadow for selected frame
+    public func showShadow(for frame: CGRect, animated: Bool) {
         
-        highlightedArea = area
+        highlightedFrame = frame
         
         isOpenShadow = true
         
-        // Setting pathes by area
-        let shadowedPath = getCirclePath(by: area, inverse: true)
+        // Setting pathes by frame
+        let shadowedPath = getCirclePath(by: frame, inverse: true)
        
         // Setting animation layer
         shadowLayer.fillRule = .evenOdd
@@ -82,7 +81,7 @@ class ShadowView: UIView {
     public func dismissShadow(animated: Bool, finished: @escaping () -> Void) {
         isOpenShadow = false
         
-        // Setting pathes by area
+        // Setting pathes by frame
         let unshadowedPath = getCirclePath(inverse: true)
         
         // Setting animation layer
@@ -92,7 +91,7 @@ class ShadowView: UIView {
         
         // Adding animation
         if animated {
-            let shadowedPath = getCirclePath(by: highlightedArea, inverse: true)
+            let shadowedPath = getCirclePath(by: highlightedFrame, inverse: true)
             setUpAnimation(from: shadowedPath.cgPath, to: unshadowedPath.cgPath, duration: duration)
             DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                 finished()
@@ -102,11 +101,11 @@ class ShadowView: UIView {
         }
     }
     
-    private func getCirclePath(by area: CGRect? = nil, inverse: Bool = false) -> UIBezierPath {
+    private func getCirclePath(by frame: CGRect? = nil, inverse: Bool = false) -> UIBezierPath {
         let rectCentr: CGPoint!
         let radius: CGFloat!
         
-        if let rect = area {
+        if let rect = frame {
             rectCentr = CGPoint(x: rect.midX, y: rect.midY)
             radius = min(rect.height, rect.width) * 0.9 / 2
         } else {
@@ -134,7 +133,7 @@ class ShadowView: UIView {
         animate.delegate  = self
         animate.repeatCount = 0
         
-        shadowLayer.add(animate, forKey: "Shadow for selected area")
+        shadowLayer.add(animate, forKey: "Shadow for selected frame")
         
     }
     

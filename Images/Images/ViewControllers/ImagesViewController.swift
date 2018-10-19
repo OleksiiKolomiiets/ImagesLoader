@@ -297,12 +297,12 @@ extension ImagesViewController: ImageServiceDelegate {
 // MARK: - ShadowViewDelegate:
 extension ImagesViewController: ShadowViewDelegate {
     
-    func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedArea: Bool) {
+    func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedFrame: Bool) {
         
         shadowView.dismissShadow(animated: true, finished: {
             shadowView.isHidden = true
             
-            if didUserTapOnHighlightedArea {
+            if didUserTapOnHighlightedFrame {
                 let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
                 let section = self.selectedCellPath.section
                 guard  let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
@@ -391,7 +391,7 @@ extension ImagesViewController: UITableViewDelegate {
     }
     
     // Send selected data to ImageDetailViewController and present it
-    private func getCircleAreaForCell(at indexPath: IndexPath) -> CGRect {
+    private func getGlobalRectangleForCell(at indexPath: IndexPath) -> CGRect {
         let cellTablViewRectangle = tableView.rectForRow(at: indexPath)
         let cellViewRectangle = tableView.convert(cellTablViewRectangle, to: shadowView)
         
@@ -400,9 +400,9 @@ extension ImagesViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedCellPath = indexPath
-        let circleArea = getCircleAreaForCell(at: indexPath)
+        let globalRectangle = getGlobalRectangleForCell(at: indexPath)
         shadowView.isHidden = false
-        shadowView.showShadow(for: circleArea, animated: true)
+        shadowView.showShadow(for: globalRectangle, animated: true)
     }
     
 }
