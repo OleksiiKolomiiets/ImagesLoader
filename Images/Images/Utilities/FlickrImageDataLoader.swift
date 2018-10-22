@@ -20,7 +20,7 @@ class FlickrImageDataLoader {
     
     // MARK: - Variables:
     public weak var delegate: DataLoaderDelegate?
-    public var imageTags: [String]?
+    public var imageTags: [String]!
     public var imagesQuantity: Int!
     public var flickrKitImageDictionary = [String: [FlickrKitImageDictionary]]()
     private let imageDataLoader = DispatchQueue(label: "FlickrImageDataLoader")

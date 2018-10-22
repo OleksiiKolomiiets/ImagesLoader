@@ -45,34 +45,21 @@ class ImagesViewController: UIViewController {
     private var dataLoader = FlickrImageDataLoader()
     private var reloadingTimer: Timer?
     private var proccesingView: UIView?
-    private let headerNibId = ImagesViewControllerSettings.kTVHeaderIdentifier
-    private var isDragSessionWillBegin = false {
-        didSet {
-            proposeForDropLable.isHidden = !isDragSessionWillBegin
-            dropZoneView.isHidden = !isDragSessionWillBegin
-        }
-    }
     private var removeImagesActionStarts = false
-    private var collectionViewThrownedImageURLs: [URL]? {
-        didSet {
-            if let imageURLs = collectionViewThrownedImageURLs {
-                collectionView.reloadData()
-                if imageURLs.isEmpty {
-                    removeImagesActionStarts = false
-                }
-            }
-        }
-    }
     private var indexOfCellBeforeDragging = 0
     private var removingLongPressGesture: UILongPressGestureRecognizer!
-    var selectedCellPath: IndexPath!
-    var tagsSource = [String]()
-    var dataSource: [String: [FlickrKitImageDictionary]]? {
-        willSet {
-            if dataSource == nil {
-                proccesingView?.removeFromSuperview()
-                tabBarController?.tabBar.isHidden = false
-            }
+    private var selectedCellPath: IndexPath!
+    private var isDragSessionWillBegin = false {
+        didSet {
+            proposeForDropLable.isHidden.toggle()
+            dropZoneView.isHidden.toggle()
+        }
+    }
+    private var collectionViewThrownedImageURLs: [URL]? {
+        didSet {
+            guard let imageURLs = collectionViewThrownedImageURLs else { return }
+            collectionView.reloadData()
+            removeImagesActionStarts = !imageURLs.isEmpty
         }
     }
     
@@ -119,6 +106,7 @@ class ImagesViewController: UIViewController {
         dataLoader.imagesQuantity = ImagesViewControllerSettings.kImagesPerPage
         dataLoader.reload()
         
+        let headerNibId = ImagesViewControllerSettings.kTVHeaderIdentifier
         tableView.register(UINib(nibName: headerNibId, bundle: nil), forHeaderFooterViewReuseIdentifier: headerNibId)
         tableView.dragDelegate = self           // didn't find its setting on Storyboard
         tableView.dragInteractionEnabled = true // didn't find its setting on Storyboard
@@ -276,15 +264,8 @@ extension ImagesViewController: DataLoaderDelegate {
     }
     
     func onDataLoaded(dataLoader: FlickrImageDataLoader) {
-        dataSource = [String: [FlickrKitImageDictionary]]()
-        tagsSource = [String]()
-        dataLoader.flickrKitImageDictionary.forEach { (tag, flickrKitImageDictionariesCollection) in
-            tagsSource.append(tag)
-            dataSource![tag] = [FlickrKitImageDictionary]()
-            flickrKitImageDictionariesCollection.forEach({ flickrKitImageDictionary in
-                dataSource![tag]?.append(flickrKitImageDictionary)
-            })
-        }
+        proccesingView?.removeFromSuperview()
+        tabBarController?.tabBar.isHidden = false
         
         tableView.reloadData()
     }
@@ -302,8 +283,10 @@ extension ImagesViewController: ShadowViewDelegate {
             if didUserTapOnHighlightedFrame {
                 let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
                 let section = self.selectedCellPath.section
+                let dataSource = self.dataLoader.flickrKitImageDictionary
+                let tag = self.dataLoader.imageTags[section]
                 guard  let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
-                    let dataSource = self.dataSource, let flickrDictionary = dataSource[self.tagsSource[section]] else  { return }
+                    let flickrDictionary = dataSource[tag] else  { return }
                     
                 let row = self.selectedCellPath.row
                 let data = flickrDictionary[row]
@@ -325,9 +308,11 @@ extension ImagesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = ImagesViewControllerSettings.kTVCellIdentifier
         let section = indexPath.section
+        let dataSource = self.dataLoader.flickrKitImageDictionary
+        let tag = self.dataLoader.imageTags[section]
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ImageTableViewCell,
-            let dataSource = self.dataSource, let flickrDictionary = dataSource[tagsSource[section]] else {
+            let flickrDictionary = dataSource[tag] else {
             return UITableViewCell()
         }
         
@@ -353,7 +338,7 @@ extension ImagesViewController: UITableViewDataSource {
     
     // Configurate reusable cells
     func numberOfSections(in tableView: UITableView) -> Int {
-        return dataSource?.count ?? 0
+        return self.dataLoader.flickrKitImageDictionary.count
     }
     
     private func setTableViewCell(by indexPath: IndexPath, image: UIImage?, title: String) {
@@ -369,8 +354,9 @@ extension ImagesViewController: UITableViewDelegate {
     
     // Configurate header section view
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerNibId = ImagesViewControllerSettings.kTVHeaderIdentifier
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerNibId) as! CustomSectionHeaderView
-        headerView.setTitle(tagsSource[section])
+        headerView.setTitle(dataLoader.imageTags[section])
         return headerView
     }
     
@@ -379,8 +365,8 @@ extension ImagesViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionTag = tagsSource[section]
-        return dataSource?[sectionTag]?.count ?? 0
+        let sectionTag = dataLoader.imageTags[section]
+        return self.dataLoader.flickrKitImageDictionary[sectionTag]?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -604,7 +590,7 @@ extension ImagesViewController: UIDropInteractionDelegate {
             
             detailVC.imageURL = url
             detailVC.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
-            self.tabBarController?.viewControllers?.append(detailVC)
+            tabBarController?.viewControllers?.append(detailVC)
         } else {
             for (viewControllerIndex, viewController) in tabBarViewControllers.enumerated() {
                 guard let vc = viewController as? ImageDetailViewController else { continue }
@@ -642,9 +628,9 @@ extension ImagesViewController: UITableViewDragDelegate {
      
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
         let section = indexPath.section
-        let tagSection = tagsSource[section]
+        let tagSection = dataLoader.imageTags[section]
         let row = indexPath.row
-        let imageData = FlickrKitImageDataWrapper(from: dataSource![tagSection]![row])
+        let imageData = FlickrKitImageDataWrapper(from: self.dataLoader.flickrKitImageDictionary[tagSection]![row])
         let itemProvider = NSItemProvider(object: imageData)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
