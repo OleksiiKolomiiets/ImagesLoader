@@ -15,7 +15,6 @@ protocol DataLoaderDelegate: class {
 }
 
 typealias FlickrKitImageDictionary = [String: Any]
-typealias Tag = String
 
 class FlickrImageDataLoader {
     
@@ -23,16 +22,7 @@ class FlickrImageDataLoader {
     public weak var delegate: DataLoaderDelegate?
     public var imageTags: [String]?
     public var imagesQuantity: Int!
-    public var flickrKitImageDictionary = [Tag: [FlickrKitImageDictionary]]() {
-        didSet {
-            if self.flickrKitImageDictionary.count == imageTags?.count{
-                DispatchQueue.main.async { () -> Void  in
-                    self.delegate!.onDataLoaded(dataLoader: self)
-                }
-            }
-        }
-    }
-    
+    public var flickrKitImageDictionary = [String: [FlickrKitImageDictionary]]()
     private let imageDataLoader = DispatchQueue(label: "FlickrImageDataLoader")
     
     
@@ -62,6 +52,11 @@ class FlickrImageDataLoader {
                         return
                 }
                 self.flickrKitImageDictionary[tag] = photoArray
+                if self.flickrKitImageDictionary.count == self.imageTags?.count{
+                    DispatchQueue.main.async { () -> Void  in
+                        self.delegate!.onDataLoaded(dataLoader: self)
+                    }
+                }
             }
         }
     }

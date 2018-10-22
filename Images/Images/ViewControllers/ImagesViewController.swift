@@ -9,22 +9,22 @@
 import UIKit
 import MobileCoreServices
 
-class ImagesViewControllerSettings {
+fileprivate class ImagesViewControllerSettings {
     //MARK: - CONSTANTS
     //Uploading images constants
-    fileprivate static let kImagesPerPage       = 30
-    fileprivate static let kTags                = ["sun", "mercury", "venus", "earth", "mars", "jupiter","saturn", "uranus", "neptune", "pluto"]
-    fileprivate static let kTagsCountInOneLoad  = 3
+    static let kImagesPerPage       = 30
+    static let kTags                = ["sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"]
+    static let kTagsCountInOneLoad  = 3
     //Reloading constant
-    fileprivate static let kTimeLimit           = 30.0
+    static let kTimeLimit           = 30.0
     // TV == TableView constants
-    fileprivate static let kTVHeightForRow:     CGFloat = 91
-    fileprivate static let kTVHeightForHeader:  CGFloat = 80
-    fileprivate static let kTVCellIdentifier    = "imageCell"
-    fileprivate static let kTVHeaderIdentifier  = "CustomSectionHeaderView"
-    fileprivate static let kTVCellDefaultTitle  = "Title doesn't exist"
+    static let kTVHeightForRow:     CGFloat = 91
+    static let kTVHeightForHeader:  CGFloat = 80
+    static let kTVCellIdentifier    = "imageCell"
+    static let kTVHeaderIdentifier  = "CustomSectionHeaderView"
+    static let kTVCellDefaultTitle  = "Title doesn't exist"
     // CV == CollectionView constants
-    fileprivate static let kCVCellIdentifier    = "imageCollectionView"
+    static let kCVCellIdentifier    = "imageCollectionView"
 }
 
 class ImagesViewController: UIViewController {
@@ -44,7 +44,6 @@ class ImagesViewController: UIViewController {
     // MARK:  - Properties:
     private var dataLoader = FlickrImageDataLoader()
     private var reloadingTimer: Timer?
-    private var randomIndices = [Int]()
     private var proccesingView: UIView?
     private let headerNibId = ImagesViewControllerSettings.kTVHeaderIdentifier
     private var isDragSessionWillBegin = false {
@@ -67,8 +66,8 @@ class ImagesViewController: UIViewController {
     private var indexOfCellBeforeDragging = 0
     private var removingLongPressGesture: UILongPressGestureRecognizer!
     var selectedCellPath: IndexPath!
-    var tagsSource = [Tag]()
-    var dataSource: [Tag: [FlickrKitImageDictionary]]? {
+    var tagsSource = [String]()
+    var dataSource: [String: [FlickrKitImageDictionary]]? {
         willSet {
             if dataSource == nil {
                 proccesingView?.removeFromSuperview()
@@ -277,8 +276,8 @@ extension ImagesViewController: DataLoaderDelegate {
     }
     
     func onDataLoaded(dataLoader: FlickrImageDataLoader) {
-        dataSource = [Tag: [FlickrKitImageDictionary]]()
-        tagsSource = [Tag]()
+        dataSource = [String: [FlickrKitImageDictionary]]()
+        tagsSource = [String]()
         dataLoader.flickrKitImageDictionary.forEach { (tag, flickrKitImageDictionariesCollection) in
             tagsSource.append(tag)
             dataSource![tag] = [FlickrKitImageDictionary]()

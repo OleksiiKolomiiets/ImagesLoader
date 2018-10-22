@@ -22,7 +22,7 @@ class ShadowView: UIView {
     private var highlightedFrame: CGRect!
     private var isTapedOnFrame: Bool!
     private var  duration: Double {
-       return isOpenShadow ? 0.7 : 0.3
+       return isOpenShadow ? 0.5 : 0.2
     }
     
     // MARK: - Functions:
