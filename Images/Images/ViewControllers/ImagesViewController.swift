@@ -10,13 +10,16 @@ import UIKit
 import MobileCoreServices
 
 fileprivate class ImagesViewControllerSettings {
+    
+    
     //MARK: - CONSTANTS
+    
     //Uploading images constants
     static let kImagesPerPage       = 30
     static let kTags                = ["sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"]
     static let kTagsCountInOneLoad  = 3
     //Reloading constant
-    static let kTimeLimit           = 30.0
+    static let kTimeLimit           = 5.0
     // TV == TableView constants
     static let kTVHeightForRow:     CGFloat = 91
     static let kTVHeightForHeader:  CGFloat = 80
@@ -30,6 +33,7 @@ fileprivate class ImagesViewControllerSettings {
 class ImagesViewController: UIViewController {
     
     // MARK: - Outlets:
+    
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var shadowView: ShadowView!
     @IBOutlet weak var proposeForDropLable: UILabel!
@@ -41,15 +45,27 @@ class ImagesViewController: UIViewController {
         }
     }
     
+    
     // MARK:  - Properties:
-    private var dataLoader = FlickrImageDataLoader()
+    
+    private var dataLoader = FlickrKitHelper()
+    private var imageDataDictionary: [String: [ImageData]]? {
+        didSet {
+            proccesingView?.removeFromSuperview()
+            tabBarController?.tabBar.isHidden = false
+            
+            tableView.reloadData()
+        }
+    }
+    private var imageTags: [String]!
+    
     private var reloadingTimer: Timer?
     private var proccesingView: UIView?
     private var removeImagesActionStarts = false
     private var indexOfCellBeforeDragging = 0
     private var removingLongPressGesture: UILongPressGestureRecognizer!
     private var selectedCellPath: IndexPath!
-    private var isDragSessionWillBegin = false {
+    private var isDragSessionWillBegin: Bool! {
         didSet {
             proposeForDropLable.isHidden.toggle()
             dropZoneView.isHidden.toggle()
@@ -63,7 +79,9 @@ class ImagesViewController: UIViewController {
         }
     }
     
+    
     // MARK: - Actions:
+    
     @objc private func longTap(_ gesture: UIGestureRecognizer){
         switch gesture.state {
         case .began:
@@ -94,18 +112,28 @@ class ImagesViewController: UIViewController {
         })
     }
     
-    // MARK: - Functions:
+    
+    // MARK: - VC Lifecycle Methods:
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         coverTheScreen() // cover the screen while content is downloading
         shadowView.delegate = self
         
-        dataLoader.delegate = self
-        dataLoader.imageTags = getRandomTags()
-        dataLoader.imagesQuantity = ImagesViewControllerSettings.kImagesPerPage
-        dataLoader.reload()
+//        dataLoader.delegate = self
+//        dataLoader.imageTags = getRandomTags()
+//
+//        dataLoader.reload()
         
+        // get image data from loader
+        dataLoader.imagesQuantity = ImagesViewControllerSettings.kImagesPerPage
+        imageTags = getRandomTags()
+        dataLoader.load(for: imageTags) { imageDataDictionary in
+            self.imageDataDictionary = imageDataDictionary
+        }
+        
+        // prepare table view
         let headerNibId = ImagesViewControllerSettings.kTVHeaderIdentifier
         tableView.register(UINib(nibName: headerNibId, bundle: nil), forHeaderFooterViewReuseIdentifier: headerNibId)
         tableView.dragDelegate = self           // didn't find its setting on Storyboard
@@ -113,6 +141,7 @@ class ImagesViewController: UIViewController {
         
         setCustomOpacityAnimation(for: proposeForDropLable)
         
+        // prepare collection view
         collectionViewFlowLayout.minimumLineSpacing = 0
         collectionView.dropDelegate = self
         removingLongPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(self.longTap(_:)))
@@ -138,6 +167,7 @@ class ImagesViewController: UIViewController {
         reloadingTimer = nil
     }
     
+    // MARK: - Functions:
     // getting random tags
     private func getRandomTags() -> [String] {
         var result = [String]()
@@ -185,8 +215,10 @@ class ImagesViewController: UIViewController {
     
     // reloading data source
     @objc private func onTimerTick() {
-        dataLoader.imageTags = getRandomTags()
-        dataLoader.reload()
+        imageTags = getRandomTags()
+        dataLoader.load(for: imageTags) { imageDataDictionary in
+            self.imageDataDictionary = imageDataDictionary
+        }
     }
     
     private func coverTheScreen() {
@@ -202,7 +234,12 @@ class ImagesViewController: UIViewController {
         
     }
     
-     private lazy var badSignalImageView: UIImageView = {
+    func addBadSignalImage(at view: UIView) {
+        setCustomOpacityAnimation(for: badSignalImageView)
+        view.addSubview(badSignalImageView)
+    }
+    
+    private lazy var badSignalImageView: UIImageView = {
         let badSignalImage = UIImage(named: "badSignal")!
         let imageWidth: CGFloat = badSignalImage.size.width
         let imageHeight: CGFloat = badSignalImage.size.height
@@ -215,11 +252,6 @@ class ImagesViewController: UIViewController {
         badSignalImageView.contentMode = .scaleAspectFill
         return badSignalImageView
     }()
-    
-    func addBadSignalImage(at view: UIView) {
-        setCustomOpacityAnimation(for: badSignalImageView)
-        view.addSubview(badSignalImageView)
-    }
     
     private func setCustomOpacityAnimation(for view: UIView) {
         // add opacity animation
@@ -257,23 +289,20 @@ class ImagesViewController: UIViewController {
     
 }
 
-// MARK: - DataLoaderDelegate:
+
 extension ImagesViewController: DataLoaderDelegate {
-    func onErrorCatched(dataLoader: FlickrImageDataLoader, error: Error) {
+    
+    // MARK: - DataLoaderDelegate:
+    
+    func onErrorCatched(dataLoader: FlickrKitHelper, error: Error) {
         addBadSignalImage(at: proccesingView!)
     }
-    
-    func onDataLoaded(dataLoader: FlickrImageDataLoader) {
-        proccesingView?.removeFromSuperview()
-        tabBarController?.tabBar.isHidden = false
-        
-        tableView.reloadData()
-    }
-    
 }
 
-// MARK: - ShadowViewDelegate:
+
 extension ImagesViewController: ShadowViewDelegate {
+    
+    // MARK: - ShadowViewDelegate:
     
     func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedFrame: Bool) {
         
@@ -283,14 +312,14 @@ extension ImagesViewController: ShadowViewDelegate {
             if didUserTapOnHighlightedFrame {
                 let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
                 let section = self.selectedCellPath.section
-                let dataSource = self.dataLoader.flickrKitImageDictionary
-                let tag = self.dataLoader.imageTags[section]
+                let dataSource = self.imageDataDictionary!
+                let tag = self.imageTags[section]
                 guard  let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
                     let flickrDictionary = dataSource[tag] else  { return }
-                    
+                
                 let row = self.selectedCellPath.row
                 let data = flickrDictionary[row]
-                let url = FlickrImageDataLoader.getUrlForPhoto(sizeType: .large, using: data)
+                let url = data.urlLarge1024
                 detailVC.imageURL = url
                 detailVC.isDoneButtonHidden = false
                 self.present(detailVC, animated: true)
@@ -302,26 +331,25 @@ extension ImagesViewController: ShadowViewDelegate {
     }
 }
 
-// MARK: - Table view data source:
-extension ImagesViewController: UITableViewDataSource {
-    
+extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
+
+    // MARK: - Table view data source:
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = ImagesViewControllerSettings.kTVCellIdentifier
         let section = indexPath.section
-        let dataSource = self.dataLoader.flickrKitImageDictionary
-        let tag = self.dataLoader.imageTags[section]
+        let dataSource = imageDataDictionary!
+        let tag = imageTags[section]
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ImageTableViewCell,
             let flickrDictionary = dataSource[tag] else {
-            return UITableViewCell()
+                return UITableViewCell()
         }
         
         var cellImage: UIImage?
         let row = indexPath.row
         let data = flickrDictionary[row]
-        var title = data["title"] as! String
-        title = title.isEmpty ? ImagesViewControllerSettings.kTVCellDefaultTitle : title
-        let url = FlickrImageDataLoader.getUrlForPhoto(sizeType: .small240, using: data)
+        let title = data.title.isEmpty ? ImagesViewControllerSettings.kTVCellDefaultTitle : data.title
+        let url = data.urlSmall240
         
         if let image = ImageLoadHelper.getImageFromCache(by: url) {
             cellImage = image
@@ -338,7 +366,7 @@ extension ImagesViewController: UITableViewDataSource {
     
     // Configurate reusable cells
     func numberOfSections(in tableView: UITableView) -> Int {
-        return self.dataLoader.flickrKitImageDictionary.count
+        return imageTags.count
     }
     
     private func setTableViewCell(by indexPath: IndexPath, image: UIImage?, title: String) {
@@ -346,17 +374,13 @@ extension ImagesViewController: UITableViewDataSource {
             cell.configure(with: image, title)
         }
     }
-    
-}
 
-// MARK: - Table view delegate:
-extension ImagesViewController: UITableViewDelegate {
-    
+    // MARK: - Table view delegate:
     // Configurate header section view
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerNibId = ImagesViewControllerSettings.kTVHeaderIdentifier
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerNibId) as! CustomSectionHeaderView
-        headerView.setTitle(dataLoader.imageTags[section])
+        headerView.setTitle(imageTags[section])
         return headerView
     }
     
@@ -364,9 +388,9 @@ extension ImagesViewController: UITableViewDelegate {
         return ImagesViewControllerSettings.kTVHeightForHeader
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionTag = dataLoader.imageTags[section]
-        return self.dataLoader.flickrKitImageDictionary[sectionTag]?.count ?? 0
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {        
+        let sectionTag = imageTags[section]
+        return imageDataDictionary?[sectionTag]?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -390,8 +414,10 @@ extension ImagesViewController: UITableViewDelegate {
     
 }
 
-// MARK: - UICollectionViewDelegate:
-extension ImagesViewController: UICollectionViewDelegate {
+extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    // MARK: - UICollectionViewDelegate:
+    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         if scrollView == collectionView {
             indexOfCellBeforeDragging = indexOfMajorCell()
@@ -445,10 +471,9 @@ extension ImagesViewController: UICollectionViewDelegate {
         let safeIndex = max(0, min(count - 1, index))
         return safeIndex
     }
-}
 
-// MARK: - UICollectionViewDataSource:
-extension ImagesViewController: UICollectionViewDataSource{
+    // MARK: - UICollectionViewDataSource:
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionViewThrownedImageURLs?.count ?? 0
     }
@@ -496,67 +521,58 @@ extension ImagesViewController: UICollectionViewDropDelegate {
     
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         
-        let destinationIndexPath: IndexPath
-        if let indexPath = coordinator.destinationIndexPath {
-            destinationIndexPath = indexPath
-        } else {
-            // Get last index path of collection view.
-            let section = collectionView.numberOfSections - 1
-            let row = collectionView.numberOfItems(inSection: section)
-            destinationIndexPath = IndexPath(row: row, section: section)
-        }
+        var indexPathes = [IndexPath]()
+        let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
         
-        
-        for (index, item) in coordinator.items.enumerated() {
-            item.dragItem.itemProvider.loadObject(ofClass: FlickrKitImageDataWrapper.self, completionHandler: { (imageData, error) in
-                DispatchQueue.main.async {
-                    collectionView.performBatchUpdates({ [weak self] in
-                        guard let self = self else { return }
-                        
-                        var indexPaths = [IndexPath]()
-                        let indexPath = IndexPath(row: destinationIndexPath.row + index,
-                                                  section: destinationIndexPath.section)
-                        if let imageData = imageData as? FlickrKitImageDataWrapper {
-                            let url = FlickrImageDataLoader.getUrlForPhoto(sizeType: .small320, using: imageData)
-                            
-                            if let imageURLs = self.collectionViewThrownedImageURLs {
-                                if !imageURLs.contains(url) {
-                                    self.collectionViewThrownedImageURLs!.append(url)
-                                    
-                                    let insertIndex = destinationIndexPath.row
-                                    let lastIndex = self.collectionViewThrownedImageURLs!.endIndex
-                                    for i in (insertIndex + 1 ..< lastIndex).reversed() {
-                                        self.collectionViewThrownedImageURLs?.swapAt(i, i - 1)
-                                    }
-                                    indexPaths.append(indexPath)
-                                }
-                            } else {
-                                self.collectionViewThrownedImageURLs = [url]
-                                indexPaths.append(indexPath)
-                            }
-                        }
-                        self.removeImagesActionStarts = false
-                        collectionView.insertItems(at: indexPaths)
-                        
-                    })
+        coordinator.session.loadObjects(ofClass: NSString.self) { (nsstrings) in
+            
+            DispatchQueue.main.async { [weak self] in
+                
+                guard let self = self else { return }
+                var array = [URL]()
+                if self.collectionViewThrownedImageURLs != nil {
+                    array = self.collectionViewThrownedImageURLs!
                 }
-            })
+                nsstrings.enumerated().forEach({ (index, nsstring) in
+                    
+                    let imageData = self.getImageData(from: nsstring)
+                    let url = imageData.urlSmall320
+                    
+                    if !array.contains(url) {
+                        array.insert(url, at: destinationIndexPath.row)
+                        let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
+                        indexPathes.append(indexPath)
+                    }
+                    
+                })
+                
+                collectionView.performBatchUpdates({
+                    self.collectionViewThrownedImageURLs = array
+                    self.removeImagesActionStarts = false
+                    collectionView.insertItems(at: indexPathes)
+                })
+                
+            }
         }
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        dropSessionDidUpdate session: UIDropSession,
-                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-       
-        if session.localDragSession != nil {
-            if collectionView.hasActiveDrag {
-                return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-            } else {
-                return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
-            }
-        } else {
-            return UICollectionViewDropProposal(operation: .forbidden)
+  
+    
+    // Parsing NSItemProviderReading
+    private func getImageData(from dragItem: NSItemProviderReading?) -> ImageData {
+        let itemString = dragItem as! String
+        let data = itemString.data(using: .utf8)!
+        var imageData: ImageData!
+        do {
+            imageData = try JSONDecoder().decode(ImageData.self, from: data)
+        } catch {
+            fatalError(ImageDataError.invalidData.localizedDescription)
         }
+        return imageData
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession,  withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
     }
 }
 
@@ -565,7 +581,7 @@ extension ImagesViewController: UICollectionViewDropDelegate {
 extension ImagesViewController: UIDropInteractionDelegate {
     
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        return session.canLoadObjects(ofClass: FlickrKitImageDataWrapper.self)
+        return session.canLoadObjects(ofClass: NSString.self)
     }
     
     func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
@@ -574,12 +590,21 @@ extension ImagesViewController: UIDropInteractionDelegate {
     
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        session.loadObjects(ofClass: FlickrKitImageDataWrapper.self) { imageViewEntity in
-            let url = FlickrImageDataLoader.getUrlForPhoto(sizeType: .large, using: imageViewEntity.first as! FlickrKitImageDataWrapper)
+        
+        session.loadObjects(ofClass: NSString.self) { items in
+            let itemString = items.first as! String
+            let data = itemString.data(using: .utf8)!
+            var imageData: ImageData!
+            do {
+                imageData = try JSONDecoder().decode(ImageData.self, from: data)
+            } catch {
+                fatalError(ImageDataError.invalidData.localizedDescription)
+            }
+            let url = imageData.urlLarge1024
             self.setTabBar(with: url)
         }
     }
-
+    
     
     private func setTabBar(with url: URL) {
         guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
@@ -625,14 +650,18 @@ extension ImagesViewController: UITableViewDragDelegate {
     func tableView(_ tableView: UITableView, itemsForAddingTo session: UIDragSession, at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
         return dragItem(at: indexPath)
     }
-     
+    
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
-        let section = indexPath.section
-        let tagSection = dataLoader.imageTags[section]
-        let row = indexPath.row
-        let imageData = FlickrKitImageDataWrapper(from: self.dataLoader.flickrKitImageDictionary[tagSection]![row])
-        let itemProvider = NSItemProvider(object: imageData)
+        
+        let draggedItemsTag = imageTags[indexPath.section]
+        let draggedItemsRow = indexPath.row
+        let imageData = imageDataDictionary?[draggedItemsTag]![draggedItemsRow]
+        
+        guard let data = try? JSONEncoder().encode(imageData) as NSData else { return [] }
+        
+        let itemProvider = NSItemProvider(item: data, typeIdentifier: kUTTypePlainText as String)
         let dragItem = UIDragItem(itemProvider: itemProvider)
+        
         return [dragItem]
     }
 }
