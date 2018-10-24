@@ -9,8 +9,8 @@
 import Foundation
 import FlickrKit
 
-protocol DataLoaderDelegate: class {
-    func onErrorCatched(dataLoader: FlickrKitHelper, error: Error)
+protocol FlickrKitHelperDelegate: class {
+    func onErrorCatched(helper: FlickrKitHelper, error: Error)
 }
 
 typealias FlickrKitImageDictionary = [String: Any]
@@ -18,14 +18,14 @@ typealias FlickrKitImageDictionary = [String: Any]
 class FlickrKitHelper {
     
     // MARK: - Variables:
-    public weak var delegate: DataLoaderDelegate?
+    public weak var delegate: FlickrKitHelperDelegate?
     
     public var imagesQuantity: Int!
     
     private var imageDataDictionary = [String: [ImageData]]()
     private var imageTags = [String]()
     
-    private let flickrKitHelperDispatchQueue = DispatchQueue(label: "FlickrImageDataLoader")
+    private let flickrKitHelperDispatchQueue = DispatchQueue(label: "FlickrKitHelper")
     private let flickrKitHelperDispatchGroup = DispatchGroup()
     
     
@@ -58,7 +58,7 @@ class FlickrKitHelper {
                     let photoArray = topPhotos["photo"] as? [FlickrKitImageDictionary]
                     else {
                         DispatchQueue.main.async { () -> Void  in
-                            self.delegate?.onErrorCatched(dataLoader: self, error: error!)
+                            self.delegate?.onErrorCatched(helper: self, error: error!)
                         }
                         return
                 }

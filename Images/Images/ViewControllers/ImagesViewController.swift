@@ -9,30 +9,35 @@
 import UIKit
 import MobileCoreServices
 
+
+//MARK: - CONSTANTS
+
 fileprivate class ImagesViewControllerSettings {
-    
-    
-    //MARK: - CONSTANTS
     
     //Uploading images constants
     static let kImagesPerPage       = 20
     static let kTags                = ["sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"]
-    static let kTagsCountInOneLoad  = 1
+    static let kTagsCountInOneLoad  = 3
+    static let kTabBarVScMaxCount   = 3
+    
     //Reloading constant
-    static let kTimeLimit           = 3.0
+    static let kTimeLimit           = 30.0
+    
     // TV == TableView constants
     static let kTVHeightForRow:     CGFloat = 91
     static let kTVHeightForHeader:  CGFloat = 80
     static let kTVCellIdentifier    = "imageCell"
     static let kTVHeaderIdentifier  = "CustomSectionHeaderView"
     static let kTVCellDefaultTitle  = "Title doesn't exist"
+    
     // CV == CollectionView constants
     static let kCVCellIdentifier    = "imageCollectionView"
 }
 
+// MARK: -
 class ImagesViewController: UIViewController {
     
-    // MARK: - Outlets:
+    // MARK: Outlets:
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var shadowView: ShadowView!
@@ -46,9 +51,9 @@ class ImagesViewController: UIViewController {
     }
     
     
-    // MARK:  - Properties:
+    // MARK: Properties:
     
-    private var dataLoader = FlickrKitHelper()
+    private var flickrHelper = FlickrKitHelper()
     private var imageDataDictionary: [String: [ImageData]]? 
     private var imageTags: [String]?
     
@@ -73,7 +78,7 @@ class ImagesViewController: UIViewController {
     }
     
     
-    // MARK: - Actions:
+    // MARK: Actions:
     
     // Method to switch remove action:
     @objc private func longTap(_ gesture: UIGestureRecognizer){
@@ -108,7 +113,7 @@ class ImagesViewController: UIViewController {
     }
     
     
-    // MARK: - VC Lifecycle Methods:
+    // MARK: Lifecycle Methods:
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -117,8 +122,8 @@ class ImagesViewController: UIViewController {
         shadowView.delegate = self
         
         // set image data loader delegate and max pictures per page
-        dataLoader.delegate = self
-        dataLoader.imagesQuantity = ImagesViewControllerSettings.kImagesPerPage
+        flickrHelper.delegate = self
+        flickrHelper.imagesQuantity = ImagesViewControllerSettings.kImagesPerPage
         
         // set image data from loader
         setImageData()
@@ -157,7 +162,9 @@ class ImagesViewController: UIViewController {
         stopReloadingTimer()
     }
     
-    // MARK: - Functions:
+    
+    // MARK: Functions:
+    
     // getting random tags
     private func getRandomTags() -> [String] {
         var result = [String]()
@@ -215,7 +222,7 @@ class ImagesViewController: UIViewController {
     
     fileprivate func setImageData() {
         stopReloadingTimer()
-        dataLoader.load(for: getRandomTags()) { (imageDataDictionary, imageTags) in
+        flickrHelper.load(for: getRandomTags()) { (imageDataDictionary, imageTags) in
             self.imageTags = imageTags
             self.imageDataDictionary = imageDataDictionary
             self.tableView.reloadData()
@@ -269,12 +276,13 @@ class ImagesViewController: UIViewController {
     }
     
     private func configureCollectionViewLayoutItemSize() {
-        // This inset calculation is some magic so the next and the previous cells will peek from the sides
+        
         let inset: CGFloat = calculateSectionInset()
         collectionViewFlowLayout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: inset)
         
         let width = collectionViewFlowLayout.collectionView!.frame.size.width - inset * 2
         let height = collectionViewFlowLayout.collectionView!.frame.size.height
+        
         collectionViewFlowLayout.itemSize = CGSize(width: width, height: height)
     }
     
@@ -286,25 +294,38 @@ class ImagesViewController: UIViewController {
         let buttonWidth: CGFloat = self.collectionView.frame.size.width * 0.3
         
         let inset = (collectionViewFlowLayout.collectionView!.frame.width - cellBodyWidth + buttonWidth) / 4
+        
         return inset
     }
     
+    // Getting the image data from source for current cell
+    private func getImageData(by indexPath: IndexPath) -> ImageData {
+        
+        let section = indexPath.section
+        let row = indexPath.row
+        
+        let imageTag = imageTags![section]
+        let imageDataSource = imageDataDictionary![imageTag]
+        
+        return imageDataSource![row]
+    }
+    
+    
 }
 
+// MARK: - FlickrKitHelperDelegate:
 
-extension ImagesViewController: DataLoaderDelegate {
+extension ImagesViewController: FlickrKitHelperDelegate {
     
-    // MARK: - DataLoaderDelegate:
-    
-    func onErrorCatched(dataLoader: FlickrKitHelper, error: Error) {
+    func onErrorCatched(helper: FlickrKitHelper, error: Error) {
         addBadSignalImage(at: proccesingView!)
     }
 }
 
 
+// MARK: - ShadowViewDelegate:
+
 extension ImagesViewController: ShadowViewDelegate {
-    
-    // MARK: - ShadowViewDelegate:
     
     func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedFrame: Bool) {
         
@@ -312,20 +333,15 @@ extension ImagesViewController: ShadowViewDelegate {
             shadowView.isHidden = true
             
             if didUserTapOnHighlightedFrame {
-                let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
-                let section = self.selectedCellPath.section
-                let dataSource = self.imageDataDictionary!
-                let tag = self.imageTags![section]
-                guard  let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
-                    let flickrDictionary = dataSource[tag] else  { return }
                 
-                let row = self.selectedCellPath.row
-                let data = flickrDictionary[row]
-                let url = data.urlLarge1024
-                detailVC.imageURL = url
-                detailVC.isDoneButtonHidden = false
-                self.present(detailVC, animated: true)
+                let imageData = self.getImageData(by: self.selectedCellPath)
+                let url = imageData.urlLarge1024
                 
+                let imageDetailViewController = self.getImageDetailViewController(with: url)
+                
+                imageDetailViewController.isDoneButtonHidden = false
+                
+                self.present(imageDetailViewController, animated: true)
             }
         })
         
@@ -333,26 +349,24 @@ extension ImagesViewController: ShadowViewDelegate {
     }
 }
 
+
+// MARK: - Table view extension
+
 extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
 
+    // MARK: Table view data source:
     
-    // MARK: - Table view data source:
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let identifier = ImagesViewControllerSettings.kTVCellIdentifier
-        let section = indexPath.section
-        let dataSource = imageDataDictionary!
-        let tag = imageTags![section]
         
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ImageTableViewCell,
-            let flickrDictionary = dataSource[tag] else {               
-                return UITableViewCell()
-        }
+        let tvCellIdentifier = ImagesViewControllerSettings.kTVCellIdentifier
+        let cell = tableView.dequeueReusableCell(withIdentifier: tvCellIdentifier, for: indexPath) as! ImageTableViewCell
+        
+        let imageData = getImageData(by: indexPath)
+        
+        let title = imageData.title.isEmpty ? ImagesViewControllerSettings.kTVCellDefaultTitle : imageData.title
+        let url = imageData.urlSmall240
         
         var cellImage: UIImage?
-        let row = indexPath.row
-        let data = flickrDictionary[row]
-        let title = data.title.isEmpty ? ImagesViewControllerSettings.kTVCellDefaultTitle : data.title
-        let url = data.urlSmall240
         
         if let image = ImageLoadHelper.getImageFromCache(by: url) {
             cellImage = image
@@ -369,6 +383,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
     
     // Set reusable cells
     private func setTableViewCell(by indexPath: IndexPath, image: UIImage?, title: String) {
+        
         if let cell = tableView.cellForRow(at: indexPath) as? ImageTableViewCell {
             cell.configure(with: image, title)
         }
@@ -379,14 +394,16 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
     }
     
     
-    // MARK: - Table view delegate:
-    
+    // MARK: Table view delegate:
     
     // Configurate header section view
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        
         let headerNibId = ImagesViewControllerSettings.kTVHeaderIdentifier
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerNibId) as! CustomSectionHeaderView
+        
         headerView.setTitle(imageTags![section])
+        
         return headerView
     }
     
@@ -394,8 +411,10 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
         return ImagesViewControllerSettings.kTVHeightForHeader
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {        
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         let sectionTag = imageTags![section]
+        
         return imageDataDictionary?[sectionTag]?.count ?? 0
     }
     
@@ -405,6 +424,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
     
     // Send selected data to ImageDetailViewController and present it
     private func getGlobalRectangleForCell(at indexPath: IndexPath) -> CGRect {
+        
         let cellTablViewRectangle = tableView.rectForRow(at: indexPath)
         let cellViewRectangle = tableView.convert(cellTablViewRectangle, to: shadowView)
         
@@ -412,19 +432,25 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         selectedCellPath = indexPath
         let globalRectangle = getGlobalRectangleForCell(at: indexPath)
+        
         shadowView.isHidden = false
         shadowView.showShadow(for: globalRectangle, animated: true)
     }
     
 }
 
+
+// MARK: - Collection view extension
+
 extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
-    // MARK: - UICollectionViewDelegate:
+    // MARK: UICollectionViewDelegate:
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        
         if scrollView == collectionView {
             indexOfCellBeforeDragging = indexOfMajorCell()
         }
@@ -433,7 +459,9 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         
         if scrollView == collectionView {
+            
             guard let count = collectionViewThrownedImageURLs?.count else { return }
+            
             // Stop scrollView sliding:
             targetContentOffset.pointee = scrollView.contentOffset
             
@@ -470,25 +498,27 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
     
     private func indexOfMajorCell() -> Int {
+        
         guard let count = collectionViewThrownedImageURLs?.count else { return 0 }
+        
         let itemWidth = collectionViewFlowLayout.itemSize.width
         let proportionalOffset = collectionViewFlowLayout.collectionView!.contentOffset.x / itemWidth
         let index = Int(round(proportionalOffset))
         let safeIndex = max(0, min(count - 1, index))
+        
         return safeIndex
     }
 
-    // MARK: - UICollectionViewDataSource:
+    // MARK: UICollectionViewDataSource:
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionViewThrownedImageURLs?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let identifier = ImagesViewControllerSettings.kCVCellIdentifier
-        guard let view = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as? ImageCollectionViewCell else {
-            return UICollectionViewCell()
-        }
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: indexPath) as! ImageCollectionViewCell
         
         var cellImage: UIImage?
         
@@ -502,18 +532,15 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
             }
         }
         
-        if removeImagesActionStarts {
-            view.startAnimateCellRemoving()
-        } else {
-            view.stopAnimateCellRemoving()
-        }
+        removeImagesActionStarts ? cell.startAnimateCellRemoving() : cell.stopAnimateCellRemoving()
         
-        view.configure(with: cellImage)
+        cell.configure(with: cellImage)
         
-        return view
+        return cell
     }
     
     private func setCellForCollectionView(by indexPath: IndexPath, with image: UIImage?) {
+        
         if let view = self.collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell {
             view.configure(with: image)
             self.collectionView.reloadData()
@@ -522,8 +549,10 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
 }
 
-// MARK: - UICollectionViewDropDelegate:
-extension ImagesViewController: UICollectionViewDropDelegate {
+// MARK: - Drag&Drop extension
+extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropDelegate, UITableViewDragDelegate {
+    
+    // MARK: UICollectionViewDropDelegate:
     
     func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
         
@@ -532,20 +561,22 @@ extension ImagesViewController: UICollectionViewDropDelegate {
         
         coordinator.session.loadObjects(ofClass: NSString.self) { (nsstrings) in
             
-            DispatchQueue.main.async { [weak self] in
+            DispatchQueue.main.async {
                 
-                guard let self = self else { return }
                 var array = [URL]()
                 if self.collectionViewThrownedImageURLs != nil {
                     array = self.collectionViewThrownedImageURLs!
                 }
+                
                 nsstrings.enumerated().forEach({ (index, nsstring) in
                     
                     let imageData = self.getImageData(from: nsstring)
                     let url = imageData.urlSmall320
+                    let isUrlUnique = !array.contains(url)
                     
-                    if !array.contains(url) {
+                    if isUrlUnique {
                         array.insert(url, at: destinationIndexPath.row)
+                        
                         let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
                         indexPathes.append(indexPath)
                     }
@@ -553,8 +584,10 @@ extension ImagesViewController: UICollectionViewDropDelegate {
                 })
                 
                 collectionView.performBatchUpdates({
+                    
                     self.collectionViewThrownedImageURLs = array
                     self.removeImagesActionStarts = false
+                    
                     collectionView.insertItems(at: indexPathes)
                 })
                 
@@ -562,29 +595,31 @@ extension ImagesViewController: UICollectionViewDropDelegate {
         }
     }
     
-  
-    
     // Parsing NSItemProviderReading
     private func getImageData(from dragItem: NSItemProviderReading?) -> ImageData {
+        
         let itemString = dragItem as! String
         let data = Data(itemString.utf8)
         var imageData: ImageData!
+        
         do {
             imageData = try JSONDecoder().decode(ImageData.self, from: data)
         } catch {
             fatalError(ImageDataError.invalidData.localizedDescription)
         }
+        
         return imageData
     }
     
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession,  withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+    func collectionView(_ collectionView: UICollectionView,
+                        dropSessionDidUpdate session: UIDropSession,
+                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        
         return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
     }
-}
 
 
-// MARK: - Drop interaction delegate:
-extension ImagesViewController: UIDropInteractionDelegate {
+    // MARK: Drop interaction delegate:
     
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: NSString.self)
@@ -598,49 +633,72 @@ extension ImagesViewController: UIDropInteractionDelegate {
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
         
         session.loadObjects(ofClass: NSString.self) { items in
-            let itemString = items.first as! String
             
+            let itemString = items.first as! String
             let data = Data(itemString.utf8)
             var imageData: ImageData!
+            
             do {
                 imageData = try JSONDecoder().decode(ImageData.self, from: data)
             } catch {
                 fatalError(ImageDataError.invalidData.localizedDescription)
             }
+            
             let url = imageData.urlLarge1024
             self.setTabBar(with: url)
         }
     }
     
     
-    private func setTabBar(with url: URL) {
-        guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
+    private func insertViewControllerToTheEnd(of tabBarViewControllers: [UIViewController], _ url: URL) {
         
-        if tabBarViewControllers.count < 4 {
-            let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
-            guard let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController else { return }
+        for (viewControllerIndex, viewController) in tabBarViewControllers.enumerated() {
             
-            detailVC.imageURL = url
-            detailVC.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
-            tabBarController?.viewControllers?.append(detailVC)
-        } else {
-            for (viewControllerIndex, viewController) in tabBarViewControllers.enumerated() {
-                guard let vc = viewController as? ImageDetailViewController else { continue }
-                
-                if viewControllerIndex < tabBarViewControllers.count - 1 {
-                    guard let nextVC = tabBarViewControllers[viewControllerIndex + 1] as? ImageDetailViewController else { return }
-                    vc.imageURL = nextVC.imageURL
-                } else {
-                    vc.imageURL = url
-                }
-                
+            guard let imageDetailViewController = viewController as? ImageDetailViewController else { continue }
+            
+            let isTabBarNextVCExist = viewControllerIndex < tabBarViewControllers.count - 1
+            var url = url
+            
+            if isTabBarNextVCExist {
+                let nextVC = tabBarViewControllers[viewControllerIndex + 1] as! ImageDetailViewController
+                url = nextVC.imageURL
             }
+            
+            imageDetailViewController.imageURL = url
+            
         }
     }
-}
+    
+    private func getImageDetailViewController(with url: URL) -> ImageDetailViewController {
+        
+        let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
+        let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as! ImageDetailViewController
+        
+        detailVC.imageURL = url
+        
+        return detailVC
+    }
+    
+    private func setTabBar(with url: URL) {
+        
+        guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
+        
+        let isTabVCsLessThanMax = tabBarViewControllers.count <= ImagesViewControllerSettings.kTabBarVScMaxCount
+        
+        if isTabVCsLessThanMax {
+            
+            let imageDetailViewController = getImageDetailViewController(with: url)
+            imageDetailViewController.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
+            
+            tabBarController?.viewControllers?.append(getImageDetailViewController(with: url))
+        } else {
+            insertViewControllerToTheEnd(of: tabBarViewControllers, url)
+        }
+    }
 
-// MARK: - Drag interaction delegate:
-extension ImagesViewController: UITableViewDragDelegate {
+
+    // MARK: Drag interaction delegate:
+
     
     func tableView(_ tableView: UITableView, dragSessionWillBegin session: UIDragSession) {
         isDragSessionWillBegin = true
