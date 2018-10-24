@@ -10,12 +10,15 @@ import FlickrKit
 
 enum ImageDimensionType {
     
-    case small
+    case small240
+    case small320
     case large
     
-    var size: FKPhotoSize {
+    var flickerPhotoSize: FKPhotoSize {
         switch self {
-        case .small:
+        case .small240:
+            return .small240
+        case .small320:
             return .small320
         case .large:
             return .large1024

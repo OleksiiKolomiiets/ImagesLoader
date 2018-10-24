@@ -10,18 +10,12 @@ import UIKit
 
 class ImageTableViewCell: UITableViewCell {
     
-    //=================
     // MARK: - Outlets:
-    //=================
-    
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var pictureImageView: UIImageView!
     @IBOutlet private weak var spinner: UIActivityIndicatorView!    
     
-    //===================
     // MARK: - Functions:
-    //===================
-    
     // cleaning cell before reuse
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -29,8 +23,8 @@ class ImageTableViewCell: UITableViewCell {
     }
     
     // cell configuration
-    func configure(with image: UIImage?,_ title: String) {
-        titleLabel.text = title.isEmpty ? ImagesViewControllerSettings.kDefultTitle : title
+    public func configure(with image: UIImage?, _ title: String) {
+        titleLabel.text = title
         
         if image != nil  {
             spinner.stopAnimating()

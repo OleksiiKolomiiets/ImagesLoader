@@ -10,25 +10,24 @@ import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
     
-    //=================
     // MARK: - Outlets:
-    //=================
-    
-    @IBOutlet private weak var pictureImageView: UIImageView!
+    @IBOutlet public weak var pictureImageView: UIImageView!
     @IBOutlet private weak var spinner: UIActivityIndicatorView!
+    @IBOutlet private weak var removeButton: UIButton!
     
-    //===================
+    // MARK: - Variables:
+    private var isAnimate: Bool! = true
+    
     // MARK: - Functions:
-    //===================
-    
-    // cleaning cell before reuse
     override func prepareForReuse() {
         super.prepareForReuse()
+        
+        // cleaning cell before reuse
         pictureImageView.image = nil
     }
     
     // cell configuration
-    func configure(with image: UIImage?) {                
+    public func configure(with image: UIImage?) {
         if image != nil {
             spinner.stopAnimating()
         } else {
@@ -37,13 +36,30 @@ class ImageCollectionViewCell: UICollectionViewCell {
         pictureImageView.image = image
     }
     
-    // method for testing
+    public func startAnimateCellRemoving() {
+        removeButton.isHidden = false
+        
+        let shakeAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        shakeAnimation.autoreverses = true
+        shakeAnimation.duration = 0.25
+        shakeAnimation.repeatCount = .infinity
+        
+        let startAngle: Float = (-2) * Float.pi/180
+        let stopAngle = -startAngle
+        
+        shakeAnimation.fromValue = NSNumber(value: startAngle as Float)
+        shakeAnimation.toValue = NSNumber(value: 2 * stopAngle as Float)
+        shakeAnimation.timeOffset = 290 * drand48()
+        
+        self.layer.add(shakeAnimation, forKey:"animate")
+        isAnimate = true
+    }
     
-    func setCell() {
-        spinner.startAnimating()
-        pictureImageView.layer.borderWidth = 1
-        pictureImageView.layer.cornerRadius = 15
-        pictureImageView.layer.borderColor = UIColor.white.cgColor
+    public func stopAnimateCellRemoving() {
+        removeButton.isHidden = true
+        
+        self.layer.removeAnimation(forKey: "animate")
+        isAnimate = false
     }
 }
 
