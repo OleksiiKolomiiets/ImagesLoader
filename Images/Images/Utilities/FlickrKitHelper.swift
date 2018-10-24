@@ -9,76 +9,85 @@
 import Foundation
 import FlickrKit
 
-protocol FlickrKitHelperDelegate: class {
-    func onErrorCatched(helper: FlickrKitHelper, error: Error)
-}
-
 typealias FlickrKitImageDictionary = [String: Any]
+
+enum FlickrKitHelperError: Error, LocalizedError {
+    case invalidData
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidData:
+            return "FlickrKit resonse data invalid."
+        }
+    }
+}
 
 class FlickrKitHelper {
     
     // MARK: - Variables:
-    public weak var delegate: FlickrKitHelperDelegate?
-    
-    public var imagesQuantity: Int!
+    public var imagesPerPage: Int
     
     private var imageDataDictionary = [String: [ImageData]]()
-    private var imageTags = [String]()
     
     private let flickrKitHelperDispatchQueue = DispatchQueue(label: "FlickrKitHelper")
     private let flickrKitHelperDispatchGroup = DispatchGroup()
     
     
     // MARK: - Functions:
+    
+    init(imagesPerPage: Int) {
+        self.imagesPerPage = imagesPerPage
+    }
+    
     // Start to upload images dataphotoArray
-    public func load(for tags: [String], completion: @escaping ([String: [ImageData]], [String]) -> Void) {
+    public func load(for tags: [String], completion: @escaping ([String: [ImageData]]) -> Void, failure: @escaping (Error) -> Void) {
         
         imageDataDictionary.removeAll()
-        imageTags = tags
         
-        imageTags.forEach() { tag in
-            self.setImagesData(self.imagesQuantity, by: tag)
+        tags.forEach() { tag in
+            self.startLoadingData(for: tag, self.imagesPerPage, failure)
         }
         
         flickrKitHelperDispatchGroup.notify(queue: .main) {
-            print("****")
-            completion(self.imageDataDictionary, self.imageTags)
+            completion(self.imageDataDictionary)
         }
     }
     
     // Getting images data: URLs and title
-    private func setImagesData(_ quantity: Int, by tag: String) {
+    private func startLoadingData(for tag: String, _ perPage: Int, _ failure: @escaping (Error) -> Void) {
         
         flickrKitHelperDispatchGroup.enter()
         
-        let quantity = String(quantity)
+        let perPageString = String(perPage)
         
         flickrKitHelperDispatchQueue.sync { [weak self] in
             guard let self = self else { return }
             
-            FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": quantity] ) { (response, error) -> Void in
+            FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": perPageString] ) { (response, error) -> Void in
                 
-                guard error == nil, let response = response,
-                    let topPhotos = response["photos"] as? [String: Any],
-                    let photoArray = topPhotos["photo"] as? [FlickrKitImageDictionary]
-                    else {
-                        DispatchQueue.main.async { () -> Void  in
-                            self.delegate?.onErrorCatched(helper: self, error: error!)
-                        }
-                        return
+                if let error = error {
+                    failure(error)
+                } else {
+                
+                    guard let response = response,
+                        let photos = response["photos"] as? [String: Any],
+                        let photo = photos["photo"] as? [FlickrKitImageDictionary]
+                        else {
+                            failure(FlickrKitHelperError.invalidData)
+                            return
+                    }
+                    
+                    var imageDataArray = [ImageData]()
+                    
+                    photo.forEach({ flickrKitImageData in
+                        imageDataArray.append(ImageData(title       : flickrKitImageData["title"] as! String,
+                                                        urlSmall240 : FlickrKitHelper.getUrlForPhoto(sizeType: .small240 , using: flickrKitImageData),
+                                                        urlSmall320 : FlickrKitHelper.getUrlForPhoto(sizeType: .small320 , using: flickrKitImageData),
+                                                        urlLarge1024: FlickrKitHelper.getUrlForPhoto(sizeType: .large1024, using: flickrKitImageData)))
+                    })
+                    
+                    self.imageDataDictionary[tag] = imageDataArray
                 }
-                
-                var imageDataArray = [ImageData]()
-                
-                photoArray.forEach({ flickrKitImageData in
-                    imageDataArray.append(ImageData(title       : flickrKitImageData["title"] as! String,
-                                                    urlSmall240 : FlickrKitHelper.getUrlForPhoto(sizeType: .small240, using: flickrKitImageData),
-                                                    urlSmall320 : FlickrKitHelper.getUrlForPhoto(sizeType: .small320, using: flickrKitImageData),
-                                                    urlLarge1024: FlickrKitHelper.getUrlForPhoto(sizeType: .large1024, using: flickrKitImageData)))
-                })
-                
-                self.imageDataDictionary[tag] = imageDataArray
-                print(self.imageDataDictionary.count)
                 
                 self.flickrKitHelperDispatchGroup.leave()
             }

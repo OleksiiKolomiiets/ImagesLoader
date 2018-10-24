@@ -22,6 +22,7 @@ fileprivate class ImagesViewControllerSettings {
     
     //Reloading constant
     static let kTimeLimit           = 30.0
+    static let kTimeLimitAfterFail  = 5.0
     
     // TV == TableView constants
     static let kTVHeightForRow:     CGFloat = 91
@@ -44,6 +45,8 @@ class ImagesViewController: UIViewController {
     @IBOutlet weak var proposeForDropLable: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var proccesingView: UIView!
+    @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var dropZoneView: UIView! {
         didSet {
             dropZoneView.addInteraction(UIDropInteraction(delegate: self))
@@ -53,12 +56,11 @@ class ImagesViewController: UIViewController {
     
     // MARK: Properties:
     
-    private var flickrHelper = FlickrKitHelper()
+    private var flickrHelper = FlickrKitHelper(imagesPerPage: ImagesViewControllerSettings.kImagesPerPage)
     private var imageDataDictionary: [String: [ImageData]]? 
     private var imageTags: [String]?
     
     private var reloadingTimer: Timer?
-    private var proccesingView: UIView?
     private var removeImagesActionStarts = false
     private var indexOfCellBeforeDragging = 0
     private var removingLongPressGesture: UILongPressGestureRecognizer!
@@ -125,14 +127,9 @@ class ImagesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        coverTheScreen() // cover the screen while content is downloading
         shadowView.delegate = self
         
-        // set image data loader delegate and max pictures per page
-        flickrHelper.delegate = self
-        flickrHelper.imagesQuantity = ImagesViewControllerSettings.kImagesPerPage
-        
-        // set image data from loader
+        // set image data from helper
         setImageData()
         
         // prepare table view
@@ -230,62 +227,30 @@ class ImagesViewController: UIViewController {
         setImageData()
     }
     
-    fileprivate func setImageData() {
+    private func setImageData() {
         
         stopReloadingTimer()
         
-        flickrHelper.load(for: getRandomTags()) { (imageDataDictionary, imageTags) in
-            self.imageTags = imageTags
+        let tags = getRandomTags()
+        
+        flickrHelper.load(for: tags, completion: { imageDataDictionary in
+            
+            self.imageTags = tags
             self.imageDataDictionary = imageDataDictionary
             
-            self.proccesingView?.removeFromSuperview()
+            self.proccesingView?.isHidden = true
             self.tabBarController?.tabBar.isHidden = false
             
             self.tableView.reloadData()
             self.startReloadingTimer(with: ImagesViewControllerSettings.kTimeLimit)
-        }
+            
+        }, failure: { error in
+            
+            self.startReloadingTimer(with: ImagesViewControllerSettings.kTimeLimitAfterFail)
+            print(error.localizedDescription)
+            
+        })
     }
-    
-    private func coverTheScreen() {
-        
-        proccesingView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height))
-        proccesingView?.backgroundColor = .white
-        
-        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height))
-        imageView.image = UIImage(named: "space")
-        imageView.layer.opacity = 0.8
-        imageView.contentMode = .scaleAspectFill
-        
-        tabBarController?.tabBar.isHidden = true
-        proccesingView?.addSubview(imageView)
-        
-        view.addSubview(proccesingView!)
-        
-    }
-    
-    func addBadSignalImage(at view: UIView) {
-        
-        setCustomOpacityAnimation(for: badSignalImageView)
-        
-        view.addSubview(badSignalImageView)
-    }
-    
-    private lazy var badSignalImageView: UIImageView = {
-        
-        let badSignalImage = UIImage(named: "badSignal")!
-        let imageWidth: CGFloat = badSignalImage.size.width
-        let imageHeight: CGFloat = badSignalImage.size.height
-        let superViewCentr  = CGPoint(x: view.frame.midX, y: view.frame.midY)
-        let badSignalImageView = UIImageView(frame: CGRect(x: superViewCentr.x - imageWidth / 2,
-                                                           y: superViewCentr.y - imageHeight / 2,
-                                                           width: imageWidth,
-                                                           height: imageHeight))
-        
-        badSignalImageView.image = badSignalImage
-        badSignalImageView.contentMode = .scaleAspectFill
-        
-        return badSignalImageView
-    }()
     
     private func setCustomOpacityAnimation(for view: UIView) {
         // add opacity animation
@@ -338,16 +303,6 @@ class ImagesViewController: UIViewController {
     
     
 }
-
-// MARK: - FlickrKitHelperDelegate:
-
-extension ImagesViewController: FlickrKitHelperDelegate {
-    
-    func onErrorCatched(helper: FlickrKitHelper, error: Error) {
-        addBadSignalImage(at: proccesingView!)
-    }
-}
-
 
 // MARK: - ShadowViewDelegate:
 
@@ -717,7 +672,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
             let imageDetailViewController = getImageDetailViewController(with: url)
             imageDetailViewController.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
             
-            tabBarController?.viewControllers?.append(getImageDetailViewController(with: url))
+            tabBarController?.viewControllers?.append(imageDetailViewController)
         } else {
             insertViewControllerToTheEnd(of: tabBarViewControllers, url)
         }

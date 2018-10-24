@@ -195,24 +195,43 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="813"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9N8-OH-YEX">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" alpha="0.80000000000000004" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="space" translatesAutoresizingMaskIntoConstraints="NO" id="0YQ-Xc-LS9">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                    </imageView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="0YQ-Xc-LS9" firstAttribute="top" secondItem="9N8-OH-YEX" secondAttribute="top" id="MZ0-RB-c6k"/>
+                                    <constraint firstItem="0YQ-Xc-LS9" firstAttribute="leading" secondItem="9N8-OH-YEX" secondAttribute="leading" id="f2D-Rs-7y8"/>
+                                    <constraint firstAttribute="bottom" secondItem="0YQ-Xc-LS9" secondAttribute="bottom" id="v0b-u5-idO"/>
+                                    <constraint firstAttribute="trailing" secondItem="0YQ-Xc-LS9" secondAttribute="trailing" id="vTp-A3-1L0"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.83807416820000002" green="0.8983499693" blue="0.92145264149999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="0un-16-oP2" firstAttribute="top" secondItem="umi-wv-8HL" secondAttribute="top" id="3i5-Vx-13H"/>
                             <constraint firstItem="H1M-TR-gbN" firstAttribute="top" secondItem="6cP-V6-eD9" secondAttribute="bottom" id="7y8-k5-7l7"/>
                             <constraint firstItem="KH4-IR-CVc" firstAttribute="trailing" secondItem="H1M-TR-gbN" secondAttribute="trailing" id="8Hs-PB-dK6"/>
+                            <constraint firstItem="9N8-OH-YEX" firstAttribute="top" secondItem="umi-wv-8HL" secondAttribute="top" id="8fs-dc-aoa"/>
                             <constraint firstItem="tdN-RT-arj" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" id="CTd-yz-GkO"/>
+                            <constraint firstAttribute="bottom" secondItem="9N8-OH-YEX" secondAttribute="bottom" id="DFd-8Z-G0y"/>
                             <constraint firstItem="H1M-TR-gbN" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" id="Hac-Ln-fUr"/>
                             <constraint firstItem="6cP-V6-eD9" firstAttribute="width" secondItem="umi-wv-8HL" secondAttribute="width" id="Jhx-9Q-O2h"/>
                             <constraint firstItem="KH4-IR-CVc" firstAttribute="bottom" secondItem="0un-16-oP2" secondAttribute="bottom" id="NW9-SM-ba1"/>
                             <constraint firstItem="6cP-V6-eD9" firstAttribute="top" secondItem="umi-wv-8HL" secondAttribute="top" id="R05-ld-hwW"/>
                             <constraint firstAttribute="height" secondItem="6cP-V6-eD9" secondAttribute="height" multiplier="7/3" id="SGm-uJ-g5o"/>
+                            <constraint firstItem="9N8-OH-YEX" firstAttribute="trailing" secondItem="KH4-IR-CVc" secondAttribute="trailing" id="bRe-kz-HTk"/>
                             <constraint firstItem="6cP-V6-eD9" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" id="eeb-oa-dmU"/>
                             <constraint firstItem="6cP-V6-eD9" firstAttribute="trailing" secondItem="KH4-IR-CVc" secondAttribute="trailing" id="hv1-qs-MPE"/>
                             <constraint firstItem="tdN-RT-arj" firstAttribute="top" secondItem="H1M-TR-gbN" secondAttribute="top" constant="-1" id="jpl-gV-hCo"/>
                             <constraint firstAttribute="trailing" secondItem="0un-16-oP2" secondAttribute="trailing" id="lhA-oc-DVX"/>
                             <constraint firstItem="KH4-IR-CVc" firstAttribute="trailing" secondItem="tdN-RT-arj" secondAttribute="trailing" id="nrO-LM-8v0"/>
                             <constraint firstItem="0un-16-oP2" firstAttribute="leading" secondItem="umi-wv-8HL" secondAttribute="leading" id="wB9-fx-9Qr"/>
+                            <constraint firstItem="9N8-OH-YEX" firstAttribute="leading" secondItem="KH4-IR-CVc" secondAttribute="leading" id="x4K-aK-efe"/>
                             <constraint firstItem="H1M-TR-gbN" firstAttribute="bottom" secondItem="umi-wv-8HL" secondAttribute="bottom" id="zLZ-hF-FGC"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="KH4-IR-CVc"/>
@@ -223,7 +242,9 @@
                     <connections>
                         <outlet property="collectionView" destination="PIo-gh-jkD" id="Zxo-wZ-wEX"/>
                         <outlet property="collectionViewFlowLayout" destination="Jj3-ps-l3M" id="2mX-Pa-Uzq"/>
+                        <outlet property="coverImageView" destination="0YQ-Xc-LS9" id="b4b-Y0-Hd1"/>
                         <outlet property="dropZoneView" destination="tdN-RT-arj" id="x0Z-B2-PLD"/>
+                        <outlet property="proccesingView" destination="9N8-OH-YEX" id="9BF-XL-lFb"/>
                         <outlet property="proposeForDropLable" destination="GAs-cC-siT" id="aMG-GR-Y1S"/>
                         <outlet property="shadowView" destination="0un-16-oP2" id="XDG-eY-aRE"/>
                         <outlet property="tableView" destination="H1M-TR-gbN" id="LXr-hm-3HK"/>
@@ -231,7 +252,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pvZ-L4-HU0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2895" y="110.91549295774648"/>
+            <point key="canvasLocation" x="2894.202898550725" y="110.49107142857143"/>
         </scene>
     </scenes>
     <resources>
