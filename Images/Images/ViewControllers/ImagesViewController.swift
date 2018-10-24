@@ -15,11 +15,11 @@ fileprivate class ImagesViewControllerSettings {
     //MARK: - CONSTANTS
     
     //Uploading images constants
-    static let kImagesPerPage       = 30
+    static let kImagesPerPage       = 20
     static let kTags                = ["sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"]
-    static let kTagsCountInOneLoad  = 3
+    static let kTagsCountInOneLoad  = 1
     //Reloading constant
-    static let kTimeLimit           = 5.0
+    static let kTimeLimit           = 3.0
     // TV == TableView constants
     static let kTVHeightForRow:     CGFloat = 91
     static let kTVHeightForHeader:  CGFloat = 80
@@ -49,15 +49,8 @@ class ImagesViewController: UIViewController {
     // MARK:  - Properties:
     
     private var dataLoader = FlickrKitHelper()
-    private var imageDataDictionary: [String: [ImageData]]? {
-        didSet {
-            proccesingView?.removeFromSuperview()
-            tabBarController?.tabBar.isHidden = false
-            
-            tableView.reloadData()
-        }
-    }
-    private var imageTags: [String]!
+    private var imageDataDictionary: [String: [ImageData]]? 
+    private var imageTags: [String]?
     
     private var reloadingTimer: Timer?
     private var proccesingView: UIView?
@@ -82,6 +75,7 @@ class ImagesViewController: UIViewController {
     
     // MARK: - Actions:
     
+    // Method to switch remove action:
     @objc private func longTap(_ gesture: UIGestureRecognizer){
         switch gesture.state {
         case .began:
@@ -101,6 +95,7 @@ class ImagesViewController: UIViewController {
         }
     }
     
+    // Remove elements from collection view method:
     @IBAction private func removeButtonTouch(_ sender: UIButton) {
         let hitPoint = sender.convert(CGPoint.zero, to: collectionView)
         let hitIndex = collectionView.indexPathForItem(at: hitPoint)!
@@ -118,26 +113,21 @@ class ImagesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        coverTheScreen() // cover the screen while content is downloading
+        
         shadowView.delegate = self
         
-//        dataLoader.delegate = self
-//        dataLoader.imageTags = getRandomTags()
-//
-//        dataLoader.reload()
-        
-        // get image data from loader
+        // set image data loader delegate and max pictures per page
+        dataLoader.delegate = self
         dataLoader.imagesQuantity = ImagesViewControllerSettings.kImagesPerPage
-        imageTags = getRandomTags()
-        dataLoader.load(for: imageTags) { imageDataDictionary in
-            self.imageDataDictionary = imageDataDictionary
-        }
+        
+        // set image data from loader
+        setImageData()
         
         // prepare table view
         let headerNibId = ImagesViewControllerSettings.kTVHeaderIdentifier
         tableView.register(UINib(nibName: headerNibId, bundle: nil), forHeaderFooterViewReuseIdentifier: headerNibId)
-        tableView.dragDelegate = self           // didn't find its setting on Storyboard
-        tableView.dragInteractionEnabled = true // didn't find its setting on Storyboard
+        tableView.dragDelegate = self
+        tableView.dragInteractionEnabled = true
         
         setCustomOpacityAnimation(for: proposeForDropLable)
         
@@ -157,14 +147,14 @@ class ImagesViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        startTimer()
+        startReloadingTimer(with: ImagesViewControllerSettings.kTimeLimit)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         // ending timer work when user go to anothe screen
-        reloadingTimer?.invalidate()
-        reloadingTimer = nil
+        
+        stopReloadingTimer()
     }
     
     // MARK: - Functions:
@@ -202,22 +192,34 @@ class ImagesViewController: UIViewController {
     }
     
     // start to count time for reload
-    private func startTimer() {
-        let reloadTimeInterval = ImagesViewControllerSettings.kTimeLimit
+    private func startReloadingTimer(with timeInterval: TimeInterval) {
         if reloadingTimer == nil {
-            reloadingTimer = Timer.scheduledTimer(timeInterval: reloadTimeInterval,
+            reloadingTimer = Timer.scheduledTimer(timeInterval: timeInterval,
                                                   target: self,
                                                   selector: #selector(onTimerTick),
                                                   userInfo: nil,
-                                                  repeats: true)
+                                                  repeats: false)
         }
     }
     
+    private func stopReloadingTimer() {
+        reloadingTimer?.invalidate()
+        reloadingTimer = nil
+    }
+    
     // reloading data source
+    
     @objc private func onTimerTick() {
-        imageTags = getRandomTags()
-        dataLoader.load(for: imageTags) { imageDataDictionary in
+        setImageData()
+    }
+    
+    fileprivate func setImageData() {
+        stopReloadingTimer()
+        dataLoader.load(for: getRandomTags()) { (imageDataDictionary, imageTags) in
+            self.imageTags = imageTags
             self.imageDataDictionary = imageDataDictionary
+            self.tableView.reloadData()
+            self.startReloadingTimer(with: ImagesViewControllerSettings.kTimeLimit)
         }
     }
     
@@ -313,7 +315,7 @@ extension ImagesViewController: ShadowViewDelegate {
                 let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
                 let section = self.selectedCellPath.section
                 let dataSource = self.imageDataDictionary!
-                let tag = self.imageTags[section]
+                let tag = self.imageTags![section]
                 guard  let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as? ImageDetailViewController,
                     let flickrDictionary = dataSource[tag] else  { return }
                 
@@ -333,15 +335,16 @@ extension ImagesViewController: ShadowViewDelegate {
 
 extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
 
+    
     // MARK: - Table view data source:
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier = ImagesViewControllerSettings.kTVCellIdentifier
         let section = indexPath.section
         let dataSource = imageDataDictionary!
-        let tag = imageTags[section]
+        let tag = imageTags![section]
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as? ImageTableViewCell,
-            let flickrDictionary = dataSource[tag] else {
+            let flickrDictionary = dataSource[tag] else {               
                 return UITableViewCell()
         }
         
@@ -364,23 +367,26 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
         return cell
     }
     
-    // Configurate reusable cells
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return imageTags.count
-    }
-    
+    // Set reusable cells
     private func setTableViewCell(by indexPath: IndexPath, image: UIImage?, title: String) {
         if let cell = tableView.cellForRow(at: indexPath) as? ImageTableViewCell {
             cell.configure(with: image, title)
         }
     }
-
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return imageTags?.count ?? 0
+    }
+    
+    
     // MARK: - Table view delegate:
+    
+    
     // Configurate header section view
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerNibId = ImagesViewControllerSettings.kTVHeaderIdentifier
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerNibId) as! CustomSectionHeaderView
-        headerView.setTitle(imageTags[section])
+        headerView.setTitle(imageTags![section])
         return headerView
     }
     
@@ -389,7 +395,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {        
-        let sectionTag = imageTags[section]
+        let sectionTag = imageTags![section]
         return imageDataDictionary?[sectionTag]?.count ?? 0
     }
     
@@ -561,7 +567,7 @@ extension ImagesViewController: UICollectionViewDropDelegate {
     // Parsing NSItemProviderReading
     private func getImageData(from dragItem: NSItemProviderReading?) -> ImageData {
         let itemString = dragItem as! String
-        let data = itemString.data(using: .utf8)!
+        let data = Data(itemString.utf8)
         var imageData: ImageData!
         do {
             imageData = try JSONDecoder().decode(ImageData.self, from: data)
@@ -593,7 +599,8 @@ extension ImagesViewController: UIDropInteractionDelegate {
         
         session.loadObjects(ofClass: NSString.self) { items in
             let itemString = items.first as! String
-            let data = itemString.data(using: .utf8)!
+            
+            let data = Data(itemString.utf8)
             var imageData: ImageData!
             do {
                 imageData = try JSONDecoder().decode(ImageData.self, from: data)
@@ -652,12 +659,10 @@ extension ImagesViewController: UITableViewDragDelegate {
     }
     
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
+        let dragImageTag  = imageTags![indexPath.section]
+        let dragImageData = imageDataDictionary?[dragImageTag]?[indexPath.row]
         
-        let draggedItemsTag = imageTags[indexPath.section]
-        let draggedItemsRow = indexPath.row
-        let imageData = imageDataDictionary?[draggedItemsTag]![draggedItemsRow]
-        
-        guard let data = try? JSONEncoder().encode(imageData) as NSData else { return [] }
+        guard let data = try? JSONEncoder().encode(dragImageData) as NSData else { return [] }
         
         let itemProvider = NSItemProvider(item: data, typeIdentifier: kUTTypePlainText as String)
         let dragItem = UIDragItem(itemProvider: itemProvider)

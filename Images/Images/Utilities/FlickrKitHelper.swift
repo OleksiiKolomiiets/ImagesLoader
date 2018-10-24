@@ -23,31 +23,33 @@ class FlickrKitHelper {
     public var imagesQuantity: Int!
     
     private var imageDataDictionary = [String: [ImageData]]()
+    private var imageTags = [String]()
     
-    private let imageDataLoader = DispatchQueue(label: "FlickrImageDataLoader")
-    private let downloadGroup = DispatchGroup()
+    private let flickrKitHelperDispatchQueue = DispatchQueue(label: "FlickrImageDataLoader")
+    private let flickrKitHelperDispatchGroup = DispatchGroup()
     
     
     // MARK: - Functions:
     // Start to upload images dataphotoArray
-    public func load(for tags: [String], completion: @escaping ([String: [ImageData]]) -> Void) {
-        imageDataDictionary.removeAll()
+    public func load(for tags: [String], completion: @escaping ([String: [ImageData]], [String]) -> Void) {
         
-        tags.forEach() { tag in
+        imageDataDictionary.removeAll()
+        imageTags = tags
+        imageTags.forEach() { tag in
             self.setImagesData(self.imagesQuantity, by: tag)
         }
         
-        downloadGroup.notify(queue: .main) {
+        flickrKitHelperDispatchGroup.notify(queue: .main) {
             print("****")
-            completion(self.imageDataDictionary)
+            completion(self.imageDataDictionary, self.imageTags)
         }
     }
     
     // Getting images data: URLs and title
     private func setImagesData(_ quantity: Int, by tag: String) {
-        downloadGroup.enter()
+        flickrKitHelperDispatchGroup.enter()
         let quantity = String(quantity)
-        imageDataLoader.sync { [weak self] in
+        flickrKitHelperDispatchQueue.sync { [weak self] in
             guard let self = self else { return }
             
             FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": quantity] ) { (response, error) -> Void in
@@ -70,7 +72,7 @@ class FlickrKitHelper {
                 
                 self.imageDataDictionary[tag] = imageDataArray
                 print(self.imageDataDictionary.count)
-                self.downloadGroup.leave()
+                self.flickrKitHelperDispatchGroup.leave()
             }
         }
     }
