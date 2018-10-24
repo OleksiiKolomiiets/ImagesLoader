@@ -82,8 +82,11 @@ class ImagesViewController: UIViewController {
     
     // Method to switch remove action:
     @objc private func longTap(_ gesture: UIGestureRecognizer){
+        
         switch gesture.state {
+            
         case .began:
+            
             // check if it cenceling tap
             if removeImagesActionStarts {
                 gesture.state = .cancelled
@@ -91,10 +94,13 @@ class ImagesViewController: UIViewController {
             // make all cells shaking
             removeImagesActionStarts.toggle()
             self.collectionView.reloadData()
+            
         case .ended:
+            
             if removeImagesActionStarts {
                 gesture.state = .cancelled
             }
+            
         default:
             break
         }
@@ -102,6 +108,7 @@ class ImagesViewController: UIViewController {
     
     // Remove elements from collection view method:
     @IBAction private func removeButtonTouch(_ sender: UIButton) {
+        
         let hitPoint = sender.convert(CGPoint.zero, to: collectionView)
         let hitIndex = collectionView.indexPathForItem(at: hitPoint)!
         
@@ -118,7 +125,7 @@ class ImagesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        coverTheScreen() // cover the screen while content is downloading
         shadowView.delegate = self
         
         // set image data loader delegate and max pictures per page
@@ -167,6 +174,7 @@ class ImagesViewController: UIViewController {
     
     // getting random tags
     private func getRandomTags() -> [String] {
+        
         var result = [String]()
         
         let tags = ImagesViewControllerSettings.kTags
@@ -181,6 +189,7 @@ class ImagesViewController: UIViewController {
     
     // getting random indices for tags collection
     private func getRandomIndices(number: Int, _ max: Int) -> [Int] {
+        
         var result = [Int]()
         
         for _ in 0 ..< number {
@@ -200,6 +209,7 @@ class ImagesViewController: UIViewController {
     
     // start to count time for reload
     private func startReloadingTimer(with timeInterval: TimeInterval) {
+        
         if reloadingTimer == nil {
             reloadingTimer = Timer.scheduledTimer(timeInterval: timeInterval,
                                                   target: self,
@@ -221,34 +231,47 @@ class ImagesViewController: UIViewController {
     }
     
     fileprivate func setImageData() {
+        
         stopReloadingTimer()
+        
         flickrHelper.load(for: getRandomTags()) { (imageDataDictionary, imageTags) in
             self.imageTags = imageTags
             self.imageDataDictionary = imageDataDictionary
+            
+            self.proccesingView?.removeFromSuperview()
+            self.tabBarController?.tabBar.isHidden = false
+            
             self.tableView.reloadData()
             self.startReloadingTimer(with: ImagesViewControllerSettings.kTimeLimit)
         }
     }
     
     private func coverTheScreen() {
+        
         proccesingView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height))
         proccesingView?.backgroundColor = .white
+        
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: view.frame.size.height))
         imageView.image = UIImage(named: "space")
         imageView.layer.opacity = 0.8
         imageView.contentMode = .scaleAspectFill
+        
         tabBarController?.tabBar.isHidden = true
         proccesingView?.addSubview(imageView)
+        
         view.addSubview(proccesingView!)
         
     }
     
     func addBadSignalImage(at view: UIView) {
+        
         setCustomOpacityAnimation(for: badSignalImageView)
+        
         view.addSubview(badSignalImageView)
     }
     
     private lazy var badSignalImageView: UIImageView = {
+        
         let badSignalImage = UIImage(named: "badSignal")!
         let imageWidth: CGFloat = badSignalImage.size.width
         let imageHeight: CGFloat = badSignalImage.size.height
@@ -257,8 +280,10 @@ class ImagesViewController: UIViewController {
                                                            y: superViewCentr.y - imageHeight / 2,
                                                            width: imageWidth,
                                                            height: imageHeight))
+        
         badSignalImageView.image = badSignalImage
         badSignalImageView.contentMode = .scaleAspectFill
+        
         return badSignalImageView
     }()
     
@@ -287,6 +312,7 @@ class ImagesViewController: UIViewController {
     }
     
     private func calculateSectionInset() -> CGFloat {
+        
         let deviceIsIpad = UIDevice.current.userInterfaceIdiom == .pad
         let deviceOrientationIsLandscape = UIDevice.current.orientation.isLandscape
         let cellBodyViewIsExpended = deviceIsIpad || deviceOrientationIsLandscape
@@ -330,6 +356,7 @@ extension ImagesViewController: ShadowViewDelegate {
     func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedFrame: Bool) {
         
         shadowView.dismissShadow(animated: true, finished: {
+            
             shadowView.isHidden = true
             
             if didUserTapOnHighlightedFrame {

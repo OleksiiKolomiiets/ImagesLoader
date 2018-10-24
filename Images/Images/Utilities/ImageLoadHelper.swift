@@ -23,6 +23,7 @@ class ImageLoadHelper {
     
     // Method for getting the image by URL
     static func getImage(by url: URL, completion: @escaping (UIImage?) -> Void) {
+        
         loaderQueue.async {
             let image = upload(by: url)
             DispatchQueue.main.async {
@@ -33,11 +34,14 @@ class ImageLoadHelper {
     
     // Method for uploading the image by URL
     static private func upload(by url: URL) -> UIImage? {
+        
         var image: UIImage?
+        
         if let imageData = try? Data(contentsOf: url) {
             image = UIImage(data: imageData)
             self.cache[url] = image
         }
+        
         return image
     }
     

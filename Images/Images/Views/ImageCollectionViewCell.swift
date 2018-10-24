@@ -28,15 +28,18 @@ class ImageCollectionViewCell: UICollectionViewCell {
     
     // cell configuration
     public func configure(with image: UIImage?) {
+        
         if image != nil {
             spinner.stopAnimating()
         } else {
             spinner.startAnimating()
-        }        
+        }
+        
         pictureImageView.image = image
     }
     
     public func startAnimateCellRemoving() {
+        
         removeButton.isHidden = false
         
         let shakeAnimation = CABasicAnimation(keyPath: "transform.rotation")
@@ -56,6 +59,7 @@ class ImageCollectionViewCell: UICollectionViewCell {
     }
     
     public func stopAnimateCellRemoving() {
+        
         removeButton.isHidden = true
         
         self.layer.removeAnimation(forKey: "animate")

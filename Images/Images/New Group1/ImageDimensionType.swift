@@ -15,6 +15,7 @@ enum ImageDimensionType {
     case large
     
     var flickerPhotoSize: FKPhotoSize {
+        
         switch self {
         case .small240:
             return .small240

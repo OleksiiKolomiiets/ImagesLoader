@@ -35,6 +35,7 @@ class FlickrKitHelper {
         
         imageDataDictionary.removeAll()
         imageTags = tags
+        
         imageTags.forEach() { tag in
             self.setImagesData(self.imagesQuantity, by: tag)
         }
@@ -47,12 +48,16 @@ class FlickrKitHelper {
     
     // Getting images data: URLs and title
     private func setImagesData(_ quantity: Int, by tag: String) {
+        
         flickrKitHelperDispatchGroup.enter()
+        
         let quantity = String(quantity)
+        
         flickrKitHelperDispatchQueue.sync { [weak self] in
             guard let self = self else { return }
             
             FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": quantity] ) { (response, error) -> Void in
+                
                 guard error == nil, let response = response,
                     let topPhotos = response["photos"] as? [String: Any],
                     let photoArray = topPhotos["photo"] as? [FlickrKitImageDictionary]
@@ -62,7 +67,9 @@ class FlickrKitHelper {
                         }
                         return
                 }
+                
                 var imageDataArray = [ImageData]()
+                
                 photoArray.forEach({ flickrKitImageData in
                     imageDataArray.append(ImageData(title       : flickrKitImageData["title"] as! String,
                                                     urlSmall240 : FlickrKitHelper.getUrlForPhoto(sizeType: .small240, using: flickrKitImageData),
@@ -72,6 +79,7 @@ class FlickrKitHelper {
                 
                 self.imageDataDictionary[tag] = imageDataArray
                 print(self.imageDataDictionary.count)
+                
                 self.flickrKitHelperDispatchGroup.leave()
             }
         }
