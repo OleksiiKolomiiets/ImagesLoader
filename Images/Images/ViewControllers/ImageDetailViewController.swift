@@ -32,8 +32,8 @@ class ImageDetailViewController: UIViewController {
         didSet {
             imageView.image = image
             imageView.sizeToFit()
-            setImageCentred()
-            setZoomScale()
+            centerImageView(imageView, in: scrollView)
+            setUpMinMaxZoomScale(for: scrollView, dependingOnSizeOf: image!)
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
         }
     }
@@ -90,36 +90,41 @@ class ImageDetailViewController: UIViewController {
         view.addGestureRecognizer(tap)
     }
     
-    private func setImageCentred() {
+    private func centerImageView(_ imageView: UIImageView, in scrollView: UIScrollView) {
+        
         let imageViewSize = imageView.frame.size
         let scrollViewSize = scrollView.bounds.size
         let verticalInset = imageViewSize.height < scrollViewSize.height ? (scrollViewSize.height - imageViewSize.height) / 2 : 1
         let horizontalInset = imageViewSize.width < scrollViewSize.width ? (scrollViewSize.width - imageViewSize.width) / 2 : 1
+        
         scrollView.contentInset = UIEdgeInsets(top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset) 
     }
     
     // Calculating minimum and maximum zoom scale for scroll view according to image sizes
-    private func setZoomScale() {
-        let width = image!.size.width
-        let height = image!.size.height
+    private func setUpMinMaxZoomScale(for scrollView: UIScrollView, dependingOnSizeOf image: UIImage) {
         
-        let verticalScale = view.frame.size.height / height
-        let horizontalScale = view.frame.size.width / width
+        // calculating minimum and maximum zoom scale for scroll view
+        let width = image.size.width
+        let height = image.size.height
+        
+        let verticalScale = scrollView.frame.size.height / height
+        let horizontalScale = scrollView.frame.size.width / width
         
         let minScale = min(verticalScale, horizontalScale)
         let maxScale = max(verticalScale, horizontalScale)
         
+        // setting minimum and maximum zoom scale for scroll view
         scrollView.minimumZoomScale = minScale
         scrollView.maximumZoomScale = maxScale
     }
     
-    // Getting image to display
+    // Fetching image to display
     private func fetchImage() {
         if let cachedImage = ImageLoadHelper.getImageFromCache(by: imageURL) {
             self.image = cachedImage
         } else {
             loadActivityIndicator.startAnimating()
-            ImageLoadHelper.getImage(by: imageURL) { loadedImage in
+            ImageLoadHelper.loadImage(by: imageURL) { loadedImage in
                 self.loadActivityIndicator.stopAnimating()
                 self.image = loadedImage
             }
@@ -137,6 +142,6 @@ extension ImageDetailViewController: UIScrollViewDelegate {
     
     // set image to the center of view
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        setImageCentred()
+        centerImageView(imageView, in: scrollView)
     }
 }

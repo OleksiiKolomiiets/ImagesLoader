@@ -24,6 +24,7 @@ class ImageTableViewCell: UITableViewCell {
     
     // cell configuration
     public func configure(with image: UIImage?, _ title: String) {
+        
         titleLabel.text = title
         
         if image != nil  {
@@ -31,6 +32,7 @@ class ImageTableViewCell: UITableViewCell {
         } else {
             spinner.startAnimating()
         }
+        
         pictureImageView.image = image
     }
     

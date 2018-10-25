@@ -16,28 +16,32 @@ class ImageLoadHelper {
     static private var cache = [URL: UIImage]()  // Cache for uploaded images
     
     // MARK: - Functions:
-    // Method for getting mages from cache
+    // Method for getting images from cache
     static func getImageFromCache(by url: URL) -> UIImage? {
         return ImageLoadHelper.cache[url]
     }
     
-    // Method for getting the image by URL
-    static func getImage(by url: URL, completion: @escaping (UIImage?) -> Void) {
+    // Method for loading the image by URL
+    static func loadImage(by url: URL, completion: @escaping (UIImage?) -> Void) {
+        
         loaderQueue.async {
-            let image = upload(by: url)
+            let image = downloadImage(by: url)
             DispatchQueue.main.async {
                 completion(image)
             }
         }
     }
     
-    // Method for uploading the image by URL
-    static private func upload(by url: URL) -> UIImage? {
+    // Method for downloading the image by URL
+    static private func downloadImage(by url: URL) -> UIImage? {
+        
         var image: UIImage?
+        
         if let imageData = try? Data(contentsOf: url) {
             image = UIImage(data: imageData)
             self.cache[url] = image
         }
+        
         return image
     }
     

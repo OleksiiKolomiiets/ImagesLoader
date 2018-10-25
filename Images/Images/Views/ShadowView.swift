@@ -40,6 +40,7 @@ class ShadowView: UIView {
     }
     
     @objc private func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {
+        
         shadowLayer.removeAllAnimations()
         layer.mask = nil
         let radius = min(highlightedFrame.size.height, highlightedFrame.size.width) * 0.9 / 2
@@ -79,6 +80,7 @@ class ShadowView: UIView {
     }
     
     public func dismissShadow(animated: Bool, finished: @escaping () -> Void) {
+        
         isOpenShadow = false
         
         // Setting pathes by frame
@@ -102,6 +104,7 @@ class ShadowView: UIView {
     }
     
     private func getCirclePath(by frame: CGRect? = nil, inverse: Bool = false) -> UIBezierPath {
+        
         let rectCentr: CGPoint!
         let radius: CGFloat!
         
@@ -121,10 +124,12 @@ class ShadowView: UIView {
         if inverse {
             path.append(UIBezierPath(rect: superview!.frame))
         }
+        
         return path
     }
     
     private func setUpAnimation(from: CGPath, to: CGPath, duration: Double) {
+        
         let animate = CABasicAnimation(keyPath: "path")
         
         animate.fromValue = from
