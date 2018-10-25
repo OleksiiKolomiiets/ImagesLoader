@@ -111,3 +111,11 @@ build/
 # AppCode
 .idea/
 *.xccheckout
+
+Images/Images.xcodeproj/xcuserdata
+Images.xcodeproj/xcuserdata
+*.xcodeproj/xcuserdata
+
+Images/Images.xcworkspace/xcuserdata
+Images.xcworkspace/xcuserdata
+*.xcworkspace/xcuserdata

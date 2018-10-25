@@ -60,11 +60,12 @@ class ImagesViewController: UIViewController {
     private var imageDataDictionary: [String: [ImageData]]? 
     private var imageTags: [String]?
     
-    private var reloadingTimer: Timer?
+    private var reloadTimer: Timer?
     private var removeImagesActionStarts = false
     private var indexOfCellBeforeDragging = 0
     private var removingLongPressGesture: UILongPressGestureRecognizer!
     private var selectedCellPath: IndexPath!
+    private var hasNetworkProblems = false
     private var isDragSessionWillBegin: Bool! {
         didSet {
             proposeForDropLable.isHidden.toggle()
@@ -79,6 +80,19 @@ class ImagesViewController: UIViewController {
         }
     }
     
+    private var randomTags: [String] {
+        
+        var result = [String]()
+        
+        let tags = ImagesViewControllerSettings.kTags
+        let tagsCount = ImagesViewControllerSettings.kTagsCountInOneLoad
+        let allTagsCount = tags.count
+        let randomIndices = getRandomIndices(number: tagsCount, allTagsCount)
+        
+        randomIndices.forEach() { result.append(tags[$0]) }
+        
+        return result
+    }
     
     // MARK: Actions:
     
@@ -129,8 +143,8 @@ class ImagesViewController: UIViewController {
         
         shadowView.delegate = self
         
-        // set image data from helper
-        setImageData()
+        // reload image data from helper
+        reloadImages()
         
         // prepare table view
         let headerNibId = ImagesViewControllerSettings.kTVHeaderIdentifier
@@ -138,7 +152,7 @@ class ImagesViewController: UIViewController {
         tableView.dragDelegate = self
         tableView.dragInteractionEnabled = true
         
-        setCustomOpacityAnimation(for: proposeForDropLable)
+        customizeOpacityAnimation(for: proposeForDropLable)
         
         // prepare collection view
         collectionViewFlowLayout.minimumLineSpacing = 0
@@ -156,33 +170,18 @@ class ImagesViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        startReloadingTimer(with: ImagesViewControllerSettings.kTimeLimit)
+        startReloadTimer(with: ImagesViewControllerSettings.kTimeLimit)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         // ending timer work when user go to anothe screen
         
-        stopReloadingTimer()
+        stopReloadTimer()
     }
     
     
     // MARK: Functions:
-    
-    // getting random tags
-    private func getRandomTags() -> [String] {
-        
-        var result = [String]()
-        
-        let tags = ImagesViewControllerSettings.kTags
-        let tagsCount = ImagesViewControllerSettings.kTagsCountInOneLoad
-        let allTagsCount = tags.count
-        let randomIndices = getRandomIndices(number: tagsCount, allTagsCount)
-        
-        randomIndices.forEach() { result.append(tags[$0]) }        
-        
-        return result
-    }
     
     // getting random indices for tags collection
     private func getRandomIndices(number: Int, _ max: Int) -> [Int] {
@@ -204,11 +203,11 @@ class ImagesViewController: UIViewController {
         return result
     }
     
-    // start to count time for reload
-    private func startReloadingTimer(with timeInterval: TimeInterval) {
+    // start to count time for reload image data
+    private func startReloadTimer(with timeInterval: TimeInterval) {
         
-        if reloadingTimer == nil {
-            reloadingTimer = Timer.scheduledTimer(timeInterval: timeInterval,
+        if reloadTimer == nil {
+            reloadTimer = Timer.scheduledTimer(timeInterval: timeInterval,
                                                   target: self,
                                                   selector: #selector(onTimerTick),
                                                   userInfo: nil,
@@ -216,44 +215,54 @@ class ImagesViewController: UIViewController {
         }
     }
     
-    private func stopReloadingTimer() {
-        reloadingTimer?.invalidate()
-        reloadingTimer = nil
+    @objc private func onTimerTick() {
+        reloadImages()
+    }
+    
+    // stop timer for reload image data
+    private func stopReloadTimer() {
+        
+        if reloadTimer != nil {
+            reloadTimer?.invalidate()
+            reloadTimer = nil
+        }
     }
     
     // reloading data source
-    
-    @objc private func onTimerTick() {
-        setImageData()
+    private func reloadImages() {
+        
+        stopReloadTimer()
+        
+        let tags = randomTags
+        
+        flickrHelper.load(for: tags) { imageDataDictionary, errors in
+            
+            if let errors = errors {
+                self.hasNetworkProblems = true
+                
+                self.customizeOpacityAnimation(for: self.coverImageView)
+                
+                errors.forEach() { error in
+                    print(error.localizedDescription)
+                }
+                
+            } else {
+                self.hasNetworkProblems = false
+                
+                self.imageTags = tags
+                self.imageDataDictionary = imageDataDictionary
+                
+                self.tableView.reloadData()
+            }
+            
+            self.startReloadTimer(with: self.hasNetworkProblems ? ImagesViewControllerSettings.kTimeLimit : ImagesViewControllerSettings.kTimeLimitAfterFail)
+            self.proccesingView.isHidden = !self.hasNetworkProblems
+            self.tabBarController?.tabBar.isHidden = self.hasNetworkProblems
+        }
     }
     
-    private func setImageData() {
-        
-        stopReloadingTimer()
-        
-        let tags = getRandomTags()
-        
-        flickrHelper.load(for: tags, completion: { imageDataDictionary in
-            
-            self.imageTags = tags
-            self.imageDataDictionary = imageDataDictionary
-            
-            self.proccesingView?.isHidden = true
-            self.tabBarController?.tabBar.isHidden = false
-            
-            self.tableView.reloadData()
-            self.startReloadingTimer(with: ImagesViewControllerSettings.kTimeLimit)
-            
-        }, failure: { error in
-            
-            self.startReloadingTimer(with: ImagesViewControllerSettings.kTimeLimitAfterFail)
-            print(error.localizedDescription)
-            
-        })
-    }
-    
-    private func setCustomOpacityAnimation(for view: UIView) {
-        // add opacity animation
+    private func customizeOpacityAnimation(for view: UIView) {
+        // create opacity animation
         let animation = CABasicAnimation(keyPath: "opacity")
         
         animation.fromValue = 0.7
@@ -261,7 +270,7 @@ class ImagesViewController: UIViewController {
         animation.duration = 0.7
         animation.repeatCount = .infinity
         animation.autoreverses = true
-        
+        // create opacity animation to view
         view.layer.add(animation, forKey: "Propose opacity")
     }
     
@@ -353,8 +362,8 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
         if let image = ImageLoadHelper.getImageFromCache(by: url) {
             cellImage = image
         } else {
-            ImageLoadHelper.getImage(by: url, completion: { image in
-                self.setTableViewCell(by: indexPath, image: image, title: title)
+            ImageLoadHelper.loadImage(by: url, completion: { image in
+                self.configureTableViewCell(by: indexPath, image: image, title: title)
             })
         }
         
@@ -363,8 +372,8 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
         return cell
     }
     
-    // Set reusable cells
-    private func setTableViewCell(by indexPath: IndexPath, image: UIImage?, title: String) {
+    // Configure reusable cells
+    private func configureTableViewCell(by indexPath: IndexPath, image: UIImage?, title: String) {
         
         if let cell = tableView.cellForRow(at: indexPath) as? ImageTableViewCell {
             cell.configure(with: image, title)
@@ -508,8 +517,8 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
             if let image = ImageLoadHelper.getImageFromCache(by: url) {
                 cellImage = image
             } else {
-                ImageLoadHelper.getImage(by: url) { image in
-                    self.setCellForCollectionView(by: indexPath, with: image)
+                ImageLoadHelper.loadImage(by: url) { image in
+                    self.configureCollectionViewCell(by: indexPath, with: image)
                 }
             }
         }
@@ -521,7 +530,7 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
         return cell
     }
     
-    private func setCellForCollectionView(by indexPath: IndexPath, with image: UIImage?) {
+    private func configureCollectionViewCell(by indexPath: IndexPath, with image: UIImage?) {
         
         if let view = self.collectionView.cellForItem(at: indexPath) as? ImageCollectionViewCell {
             view.configure(with: image)
@@ -673,6 +682,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
             imageDetailViewController.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
             
             tabBarController?.viewControllers?.append(imageDetailViewController)
+            
         } else {
             insertViewControllerToTheEnd(of: tabBarViewControllers, url)
         }
