@@ -2,10 +2,7 @@
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
-Images/Images.xcworkspace/
-Images.xcworkspace/
-*.xcworkspace/
-Images/.DS_Store
+Images/.DS_Stodre
 
 ## Build generated
 build/
@@ -23,6 +20,7 @@ DerivedData/
 xcuserdata/
 
 ## Other
+
 *.moved-aside
 *.xccheckout
 *.xcscmblueprint
@@ -52,7 +50,6 @@ playground.xcworkspace
 # https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
 Pods/
 Podfile.lock
-WeatherApp.xcworkspace
 
 
 # Carthage
@@ -112,10 +109,7 @@ build/
 .idea/
 *.xccheckout
 
-Images/Images.xcodeproj/xcuserdata
-Images.xcodeproj/xcuserdata
-*.xcodeproj/xcuserdata
 
-Images/Images.xcworkspace/xcuserdata
-Images.xcworkspace/xcuserdata
-*.xcworkspace/xcuserdata
+xcuserdata
+xcuserdata/**/*
+!xcuserdata/**/xcschemes/*

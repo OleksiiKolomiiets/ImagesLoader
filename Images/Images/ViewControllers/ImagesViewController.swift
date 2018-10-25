@@ -205,7 +205,6 @@ class ImagesViewController: UIViewController {
     
     // start to count time for reload image data
     private func startReloadTimer(with timeInterval: TimeInterval) {
-        
         if reloadTimer == nil {
             reloadTimer = Timer.scheduledTimer(timeInterval: timeInterval,
                                                   target: self,
@@ -237,14 +236,10 @@ class ImagesViewController: UIViewController {
         
         flickrHelper.load(for: tags) { imageDataDictionary, errors in
             
-            if let errors = errors {
+            if errors != nil {
+                
                 self.hasNetworkProblems = true
-                
                 self.customizeOpacityAnimation(for: self.coverImageView)
-                
-                errors.forEach() { error in
-                    print(error.localizedDescription)
-                }
                 
             } else {
                 self.hasNetworkProblems = false
@@ -255,7 +250,7 @@ class ImagesViewController: UIViewController {
                 self.tableView.reloadData()
             }
             
-            self.startReloadTimer(with: self.hasNetworkProblems ? ImagesViewControllerSettings.kTimeLimit : ImagesViewControllerSettings.kTimeLimitAfterFail)
+            self.startReloadTimer(with: self.hasNetworkProblems ? ImagesViewControllerSettings.kTimeLimitAfterFail : ImagesViewControllerSettings.kTimeLimit)
             self.proccesingView.isHidden = !self.hasNetworkProblems
             self.tabBarController?.tabBar.isHidden = self.hasNetworkProblems
         }

@@ -10,6 +10,7 @@ import Foundation
 import FlickrKit
 
 typealias FlickrKitImageDictionary = [String: Any]
+typealias FlickrKitHelperCompletionHandler = ([String: [ImageData]]?, Error?) -> Void
 
 class FlickrKitHelper {
     
@@ -17,7 +18,7 @@ class FlickrKitHelper {
     public var imagesPerPage: Int
     
     private var imageDataDictionary: [String: [ImageData]]?
-    private var flickrNetworkError: [Error]?
+    private var flickrError: Error?
     
     private let flickrKitHelperDispatchQueue = DispatchQueue(label: "FlickrKitHelper")
     private let flickrKitHelperDispatchGroup = DispatchGroup()
@@ -29,35 +30,25 @@ class FlickrKitHelper {
         self.imagesPerPage = imagesPerPage
     }
     
-    // Start to upload images dataphotoArray
-    public func load(for tags: [String], completion: @escaping ([String: [ImageData]]?, [Error]?) -> Void) {
+    // Starting to load images data
+    public func load(for tags: [String], completion: @escaping FlickrKitHelperCompletionHandler) {
         
         imageDataDictionary?.removeAll()
+        flickrError = nil
         
         tags.forEach() { tag in
-            self.startLoadingData(for: tag, self.imagesPerPage) { error in
-                
-                guard var flickrNetworkError = self.flickrNetworkError else {
-                    self.flickrNetworkError = [error]
-                    return
-                }
-                
-                if flickrNetworkError.contains(where: { $0.localizedDescription == error.localizedDescription }) {
-                    flickrNetworkError.append(error)
-                }
-                
-            }
+            self.startLoadingData(for: tag, self.imagesPerPage) 
         }
         
-        flickrKitHelperDispatchGroup.notify(queue: .main) {            
-            completion(self.imageDataDictionary, self.flickrNetworkError)
+        flickrKitHelperDispatchGroup.notify(queue: .main) {
+            completion(self.imageDataDictionary, self.flickrError)
         }
         
         
     }
     
     // Loading images data: URLs and title
-    private func startLoadingData(for tag: String, _ perPage: Int, _ failure: @escaping (Error) -> Void) {
+    private func startLoadingData(for tag: String, _ perPage: Int) {
         
         flickrKitHelperDispatchGroup.enter()
         
@@ -68,11 +59,14 @@ class FlickrKitHelper {
             FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": perPageString] ) { (response, error) -> Void in
                 
                 if let error = error {
-                    failure(error)
+                    if self.flickrError == nil {
+                        self.flickrError = error
+                        print(error.localizedDescription)
+                    }
                 } else if let response = response {
                     
                     let photos = response["photos"] as! [String: Any]
-                    let photo = photos["photo"] as! [FlickrKitImageDictionary]
+                    let photo  = photos["photo"]    as! [FlickrKitImageDictionary]
                     
                     var imageDataArray = [ImageData]()
                     
