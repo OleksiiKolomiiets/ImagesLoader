@@ -8,6 +8,10 @@
 
 import UIKit
 
+fileprivate class FavoriteImagesSettings {
+    static let kCellIdentifier = "favoriteImageCelIdentifier"
+}
+
 class FavoriteImagesViewController: UIViewController {
 
     override func viewDidLoad() {
