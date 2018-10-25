@@ -591,7 +591,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
         do {
             imageData = try JSONDecoder().decode(ImageData.self, from: data)
         } catch {
-            fatalError(ImageDataError.invalidData.localizedDescription)
+            print(ImageDataError.invalidData.localizedDescription)
         }
         
         return imageData
@@ -604,7 +604,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
         return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
     }
 
-
+  
     // MARK: Drop interaction delegate:
     
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
@@ -627,7 +627,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
             do {
                 imageData = try JSONDecoder().decode(ImageData.self, from: data)
             } catch {
-                fatalError(ImageDataError.invalidData.localizedDescription)
+                print(ImageDataError.invalidData.localizedDescription)
             }
             
             let url = imageData.urlLarge1024
