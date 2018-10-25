@@ -32,18 +32,32 @@
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nbO-jW-mrB">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="287.5"/>
                                                 </imageView>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="0Nr-lf-ZeG">
+                                                    <rect key="frame" x="169" y="141.5" width="37" height="37"/>
+                                                    <color key="color" name="alternateSelectedControlTextColor" catalog="System" colorSpace="catalog"/>
+                                                </activityIndicatorView>
                                             </subviews>
                                             <color key="backgroundColor" name="selectedKnobColor" catalog="System" colorSpace="catalog"/>
                                             <constraints>
+                                                <constraint firstItem="0Nr-lf-ZeG" firstAttribute="centerY" secondItem="atc-k9-8hM" secondAttribute="centerY" id="9LO-UV-2e6"/>
                                                 <constraint firstAttribute="bottom" secondItem="nbO-jW-mrB" secondAttribute="bottom" constant="32" id="NV3-xD-ome"/>
+                                                <constraint firstItem="0Nr-lf-ZeG" firstAttribute="centerX" secondItem="atc-k9-8hM" secondAttribute="centerX" id="Wf6-J5-qFU"/>
                                                 <constraint firstItem="nbO-jW-mrB" firstAttribute="top" secondItem="atc-k9-8hM" secondAttribute="top" id="Yox-li-gqo"/>
                                                 <constraint firstItem="nbO-jW-mrB" firstAttribute="leading" secondItem="atc-k9-8hM" secondAttribute="leading" id="jcL-Nc-KbX"/>
                                                 <constraint firstAttribute="trailing" secondItem="nbO-jW-mrB" secondAttribute="trailing" id="qT4-uu-As5"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="favoriteImageView" destination="nbO-jW-mrB" id="Idf-4S-9dO"/>
+                                            <outlet property="spinner" destination="0Nr-lf-ZeG" id="1Lz-Gz-it0"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Z7f-bM-ARg" id="3Ng-Wd-vDO"/>
+                                    <outlet property="delegate" destination="Z7f-bM-ARg" id="ZkM-2r-WxQ"/>
+                                </connections>
                             </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -55,6 +69,9 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bGP-uN-xVs"/>
                     </view>
+                    <connections>
+                        <outlet property="tableView" destination="tEO-kM-Pw9" id="hhR-x0-fDs"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yll-CJ-Hjd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

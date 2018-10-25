@@ -10,4 +10,19 @@ import UIKit
 
 class FavoriteImageTableViewCell: UITableViewCell {
     
+    @IBOutlet private weak var favoriteImageView: UIImageView!
+    @IBOutlet private weak var spinner: UIActivityIndicatorView!
+    
+    public func setImageView(by image: UIImage?) {
+        
+        if image != nil {
+            
+            spinner.startAnimating()
+            
+        } else {
+            
+            spinner.stopAnimating()
+            favoriteImageView.image = image
+        }
+    }
 }
