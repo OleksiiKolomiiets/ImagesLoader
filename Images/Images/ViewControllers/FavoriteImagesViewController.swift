@@ -23,6 +23,8 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     // MARK: Properties:
     
+    private var savingHelper: UserDefaultsHelper!
+    
     public var favoritedImagesData: [Data]! {
         didSet {            
             updateFavoriteImagesData()
@@ -30,31 +32,9 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     private var favoritesImagesURLs: [URL]? {
-        var resultArray: [URL]?
-        
-        let savedData = UserDefaults.standard.object(forKey: FavoriteImagesSettings.kUserDefultsKey) as? [Data] ?? [Data]()
-        
-        for data in savedData {
-            
-            var imageData: ImageData!
-            
-            do {
-                imageData = try JSONDecoder().decode(ImageData.self, from: data)
-            } catch {
-                print(ImageDataError.invalidData.localizedDescription)
-            }
-            
-            let url = imageData.urlLarge1024
-            
-            if resultArray != nil {
-                resultArray!.append(url)
-            } else {
-                resultArray = [url]
-            }
-            
+        didSet {
+            tableView.reloadData()
         }
-        
-        return resultArray
     }
     
     
@@ -63,6 +43,9 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        savingHelper = UserDefaultsHelper(key: FavoriteImagesSettings.kUserDefultsKey)
+        
+        updateFavoriteImagesData()
     }
     
     // Making bar content light on dark background
@@ -70,24 +53,54 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         return .lightContent
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        tableView.reloadData()
-    }
-    
     
     // MARK: Function:
     
     private func updateFavoriteImagesData() {
+       
+        var resultArray: [URL]?
         
-        let userDefults = UserDefaults.standard
-        // TODO: make possible to add more than one and unique images
-        userDefults.set(favoritedImagesData, forKey: FavoriteImagesSettings.kUserDefultsKey)
+        let savedData = UserDefaults.standard.object(forKey: FavoriteImagesSettings.kUserDefultsKey) as? [Data] ?? [Data]()
+        
+        for data in savedData {
+            
+            let imageData = getImageData(from: data)
+            
+            guard let url = imageData?.urlLarge1024 else { break }
+            
+            if resultArray != nil {
+                resultArray!.append(url)
+            } else {
+                resultArray = [url]
+            }
+        }
+        
+        favoritesImagesURLs = resultArray
+        
+        guard let favoritedImagesData = favoritedImagesData else { return }
+        
+        for imageData in favoritedImagesData {
+            self.savingHelper.appendOnUserDefaults(imageData)
+        }
         
     }
     
+    private func getImageData(from data: Data) -> ImageData? {
+        
+        var imageData: ImageData?
+        
+        do {
+            imageData = try JSONDecoder().decode(ImageData.self, from: data)
+        } catch {
+            print(ImageDataError.invalidData.localizedDescription)
+        }
+        
+        return imageData
+    }
     
+    private func getData(from imageData: ImageData) -> Data? {
+        return try? JSONEncoder().encode(imageData) as Data
+    }
     
     // MARK: UITableViewDataSource
     
