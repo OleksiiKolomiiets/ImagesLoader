@@ -105,7 +105,6 @@
 				795B8B79212D804D00E18F16 /* Views */,
 				792348CE214024D0007903E1 /* Extensions */,
 				79545932214A8B36004191EE /* Storyboards */,
-				79A225C12167B3DC00C08D7B /* XIBs */,
 				794C9D7C212D60C70034E77F /* Supporting Files */,
 			);
 			path = Images;
@@ -149,7 +148,7 @@
 				794C9D7E212D61000034E77F /* ImageTableViewCell.swift */,
 				79A58B152182122900A10DDD /* FavoriteImageTableViewCell.swift */,
 				795B8B7A212D815A00E18F16 /* ImageCollectionViewCell.swift */,
-				79C1563B212EE53F00E486C1 /* CustomSectionHeaderView.swift */,
+				79A58B17218331DC00A10DDD /* CustomSectionHeaderView */,
 				798EF882215CF98D0060452C /* ShadowView.swift */,
 			);
 			path = Views;
@@ -172,12 +171,13 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		79A225C12167B3DC00C08D7B /* XIBs */ = {
+		79A58B17218331DC00A10DDD /* CustomSectionHeaderView */ = {
 			isa = PBXGroup;
 			children = (
+				79C1563B212EE53F00E486C1 /* CustomSectionHeaderView.swift */,
 				79D368C5213545DB007E14AE /* CustomSectionHeaderView.xib */,
 			);
-			path = XIBs;
+			path = CustomSectionHeaderView;
 			sourceTree = "<group>";
 		};
 		84E220EB742BB4CD5DD8FB58 /* Frameworks */ = {
