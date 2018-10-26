@@ -635,8 +635,30 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
         }
     }
     
+    private func setTabBar(with url: URL) {
+        
+        guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
+        
+        addDetailImagesViewControllers(with: url, to: tabBarViewControllers)
+    }
+
+    /// Functionality to add not more than three detail image vcs more to tab bar
+    private func addDetailImagesViewControllers(with url: URL, to tabBarViewControllers: [UIViewController]) {
+        let isTabVCsLessThanMax = tabBarViewControllers.count <= ImagesViewControllerSettings.kTabBarVScMaxCount
+        
+        if isTabVCsLessThanMax {
+            
+            let imageDetailViewController = getImageDetailViewController(with: url)
+            imageDetailViewController.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
+            
+            tabBarController?.viewControllers?.append(imageDetailViewController)
+            
+        } else {
+            insertDetailImageViewController(with: url, toTheEndOf: tabBarViewControllers)
+        }
+    }
     
-    private func insertViewControllerToTheEnd(of tabBarViewControllers: [UIViewController], _ url: URL) {
+    private func insertDetailImageViewController(with url: URL, toTheEndOf tabBarViewControllers: [UIViewController]) {
         
         for (viewControllerIndex, viewController) in tabBarViewControllers.enumerated() {
             
@@ -665,24 +687,6 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
         return detailVC
     }
     
-    private func setTabBar(with url: URL) {
-        
-        guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
-        
-        let isTabVCsLessThanMax = tabBarViewControllers.count <= ImagesViewControllerSettings.kTabBarVScMaxCount
-        
-        if isTabVCsLessThanMax {
-            
-            let imageDetailViewController = getImageDetailViewController(with: url)
-            imageDetailViewController.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
-            
-            tabBarController?.viewControllers?.append(imageDetailViewController)
-            
-        } else {
-            insertViewControllerToTheEnd(of: tabBarViewControllers, url)
-        }
-    }
-
 
     // MARK: Drag interaction delegate:
 
