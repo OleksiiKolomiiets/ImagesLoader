@@ -13,7 +13,7 @@ class FavoriteImageTableViewCell: UITableViewCell {
     @IBOutlet private weak var favoriteImageView: UIImageView!
     @IBOutlet private weak var spinner: UIActivityIndicatorView!
     
-    public func setImageView(by image: UIImage?) {
+    public func setUpImageView(by image: UIImage?) {
         
         if image != nil {
             

@@ -49,11 +49,11 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
             let url = urls[indexPath.row]
             
             if let image = ImageLoadHelper.getImageFromCache(by: url) {
-                cell.setImageView(by: image)
+                cell.setUpImageView(by: image)
             } else {
                 ImageLoadHelper.loadImage(by: url, completion: { image in
                     if let cell = tableView.cellForRow(at: indexPath) as? FavoriteImageTableViewCell {
-                        cell.setImageView(by: image)
+                        cell.setUpImageView(by: image)
                     }
                 })
             }
