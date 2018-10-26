@@ -630,8 +630,11 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
         
         setUpFavoriteImagesViewController(with: droppedItems, in: tabBarViewControllers)
         
+        /*
+         Freez
         let url = extractURLForDetailVC(from: droppedItems.first)
         addDetailImagesViewControllers(with: url, to: tabBarViewControllers)
+         */
     }
     
     /// Functionality for adding favorite images
