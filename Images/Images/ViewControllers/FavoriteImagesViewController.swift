@@ -10,6 +10,7 @@ import UIKit
 
 fileprivate class FavoriteImagesSettings {
     static let kCellIdentifier = "favoriteImageCelIdentifier"
+    static let kUserDefultsKey = "SavedFavoriteImagesDataArray"
 }
 
 class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -22,6 +23,8 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     // MARK: Properties:
     
+    public var favoritedImagesData: [Data]?
+    
     private var favoritesImagesURLs: [URL]?
     
     
@@ -29,9 +32,23 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        reciveData()
+        
+    }
+    
+    
+    // MARK: Function:
+    
+    private func reciveData() {
+        
+    }
+    
     
     
     // MARK: UITableViewDataSource

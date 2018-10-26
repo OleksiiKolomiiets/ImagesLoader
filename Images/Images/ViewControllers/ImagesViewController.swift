@@ -620,29 +620,65 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
         
         session.loadObjects(ofClass: NSString.self) { items in
             
-            let itemString = items.first as! String
-            let data = Data(itemString.utf8)
-            var imageData: ImageData!
-            
-            do {
-                imageData = try JSONDecoder().decode(ImageData.self, from: data)
-            } catch {
-                print(ImageDataError.invalidData.localizedDescription)
-            }
-            
-            let url = imageData.urlLarge1024
-            self.setTabBar(with: url)
+            self.setTabBar(with: items)
         }
     }
     
-    private func setTabBar(with url: URL) {
+    private func setTabBar(with droppedItems: [NSItemProviderReading]) {
         
         guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
         
+        setUpFavoriteImagesViewController(with: droppedItems, in: tabBarViewControllers)
+        
+        let url = extractURLForDetailVC(from: droppedItems.first)
         addDetailImagesViewControllers(with: url, to: tabBarViewControllers)
     }
-
+    
+    /// Functionality for adding favorite images
+    
+    private func setUpFavoriteImagesViewController(with droppedItems: [NSItemProviderReading], in tabBarViewControllers: [UIViewController]) {
+        guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
+        
+        var dataArray = [Data]()
+        for droppedItem in droppedItems {
+             dataArray.append(getData(from: droppedItem))
+        }
+        
+        var favoriteImagesVC: FavoriteImagesViewController!
+        for viewController in tabBarViewControllers {
+            if viewController is FavoriteImagesViewController {
+                favoriteImagesVC = viewController as? FavoriteImagesViewController
+                break
+            }
+        }
+        
+        favoriteImagesVC.favoritedImagesData = dataArray
+    }
+    
+    private func getData(from item: NSItemProviderReading) -> Data {
+        
+        let itemString = item as! String
+        
+        return Data(itemString.utf8)
+    }
+    
     /// Functionality to add not more than three detail image vcs more to tab bar
+    
+    private func extractURLForDetailVC(from item: NSItemProviderReading?) -> URL {
+        
+        let itemString = item as! String
+        let data = Data(itemString.utf8)
+        var imageData: ImageData!
+        
+        do {
+            imageData = try JSONDecoder().decode(ImageData.self, from: data)
+        } catch {
+            print(ImageDataError.invalidData.localizedDescription)
+        }
+        
+        return imageData.urlLarge1024
+    }
+
     private func addDetailImagesViewControllers(with url: URL, to tabBarViewControllers: [UIViewController]) {
         let isTabVCsLessThanMax = tabBarViewControllers.count <= ImagesViewControllerSettings.kTabBarVScMaxCount
         
