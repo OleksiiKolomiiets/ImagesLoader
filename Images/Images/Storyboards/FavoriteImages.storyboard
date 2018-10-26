@@ -13,7 +13,7 @@
         <!--Favorite Images View Controller-->
         <scene sceneID="94k-xR-RbD">
             <objects>
-                <viewController storyboardIdentifier="FavoriteImages" id="Z7f-bM-ARg" customClass="FavoriteImagesViewController" customModule="Images___iOS_Application" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FavoriteImagesViewController" id="Z7f-bM-ARg" customClass="FavoriteImagesViewController" customModule="Images___iOS_Application" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Tbq-Vz-6iA">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
