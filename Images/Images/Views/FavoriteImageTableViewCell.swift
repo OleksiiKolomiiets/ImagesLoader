@@ -15,7 +15,7 @@ class FavoriteImageTableViewCell: UITableViewCell {
     
     public func setUpImageView(by image: UIImage?) {
         
-        if image != nil {
+        if image == nil {
             
             spinner.startAnimating()
             

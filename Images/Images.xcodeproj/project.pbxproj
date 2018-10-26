@@ -145,10 +145,10 @@
 		795B8B79212D804D00E18F16 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				79A58B17218331DC00A10DDD /* CustomSectionHeaderView */,
 				794C9D7E212D61000034E77F /* ImageTableViewCell.swift */,
 				79A58B152182122900A10DDD /* FavoriteImageTableViewCell.swift */,
 				795B8B7A212D815A00E18F16 /* ImageCollectionViewCell.swift */,
-				79A58B17218331DC00A10DDD /* CustomSectionHeaderView */,
 				798EF882215CF98D0060452C /* ShadowView.swift */,
 			);
 			path = Views;

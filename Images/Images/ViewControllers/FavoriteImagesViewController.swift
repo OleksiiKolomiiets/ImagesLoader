@@ -23,9 +23,39 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     // MARK: Properties:
     
-    public var favoritedImagesData: [Data]?
+    public var favoritedImagesData: [Data]! {
+        didSet {            
+            updateFavoriteImagesData()
+        }
+    }
     
-    private var favoritesImagesURLs: [URL]?
+    private var favoritesImagesURLs: [URL]? {
+        var resultArray: [URL]?
+        
+        let savedData = UserDefaults.standard.object(forKey: FavoriteImagesSettings.kUserDefultsKey) as? [Data] ?? [Data]()
+        
+        for data in savedData {
+            
+            var imageData: ImageData!
+            
+            do {
+                imageData = try JSONDecoder().decode(ImageData.self, from: data)
+            } catch {
+                print(ImageDataError.invalidData.localizedDescription)
+            }
+            
+            let url = imageData.urlLarge1024
+            
+            if resultArray != nil {
+                resultArray!.append(url)
+            } else {
+                resultArray = [url]
+            }
+            
+        }
+        
+        return resultArray
+    }
     
     
     // MARK: Methods of view controller lifecycle:
@@ -35,17 +65,25 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         
     }
     
+    // Making bar content light on dark background
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        reciveData()
-        
+        tableView.reloadData()
     }
     
     
     // MARK: Function:
     
-    private func reciveData() {
+    private func updateFavoriteImagesData() {
+        
+        let userDefults = UserDefaults.standard
+        // TODO: make possible to add more than one and unique images
+        userDefults.set(favoritedImagesData, forKey: FavoriteImagesSettings.kUserDefultsKey)
         
     }
     
