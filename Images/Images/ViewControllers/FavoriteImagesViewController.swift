@@ -171,5 +171,15 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         
         return cell
     }
+    
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            favoriteImagesURL!.remove(at: indexPath.row)
+            savingManager.remove(at: indexPath.row, for: FavoriteImagesSettings.kUserDefultsKey)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
 
 }

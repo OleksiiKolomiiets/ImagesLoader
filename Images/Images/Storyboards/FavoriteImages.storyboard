@@ -23,17 +23,17 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="favoriteImageCelIdentifier" id="Tcq-1h-gCs" customClass="FavoriteImageTableViewCell" customModule="Images___iOS_Application" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="favoriteImageCelIdentifier" rowHeight="273" id="Tcq-1h-gCs" customClass="FavoriteImageTableViewCell" customModule="Images___iOS_Application" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="273"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Tcq-1h-gCs" id="atc-k9-8hM">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="272.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="nbO-jW-mrB">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="nbO-jW-mrB">
                                                     <rect key="frame" x="16" y="16" width="343" height="240"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="240" id="bAI-AA-vU5"/>
+                                                        <constraint firstAttribute="height" constant="240" id="6Tt-zX-Aoq"/>
                                                     </constraints>
                                                 </imageView>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="0Nr-lf-ZeG">
@@ -45,10 +45,10 @@
                                             <constraints>
                                                 <constraint firstItem="0Nr-lf-ZeG" firstAttribute="centerY" secondItem="nbO-jW-mrB" secondAttribute="centerY" id="9LO-UV-2e6"/>
                                                 <constraint firstAttribute="trailing" secondItem="nbO-jW-mrB" secondAttribute="trailing" constant="16" id="H35-Tg-Q7i"/>
+                                                <constraint firstItem="nbO-jW-mrB" firstAttribute="top" secondItem="atc-k9-8hM" secondAttribute="top" constant="16" id="RfU-Ap-DXc"/>
                                                 <constraint firstItem="0Nr-lf-ZeG" firstAttribute="centerX" secondItem="nbO-jW-mrB" secondAttribute="centerX" id="Wf6-J5-qFU"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="nbO-jW-mrB" secondAttribute="bottom" constant="8" id="XfW-hz-AM9"/>
-                                                <constraint firstItem="nbO-jW-mrB" firstAttribute="top" secondItem="atc-k9-8hM" secondAttribute="top" constant="16" id="Yox-li-gqo"/>
                                                 <constraint firstItem="nbO-jW-mrB" firstAttribute="leading" secondItem="atc-k9-8hM" secondAttribute="leading" constant="16" id="jcL-Nc-KbX"/>
+                                                <constraint firstItem="nbO-jW-mrB" firstAttribute="centerY" secondItem="atc-k9-8hM" secondAttribute="centerY" id="pet-ts-Kir"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
