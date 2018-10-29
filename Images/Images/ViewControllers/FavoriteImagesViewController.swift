@@ -23,7 +23,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     // MARK: Properties:
     
-    private var savingHelper: UserDefaultsHelper!
+    private var savingHelper: UserDefaultsManager!
     
     public var favoritedImagesData: [Data]! {
         didSet {            
@@ -43,7 +43,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        savingHelper = UserDefaultsHelper(key: FavoriteImagesSettings.kUserDefultsKey)
+        savingHelper = UserDefaultsManager(key: FavoriteImagesSettings.kUserDefultsKey)
         
         updateFavoriteImagesData()
     }
@@ -80,7 +80,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         guard let favoritedImagesData = favoritedImagesData else { return }
         
         for imageData in favoritedImagesData {
-            self.savingHelper.appendOnUserDefaults(imageData)
+            self.savingHelper.append(imageData)
         }
         
     }
