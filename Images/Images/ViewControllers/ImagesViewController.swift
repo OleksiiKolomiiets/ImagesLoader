@@ -654,7 +654,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
             }
         }
         
-        favoriteImagesVC.favoritedImagesData = dataArray
+        favoriteImagesVC.droppedImagesData = dataArray
     }
     
     private func getData(from item: NSItemProviderReading) -> Data {

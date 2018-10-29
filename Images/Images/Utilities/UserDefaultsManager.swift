@@ -15,7 +15,7 @@ class UserDefaultsManager {
     private let userDefaults = UserDefaults.standard
     
     
-    // MARK: Functions:   
+    // MARK: Functions:
     
     public func append(_ data: Data, for key: String) {
         
@@ -38,7 +38,7 @@ class UserDefaultsManager {
         userDefaults.synchronize()
     }
     
-    private func savedData(for key: String) -> [Data] {
+    public func savedData(for key: String) -> [Data] {
         return userDefaults.object(forKey: key) as? [Data] ?? [Data]()
     }
 }

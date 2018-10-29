@@ -13,14 +13,18 @@ class FavoriteImageTableViewCell: UITableViewCell {
     @IBOutlet private weak var favoriteImageView: UIImageView!
     @IBOutlet private weak var spinner: UIActivityIndicatorView!
     
+    // cleaning cell before reuse
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        favoriteImageView.image = nil
+    }
+    
     public func setUpImageView(by image: UIImage?) {
         
         if image == nil {
-            
             spinner.startAnimating()
-            
         } else {
-            
             spinner.stopAnimating()
             favoriteImageView.image = image
         }

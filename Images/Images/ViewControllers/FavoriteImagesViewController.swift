@@ -23,19 +23,46 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     // MARK: Properties:
     
-    private var savingHelper: UserDefaultsManager!
+    private var savingManager = UserDefaultsManager()
     
-    public var favoritedImagesData: [Data]! {
-        didSet {            
-            updateFavoriteImagesData()
-        }
-    }
-    
-    private var favoritesImagesURLs: [URL]? {
+    public var droppedImagesData: [Data]!  {
         didSet {
-            tableView.reloadData()
+            // add to USerDefaults if hasn't already added
+                // get saved data
+            let savedData = savingManager.savedData(for: FavoriteImagesSettings.kUserDefultsKey)
+                // encode it to ImageData
+            let savedImages = getImageDataCollection(from: savedData)
+                // encode images data that had just dropped to ImageData
+            let draggedImages = getImageDataCollection(from: droppedImagesData)
+                // check if dose not containe
+            var isDataAdded = false
+            for draggedImage in draggedImages {
+                
+                let draggedImageAlreadySaved = savedImages.contains(where: { image -> Bool in
+                    image.urlLarge1024 == draggedImage.urlLarge1024
+                })
+                if !draggedImageAlreadySaved {
+                    // append
+                    savingManager.append(getData(fromImageData: draggedImage)!, for: FavoriteImagesSettings.kUserDefultsKey)
+                    isDataAdded = true
+                }
+            }
+            
+            if isDataAdded {
+                // refresh favorite images URL collection
+                uploadFavoriteImagesURL()
+            }
         }
     }
+    
+    // collection of favorite image urls - data source for tableView
+    private var favoriteImagesURL: [URL]? {
+        didSet {
+            needsToReloadTableViewData = true
+        }
+    }
+    
+    private var needsToReloadTableViewData = false
     
     
     // MARK: Methods of view controller lifecycle:
@@ -43,9 +70,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        savingHelper = UserDefaultsManager(key: FavoriteImagesSettings.kUserDefultsKey)
-        
-        updateFavoriteImagesData()
+        uploadFavoriteImagesURL()
     }
     
     // Making bar content light on dark background
@@ -53,35 +78,33 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         return .lightContent
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if needsToReloadTableViewData {
+            tableView.reloadData()
+            needsToReloadTableViewData = false
+        }
+    }
+    
     
     // MARK: Function:
     
-    private func updateFavoriteImagesData() {
+    private func uploadFavoriteImagesURL() {
        
-        var resultArray: [URL]?
+        let savedData = savingManager.savedData(for: FavoriteImagesSettings.kUserDefultsKey)
         
-        let savedData = UserDefaults.standard.object(forKey: FavoriteImagesSettings.kUserDefultsKey) as? [Data] ?? [Data]()
+        var urlsFromSavedData = [URL]()
         
         for data in savedData {
             
             let imageData = getImageData(from: data)
+            guard let url = imageData?.urlLarge1024 else { continue }
             
-            guard let url = imageData?.urlLarge1024 else { break }
-            
-            if resultArray != nil {
-                resultArray!.append(url)
-            } else {
-                resultArray = [url]
-            }
+            urlsFromSavedData.append(url)
         }
         
-        favoritesImagesURLs = resultArray
-        
-        guard let favoritedImagesData = favoritedImagesData else { return }
-        
-        for imageData in favoritedImagesData {
-            self.savingHelper.append(imageData)
-        }
+        favoriteImagesURL = urlsFromSavedData
         
     }
     
@@ -98,26 +121,42 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         return imageData
     }
     
-    private func getData(from imageData: ImageData) -> Data? {
-        return try? JSONEncoder().encode(imageData) as Data
+    private func getImageDataCollection(from dataCollection: [Data]) -> [ImageData] {
+        
+        var imagesData = [ImageData]()
+        
+        for data in dataCollection {            
+            guard let imageData = getImageData(from: data) else { continue }
+            
+            imagesData.append(imageData)
+        }
+        
+        return imagesData
     }
+    
+    private func getData(fromImageData: ImageData) -> Data? {
+        return try? JSONEncoder().encode(fromImageData) as Data
+    }
+    
     
     // MARK: UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return favoritesImagesURLs?.count ?? 0
+        return favoriteImagesURL?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: FavoriteImagesSettings.kCellIdentifier, for: indexPath) as! FavoriteImageTableViewCell
         
-        if let urls = favoritesImagesURLs {
+        var cellImage: UIImage?
+        
+        if let urls = favoriteImagesURL {
             
             let url = urls[indexPath.row]
             
             if let image = ImageLoadHelper.getImageFromCache(by: url) {
-                cell.setUpImageView(by: image)
+                cellImage = image
             } else {
                 ImageLoadHelper.loadImage(by: url, completion: { image in
                     if let cell = tableView.cellForRow(at: indexPath) as? FavoriteImageTableViewCell {
@@ -127,6 +166,8 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
             }
             
         }
+        
+        cell.setUpImageView(by: cellImage)
         
         return cell
     }
