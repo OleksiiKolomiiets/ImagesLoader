@@ -23,35 +23,10 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     // MARK: Properties:
     
-    private var savingManager = UserDefaultsManager()
-    
-    public var droppedImagesData: [Data]!  {
+    // Favorited array of Data
+    var droppedImagesData: [Data]!  {
         didSet {
-            // add to USerDefaults if hasn't already added
-                // get saved data
-            let savedData = savingManager.savedData(for: FavoriteImagesSettings.kUserDefultsKey)
-                // encode it to ImageData
-            let savedImages = getImageDataCollection(from: savedData)
-                // encode images data that had just dropped to ImageData
-            let draggedImages = getImageDataCollection(from: droppedImagesData)
-                // check if dose not containe
-            var isDataAdded = false
-            for draggedImage in draggedImages {
-                
-                let draggedImageAlreadySaved = savedImages.contains(where: { image -> Bool in
-                    image.urlLarge1024 == draggedImage.urlLarge1024
-                })
-                if !draggedImageAlreadySaved {
-                    // append
-                    savingManager.append(getData(fromImageData: draggedImage)!, for: FavoriteImagesSettings.kUserDefultsKey)
-                    isDataAdded = true
-                }
-            }
-            
-            if isDataAdded {
-                // refresh favorite images URL collection
-                uploadFavoriteImagesURL()
-            }
+            addToFavoriteImages(using: getImageDataCollection(from: droppedImagesData))
         }
     }
     
@@ -90,10 +65,38 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     // MARK: Function:
     
-    private func uploadFavoriteImagesURL() {
-       
-        let savedData = savingManager.savedData(for: FavoriteImagesSettings.kUserDefultsKey)
+    private func addToFavoriteImages(using draggedImages: [ImageData]) {
+        var savedData = UserDefaults.standard.object(forKey: FavoriteImagesSettings.kUserDefultsKey) as? [Data] ?? [Data]()
+        let savedImages = getImageDataCollection(from: savedData)
+        var isDataAdded = false
         
+        for draggedImage in draggedImages {
+            let draggedImageAlreadySaved = savedImages.contains(where: { image -> Bool in
+                image.urlLarge1024 == draggedImage.urlLarge1024
+            })
+            if !draggedImageAlreadySaved {
+                let data = getData(fromImageData: draggedImage)!
+                savedData.append(data)
+                UserDefaults.standard.set(savedData, forKey: FavoriteImagesSettings.kUserDefultsKey)
+                
+                isDataAdded = true
+            }
+        }
+        
+        if isDataAdded {
+            uploadFavoriteImagesURL()
+        }
+    }
+    
+    private func deleteFavoriteImage(at indexPath: IndexPath) {
+        favoriteImagesURL!.remove(at: indexPath.row)
+        var userDefaultsData = UserDefaults.standard.object(forKey: FavoriteImagesSettings.kUserDefultsKey) as? [Data] ?? [Data]()
+        userDefaultsData.remove(at: indexPath.row)
+        UserDefaults.standard.set(userDefaultsData, forKey: FavoriteImagesSettings.kUserDefultsKey)
+    }
+    
+    private func uploadFavoriteImagesURL() {
+        let savedData = UserDefaults.standard.object(forKey: FavoriteImagesSettings.kUserDefultsKey) as? [Data] ?? [Data]()
         var urlsFromSavedData = [URL]()
         
         for data in savedData {
@@ -109,7 +112,6 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     private func getImageData(from data: Data) -> ImageData? {
-        
         var imageData: ImageData?
         
         do {
@@ -122,7 +124,6 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     private func getImageDataCollection(from dataCollection: [Data]) -> [ImageData] {
-        
         var imagesData = [ImageData]()
         
         for data in dataCollection {            
@@ -172,12 +173,11 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         return cell
     }
     
-    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
         if editingStyle == .delete {
-            favoriteImagesURL!.remove(at: indexPath.row)
-            savingManager.remove(at: indexPath.row, for: FavoriteImagesSettings.kUserDefultsKey)
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            deleteFavoriteImage(at: indexPath)
+            tableView.deleteRows(at: [indexPath], with: .left)
         }
     }
     
