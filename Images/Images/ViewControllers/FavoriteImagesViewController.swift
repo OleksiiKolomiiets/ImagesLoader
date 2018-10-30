@@ -11,22 +11,99 @@ import UIKit
 fileprivate class FavoriteImagesSettings {
     static let kCellIdentifier = "favoriteImageCelIdentifier"
     static let kUserDefultsKey = "SavedFavoriteImagesDataArray"
+    static let kMaxImagesCount = 4
+}
+
+class FavoriteManager {
+    
+    // MARK: - Properties
+    
+    static let shared = FavoriteManager()
+    
+    // MARK: -
+    
+    private let userDefaults = UserDefaults.standard
+    
+    public var favoriteImages = [ImageData]()
+    
+    private var favoriteImagesKey      = FavoriteImagesSettings.kUserDefultsKey
+    private var favoriteImagesMaxCount = FavoriteImagesSettings.kMaxImagesCount
+    
+    // Initialization
+    
+    private init() {}
+    
+    func save(_ draggedData: [Data], completion: @escaping () -> ()) {
+        var savedData = userDefaults.object(forKey: favoriteImagesKey) as? [Data] ?? [Data]()
+        
+        if favoriteImages.count < favoriteImagesMaxCount {
+            
+            var draggedImages = [ImageData]()
+            for data in draggedData {
+                let draggedImageData = getImageData(from: data)
+                draggedImages.append(draggedImageData)
+            }
+            
+            var isDataAdded = false
+            
+            for draggedImage in draggedImages {
+                let draggedImageAlreadySaved = favoriteImages.contains(where: { image -> Bool in
+                    image.urlLarge1024 == draggedImage.urlLarge1024
+                })
+                if !draggedImageAlreadySaved {
+                    favoriteImages.append(draggedImage)
+                    let data = getData(fromImageData: draggedImage)
+                    savedData.append(data)
+                    isDataAdded = true
+                }
+            }
+            
+            if isDataAdded {
+                userDefaults.set(savedData, forKey: favoriteImagesKey)
+            }
+        } else {
+            completion()
+        }
+    }
+    
+    func deleteImage(at index: Int) {
+        favoriteImages.remove(at: index)
+        
+        var userDefaultsData = userDefaults.object(forKey: favoriteImagesKey) as? [Data] ?? [Data]()
+        userDefaultsData.remove(at: index)
+        userDefaults.set(userDefaultsData, forKey: favoriteImagesKey)
+    }
+    
+    func download() {
+        let savedData = userDefaults.object(forKey: favoriteImagesKey) as? [Data] ?? [Data]()
+        for data in savedData {
+            let imageData = getImageData(from: data)
+            favoriteImages.append(imageData)
+        }
+    }
+    
+    private func getImageData(from data: Data) -> ImageData {
+        return try! JSONDecoder().decode(ImageData.self, from: data)
+    }
+    
+    private func getData(fromImageData: ImageData) -> Data {
+        return try! JSONEncoder().encode(fromImageData) as Data
+    }
 }
 
 class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    
     // MARK: Outlets:
     
     @IBOutlet weak var tableView: UITableView!
-    
     
     // MARK: Properties:
     
     // Favorited array of Data
     var droppedImagesData: [Data]!  {
         didSet {
-            addToFavoriteImages(using: getImageDataCollection(from: droppedImagesData))
+            
+            //addToFavoriteImages(using: getImageDataCollection(from: droppedImagesData))
         }
     }
     
@@ -39,13 +116,12 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     private var needsToReloadTableViewData = false
     
-    
     // MARK: Methods of view controller lifecycle:
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        uploadFavoriteImagesURL()
+        FavoriteManager.shared.download()
     }
     
     // Making bar content light on dark background
@@ -64,36 +140,6 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     
     // MARK: Function:
-    
-    private func addToFavoriteImages(using draggedImages: [ImageData]) {
-        var savedData = UserDefaults.standard.object(forKey: FavoriteImagesSettings.kUserDefultsKey) as? [Data] ?? [Data]()
-        let savedImages = getImageDataCollection(from: savedData)
-        var isDataAdded = false
-        
-        for draggedImage in draggedImages {
-            let draggedImageAlreadySaved = savedImages.contains(where: { image -> Bool in
-                image.urlLarge1024 == draggedImage.urlLarge1024
-            })
-            if !draggedImageAlreadySaved {
-                let data = getData(fromImageData: draggedImage)!
-                savedData.append(data)
-                UserDefaults.standard.set(savedData, forKey: FavoriteImagesSettings.kUserDefultsKey)
-                
-                isDataAdded = true
-            }
-        }
-        
-        if isDataAdded {
-            uploadFavoriteImagesURL()
-        }
-    }
-    
-    private func deleteFavoriteImage(at indexPath: IndexPath) {
-        favoriteImagesURL!.remove(at: indexPath.row)
-        var userDefaultsData = UserDefaults.standard.object(forKey: FavoriteImagesSettings.kUserDefultsKey) as? [Data] ?? [Data]()
-        userDefaultsData.remove(at: indexPath.row)
-        UserDefaults.standard.set(userDefaultsData, forKey: FavoriteImagesSettings.kUserDefultsKey)
-    }
     
     private func uploadFavoriteImagesURL() {
         let savedData = UserDefaults.standard.object(forKey: FavoriteImagesSettings.kUserDefultsKey) as? [Data] ?? [Data]()
@@ -143,7 +189,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return favoriteImagesURL?.count ?? 0
+        return FavoriteManager.shared.favoriteImages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -152,20 +198,16 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         
         var cellImage: UIImage?
         
-        if let urls = favoriteImagesURL {
-            
-            let url = urls[indexPath.row]
-            
-            if let image = ImageLoadHelper.getImageFromCache(by: url) {
-                cellImage = image
-            } else {
-                ImageLoadHelper.loadImage(by: url, completion: { image in
-                    if let cell = tableView.cellForRow(at: indexPath) as? FavoriteImageTableViewCell {
-                        cell.setUpImageView(by: image)
-                    }
-                })
-            }
-            
+        let url = FavoriteManager.shared.favoriteImages[indexPath.row].urlLarge1024
+        
+        if let image = ImageLoadHelper.getImageFromCache(by: url) {
+            cellImage = image
+        } else {
+            ImageLoadHelper.loadImage(by: url, completion: { image in
+                if let cell = tableView.cellForRow(at: indexPath) as? FavoriteImageTableViewCell {
+                    cell.setUpImageView(by: image)
+                }
+            })
         }
         
         cell.setUpImageView(by: cellImage)
@@ -174,9 +216,9 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
         if editingStyle == .delete {
-            deleteFavoriteImage(at: indexPath)
+            FavoriteManager.shared.deleteImage(at: indexPath.row)
+//            deleteFavoriteImage(at: indexPath)
             tableView.deleteRows(at: [indexPath], with: .left)
         }
     }

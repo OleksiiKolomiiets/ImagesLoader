@@ -646,6 +646,15 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
              dataArray.append(getData(from: droppedItem))
         }
         
+        FavoriteManager.shared.save(dataArray) {
+            let alert = UIAlertController(title: "Favorite Image Alert", message: "Yuo've added more then 4 images. Please click 'OK' and delete some.", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            
+            self.present(alert, animated: true)
+        } 
+        
         var favoriteImagesVC: FavoriteImagesViewController!
         for viewController in tabBarViewControllers {
             if viewController is FavoriteImagesViewController {
@@ -653,8 +662,9 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
                 break
             }
         }
+        favoriteImagesVC.tableView.reloadData()
         
-        favoriteImagesVC.droppedImagesData = dataArray
+//        favoriteImagesVC.droppedImagesData = dataArray
     }
     
     private func getData(from item: NSItemProviderReading) -> Data {
