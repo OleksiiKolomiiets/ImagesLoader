@@ -182,4 +182,20 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     }
     
 
+    // MARK: UITableViewDelegate
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let url = favoriteImagesURL![indexPath.row]
+        let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
+        let imageDetailViewController = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as! ImageDetailViewController
+        
+        imageDetailViewController.imageURL = url
+        imageDetailViewController.isDoneButtonHidden = false
+        
+        self.present(imageDetailViewController, animated: true)
+    }
+    
 }
