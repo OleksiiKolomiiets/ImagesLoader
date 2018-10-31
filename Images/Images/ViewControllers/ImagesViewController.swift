@@ -122,6 +122,16 @@ class ImagesViewController: UIViewController {
         }
     }
     
+    @objc private func goToFavoriteImages() {
+        guard let tabBarViewControllers = tabBarController?.viewControllers else { return }
+        for viewController in tabBarViewControllers {
+            if viewController is FavoriteImagesViewController {
+                tabBarController!.selectedViewController = viewController
+                break
+            }
+        }
+    }
+    
     // Remove elements from collection view method:
     @IBAction private func removeButtonTouch(_ sender: UIButton) {
         
@@ -159,6 +169,8 @@ class ImagesViewController: UIViewController {
         collectionView.dropDelegate = self
         removingLongPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(self.longTap(_:)))
         collectionView.addGestureRecognizer(removingLongPressGesture)
+        
+        FavoriteManager.shared.download()
     }
     
     override func viewDidLayoutSubviews() {
@@ -646,25 +658,23 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
              dataArray.append(getData(from: droppedItem))
         }
         
-        FavoriteManager.shared.save(dataArray) {
-            let alert = UIAlertController(title: "Favorite Image Alert", message: "Yuo've added more then 4 images. Please click 'OK' and delete some.", preferredStyle: .alert)
+        FavoriteManager.shared.save(dataArray, success: {
+            for viewController in tabBarViewControllers {
+                if let favoriteImagesVC = viewController as? FavoriteImagesViewController {
+                    favoriteImagesVC.tableView.reloadData()
+                    break
+                }
+            }
+        }, exception: { maxCount in
+            let alert = UIAlertController(title: "Favorite Image Alert", message: "Yuo've added more then \(maxCount) images. Please click 'OK' and delete some.", preferredStyle: .alert)
             
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in self.goToFavoriteImages() } ))
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
             
             self.present(alert, animated: true)
-        } 
+        })
         
-        var favoriteImagesVC: FavoriteImagesViewController!
-        for viewController in tabBarViewControllers {
-            if viewController is FavoriteImagesViewController {
-                favoriteImagesVC = viewController as? FavoriteImagesViewController
-                break
-            }
-        }
-        favoriteImagesVC.tableView.reloadData()
         
-//        favoriteImagesVC.droppedImagesData = dataArray
     }
     
     private func getData(from item: NSItemProviderReading) -> Data {

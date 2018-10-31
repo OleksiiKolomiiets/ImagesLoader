@@ -9,12 +9,13 @@
 import Foundation
 import FlickrKit
 
-typealias FlickrKitImageDictionary = [String: Any]
-typealias FlickrKitHelperCompletionHandler = ([String: [ImageData]]?, Error?) -> Void
-
-class FlickrKitHelper {
+class FlickrKitHelper {    
+    
+    typealias FlickrKitImageDictionary = [String: Any]
+    typealias FlickrKitHelperCompletionHandler = ([String: [ImageData]]?, Error?) -> Void
     
     // MARK: - Variables:
+    
     public var imagesPerPage: Int
     
     private var imageDataDictionary: [String: [ImageData]]?
