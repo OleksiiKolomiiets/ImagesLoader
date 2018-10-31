@@ -22,6 +22,14 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    // MARK: VC Lifrcycle:
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+    }
 
     // MARK: UITableViewDataSource
     
@@ -54,8 +62,8 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            FavoriteManager.shared.deleteImage(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .left)
+            FavoriteManager.shared.deleteFavoriteImage(FavoriteManager.shared.getAllFavoriteImages()[indexPath.row])
+            tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
     

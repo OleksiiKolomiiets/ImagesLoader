@@ -595,16 +595,9 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
     
     // Parsing NSItemProviderReading
     private func getImageData(from dragItem: NSItemProviderReading?) -> ImageData {
-        
         let itemString = dragItem as! String
         let data = Data(itemString.utf8)
-        var imageData: ImageData!
-        
-        do {
-            imageData = try JSONDecoder().decode(ImageData.self, from: data)
-        } catch {
-            print(ImageDataError.invalidData.localizedDescription)
-        }
+        let imageData = ImageData(json: data)
         
         return imageData
     }
@@ -651,54 +644,34 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
     
     /// Functionality for adding favorite images
     private func setUpFavoriteImagesViewController(with droppedItems: [NSItemProviderReading], in tabBarViewControllers: [UIViewController]) {
-        guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
-        
         var dataArray = [Data]()
         for droppedItem in droppedItems {
              dataArray.append(getData(from: droppedItem))
         }
         
-        FavoriteManager.shared.save(dataArray, success: {
-            for viewController in tabBarViewControllers {
-                if let favoriteImagesVC = viewController as? FavoriteImagesViewController {
-                    favoriteImagesVC.tableView.reloadData()
-                    break
-                }
+        for data in dataArray {
+            if FavoriteManager.shared.isOverlapTheLimit {
+                let alert = UIAlertController(title: "Favorite Image Alert", message: "Favorite images limit(\(FavoriteManager.shared.maxImagesCount)) is overlaped. Please click 'OK' and delete some.", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in self.goToFavoriteImages() } ))
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                
+                self.present(alert, animated: true)
+                break
+            } else {
+                FavoriteManager.shared.addFavoriteImage(ImageData(json: data))
             }
-        }, exception: { maxCount in
-            let alert = UIAlertController(title: "Favorite Image Alert", message: "Yuo've added more then \(maxCount) images. Please click 'OK' and delete some.", preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in self.goToFavoriteImages() } ))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-            
-            self.present(alert, animated: true)
-        })
-        
-        
+        }
     }
     
     private func getData(from item: NSItemProviderReading) -> Data {
-        
-        let itemString = item as! String
-        
+        let itemString = item as! String        
         return Data(itemString.utf8)
     }
     
     /// Functionality to add not more than three detail image vcs more to tab bar
-    
     private func extractURLForDetailVC(from item: NSItemProviderReading?) -> URL {
-        
-        let itemString = item as! String
-        let data = Data(itemString.utf8)
-        var imageData: ImageData!
-        
-        do {
-            imageData = try JSONDecoder().decode(ImageData.self, from: data)
-        } catch {
-            print(ImageDataError.invalidData.localizedDescription)
-        }
-        
-        return imageData.urlLarge1024
+        return getImageData(from: item).urlLarge1024
     }
 
     private func addDetailImagesViewControllers(with url: URL, to tabBarViewControllers: [UIViewController]) {
