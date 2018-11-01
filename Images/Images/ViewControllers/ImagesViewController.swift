@@ -169,8 +169,6 @@ class ImagesViewController: UIViewController {
         collectionView.dropDelegate = self
         removingLongPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(self.longTap(_:)))
         collectionView.addGestureRecognizer(removingLongPressGesture)
-        
-        FavoriteManager.shared.download()
     }
     
     override func viewDidLayoutSubviews() {
