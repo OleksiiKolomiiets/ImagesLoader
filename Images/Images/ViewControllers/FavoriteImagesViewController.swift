@@ -34,7 +34,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FavoriteManager.shared.favoriteImages.count
+        return FavoriteManager.shared.getAllFavoriteImages().count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -43,7 +43,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         
         var cellImage: UIImage?
         
-        let url = FavoriteManager.shared.favoriteImages[indexPath.row].urlLarge1024
+        let url = FavoriteManager.shared.getAllFavoriteImages()[indexPath.row].urlLarge1024
         
         if let image = ImageLoadHelper.getImageFromCache(by: url) {
             cellImage = image
@@ -74,7 +74,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let url = FavoriteManager.shared.favoriteImages[indexPath.row].urlLarge1024
+        let url = FavoriteManager.shared.getAllFavoriteImages()[indexPath.row].urlLarge1024
         let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
         let imageDetailViewController = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as! ImageDetailViewController
         

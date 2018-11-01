@@ -28,19 +28,15 @@ class FavoriteManager: FavoriteManagerProtocol {
     
     // MARK: -
     
-    public var favoriteImages = [ImageData]()
     public var maxImagesCount = FavoriteManagerSettings.kMaxImagesCount
     
     // MARK: - Initialization
     
-    private init() {
-        let savedData = UserDefaults.standard.object(forKey: FavoriteManagerSettings.kUserDefaultsKey) as? [Data] ?? [Data]()
-        favoriteImages = getImageDataCollection(from: savedData)
-    }
+    private init() {}
     
     // MARK: - Functions:
     public var isOverlapTheLimit: Bool {
-        return favoriteImages.count >= maxImagesCount
+        return getAllFavoriteImages().count >= maxImagesCount
     }
     
     public func getAllFavoriteImages() -> [ImageData] {
@@ -52,11 +48,7 @@ class FavoriteManager: FavoriteManagerProtocol {
         var imagesData = getAllFavoriteImages()
         if !imagesData.contains(image) {
             imagesData.append(image)
-            print("****SAVE****")
-            favoriteImages.append(image)
             UserDefaults.standard.set(imagesData.map() { $0.data }, forKey: FavoriteManagerSettings.kUserDefaultsKey)
-        } else {
-            print("****ALREADY ADDED****")
         }
     }
     
@@ -65,14 +57,13 @@ class FavoriteManager: FavoriteManagerProtocol {
         let filtredImageData = imagesData.filter { imageData -> Bool in
             imageData != image
         }
-        favoriteImages = filtredImageData
         UserDefaults.standard.set(filtredImageData.map() { $0.data }, forKey: FavoriteManagerSettings.kUserDefaultsKey)
     }  
     
     private func getImageDataCollection(from dataCollection: [Data]) -> [ImageData] {
         var imageDataCollection = [ImageData]()
         for data in dataCollection {
-            let imageData = ImageData(json: data)
+            let imageData = ImageData.instance(from: data)
             imageDataCollection.append(imageData)
         }
         return imageDataCollection

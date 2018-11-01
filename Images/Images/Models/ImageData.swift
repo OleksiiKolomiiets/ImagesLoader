@@ -15,18 +15,13 @@ struct ImageData: Codable {
     let urlLarge1024: URL
 }
 
-extension ImageData {
-    
+extension ImageData {    
     public var data: Data {
         return try! JSONEncoder().encode(self) as Data
     }
     
-    init(json jsonData: Data) {
-        let imageData = try! JSONDecoder().decode(ImageData.self, from: jsonData)
-        self.init(title: imageData.title,
-                  urlSmall240: imageData.urlSmall240,
-                  urlSmall320: imageData.urlSmall320,
-                  urlLarge1024: imageData.urlLarge1024)
+    static public func instance(from jsonData: Data) -> ImageData {
+        return try! JSONDecoder().decode(ImageData.self, from: jsonData)
     }
 }
 

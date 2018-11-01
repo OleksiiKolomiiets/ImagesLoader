@@ -595,7 +595,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
     private func getImageData(from dragItem: NSItemProviderReading?) -> ImageData {
         let itemString = dragItem as! String
         let data = Data(itemString.utf8)
-        let imageData = ImageData(json: data)
+        let imageData = ImageData.instance(from: data)
         
         return imageData
     }
@@ -657,7 +657,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
                 self.present(alert, animated: true)
                 break
             } else {
-                FavoriteManager.shared.addFavoriteImage(ImageData(json: data))
+                FavoriteManager.shared.addFavoriteImage(ImageData.instance(from: data))
             }
         }
     }
