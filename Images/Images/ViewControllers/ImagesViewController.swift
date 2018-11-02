@@ -640,8 +640,8 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
         }
         
         for data in dataArray {
-            if FavoriteManager.shared.isOverlapTheLimit {
-                let alert = UIAlertController(title: "Favorite Image Alert", message: "Favorite images limit(\(FavoriteManager.shared.maxImagesCount)) is overlaped. Please click 'OK' and delete some.", preferredStyle: .alert)
+            if FavoriteManager.isOverlapTheLimit {
+                let alert = UIAlertController(title: "Favorite Image Alert", message: "Favorite images limit(\(FavoriteManager.maxImagesCount)) is overlaped. Please click 'OK' and delete some.", preferredStyle: .alert)
                 
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in self.goToFavoriteImages() } ))
                 alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -649,7 +649,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
                 self.present(alert, animated: true)
                 break
             } else {
-                FavoriteManager.shared.addFavoriteImage(ImageData.instance(from: data))
+                FavoriteManager.addFavoriteImage(ImageData.instance(from: data))
             }
         }
     }

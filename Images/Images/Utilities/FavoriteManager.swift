@@ -9,11 +9,11 @@
 import Foundation
 
 protocol FavoriteManagerProtocol {
-    var maxImagesCount: Int { get }
-    var isOverlapTheLimit: Bool { get }
-    func getAllFavoriteImages() -> [ImageData]
-    func addFavoriteImage(_ image: ImageData)
-    func deleteFavoriteImage(_ image: ImageData)
+    static var maxImagesCount: Int { get }
+    static var isOverlapTheLimit: Bool { get }
+    static func getAllFavoriteImages() -> [ImageData]
+    static func addFavoriteImage(_ image: ImageData)
+    static func deleteFavoriteImage(_ image: ImageData)
 }
 
 fileprivate class FavoriteManagerSettings {
@@ -25,27 +25,21 @@ class FavoriteManager: FavoriteManagerProtocol {
     
     // MARK: - Properties:
     
-    static let shared = FavoriteManager()
+    public static let maxImagesCount = FavoriteManagerSettings.kMaxImagesCount
     
-    // MARK: -
-    
-    public var maxImagesCount = FavoriteManagerSettings.kMaxImagesCount
-    
-    // MARK: - Initialization
-    
-    private init() {}
-    
-    // MARK: - Functions:
-    public var isOverlapTheLimit: Bool {
+    public static var isOverlapTheLimit: Bool {
         return getAllFavoriteImages().count >= maxImagesCount
     }
     
-    public func getAllFavoriteImages() -> [ImageData] {
+    
+    // MARK: - Functions:
+    
+    public static func getAllFavoriteImages() -> [ImageData] {
         let savedData = UserDefaults.standard.object(forKey: FavoriteManagerSettings.kUserDefaultsKey) as? [Data] ?? [Data]()
         return getImageDataCollection(from: savedData)
     }
     
-    public func addFavoriteImage(_ image: ImageData) {
+    public static func addFavoriteImage(_ image: ImageData) {
         var imagesData = getAllFavoriteImages()
         if !imagesData.contains(image) {
             imagesData.append(image)
@@ -53,13 +47,13 @@ class FavoriteManager: FavoriteManagerProtocol {
         }
     }
     
-    public func deleteFavoriteImage(_ image: ImageData) {
+    public static func deleteFavoriteImage(_ image: ImageData) {
         let imagesData = getAllFavoriteImages()
         let filtredImageData = imagesData.filter { imageData -> Bool in imageData != image }
         UserDefaults.standard.set(filtredImageData.map() { $0.data }, forKey: FavoriteManagerSettings.kUserDefaultsKey)
     }  
     
-    private func getImageDataCollection(from dataCollection: [Data]) -> [ImageData] {
+    private static func getImageDataCollection(from dataCollection: [Data]) -> [ImageData] {
         return dataCollection.map() { ImageData.instance(from: $0) }
     }
 }
