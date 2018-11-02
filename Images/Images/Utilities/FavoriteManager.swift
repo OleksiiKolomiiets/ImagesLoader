@@ -1,5 +1,5 @@
 //
-//  UserDefaultsFavoriteManager.swift
+//  FavoriteManager.swift
 //  Images - iOS Application
 //
 //  Created by Oleksii  Kolomiiets on 10/31/18.
@@ -8,9 +8,12 @@
 
 import Foundation
 
+/** Freez
+    Setting fo UserDefaults
 fileprivate class UserDefaultsManagerSettings {
     static let kUserDefaultsKey = "SavedFavoriteImagesDataArray"
 }
+ */
 
 class FavoriteManager: FavoriteManagerProtocol {
     

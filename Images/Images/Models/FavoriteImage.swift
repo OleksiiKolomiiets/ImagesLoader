@@ -15,24 +15,22 @@ fileprivate class CoreDataManagerSettings {
 
 class FavoriteImage: NSManagedObject {
     
+    static private var context: NSManagedObjectContext = ((UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext)!
+    
     static var allData: [FavoriteImage] {
-        guard let context: NSManagedObjectContext = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return [] }
-        
         let request = NSFetchRequest<FavoriteImage>(entityName: CoreDataManagerSettings.kEntityName)
         
         do {
             let matches = try context.fetch(request)            
             return matches
         } catch {
-            print("AllFavoriteImages errors.")
+            print("AllData errors.")
         }
         
         return []
     }
     
     static func createData(_ image: ImageData) {
-        guard let context: NSManagedObjectContext = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
-        
         let favoriteImage = FavoriteImage(context: context)
         favoriteImage.urlLarge1024 = image.urlLarge1024
         favoriteImage.urlSmall320 = image.urlSmall320
@@ -47,8 +45,6 @@ class FavoriteImage: NSManagedObject {
     }
     
     static func deleteData(_ image: ImageData) {
-        guard let context: NSManagedObjectContext = (UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext else { return }
-        
         let request: NSFetchRequest<FavoriteImage> = FavoriteImage.fetchRequest()
         
         request.predicate = NSPredicate(format: "urlLarge1024 = %@", image.urlLarge1024 as NSURL)
