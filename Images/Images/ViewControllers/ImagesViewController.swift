@@ -68,8 +68,8 @@ class ImagesViewController: UIViewController {
     private var hasNetworkProblems = false
     private var isDragSessionWillBegin: Bool! {
         didSet {
-            proposeForDropLable.isHidden.toggle()
-            dropZoneView.isHidden.toggle()
+            proposeForDropLable.isHidden = !isDragSessionWillBegin
+            dropZoneView.isHidden = !isDragSessionWillBegin
         }
     }
     private var collectionViewThrownedImageURLs: [URL]? {
@@ -119,6 +119,16 @@ class ImagesViewController: UIViewController {
             
         default:
             break
+        }
+    }
+    
+    @objc private func goToFavoriteImages() {
+        guard let tabBarViewControllers = tabBarController?.viewControllers else { return }
+        for viewController in tabBarViewControllers {
+            if viewController is FavoriteImagesViewController {
+                tabBarController!.selectedViewController = viewController
+                break
+            }
         }
     }
     
@@ -189,7 +199,7 @@ class ImagesViewController: UIViewController {
         var result = [Int]()
         
         for _ in 0 ..< number {
-            var index = Int(arc4random_uniform(UInt32(max)))
+            var index = Int.random(in: 0 ..< max)
             
             while result.contains(index) {
                 index += 1
@@ -211,6 +221,10 @@ class ImagesViewController: UIViewController {
                                                   selector: #selector(onTimerTick),
                                                   userInfo: nil,
                                                   repeats: false)
+            reloadTimer?.tolerance = 1
+            // reloadTimer won't fire when the UI is being used
+            RunLoop.current.add(reloadTimer!, forMode: RunLoop.Mode.common)
+            
         }
     }
     
@@ -220,7 +234,6 @@ class ImagesViewController: UIViewController {
     
     // stop timer for reload image data
     private func stopReloadTimer() {
-        
         if reloadTimer != nil {
             reloadTimer?.invalidate()
             reloadTimer = nil
@@ -317,7 +330,7 @@ extension ImagesViewController: ShadowViewDelegate {
         shadowView.dismissShadow(animated: true, finished: {
             
             shadowView.isHidden = true
-            
+            self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = true }
             if didUserTapOnHighlightedFrame {
                 
                 let imageData = self.getImageData(by: self.selectedCellPath)
@@ -388,7 +401,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
         let headerNibId = ImagesViewControllerSettings.kTVHeaderIdentifier
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: headerNibId) as! CustomSectionHeaderView
         
-        headerView.setTitle(imageTags![section])
+        headerView.setTitle(imageTags![section].uppercased())
         
         return headerView
     }
@@ -410,11 +423,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
     
     // Send selected data to ImageDetailViewController and present it
     private func getGlobalRectangleForCell(at indexPath: IndexPath) -> CGRect {
-        
-        let cellTablViewRectangle = tableView.rectForRow(at: indexPath)
-        let cellViewRectangle = tableView.convert(cellTablViewRectangle, to: shadowView)
-        
-        return cellViewRectangle
+        return tableView.convert(tableView.rectForRow(at: indexPath), to: shadowView)
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -422,6 +431,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
         selectedCellPath = indexPath
         let globalRectangle = getGlobalRectangleForCell(at: indexPath)
         
+        self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = false }
         shadowView.isHidden = false
         shadowView.showShadow(for: globalRectangle, animated: true)
     }
@@ -549,10 +559,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
             
             DispatchQueue.main.async {
                 
-                var array = [URL]()
-                if self.collectionViewThrownedImageURLs != nil {
-                    array = self.collectionViewThrownedImageURLs!
-                }
+                var array: [URL] = self.collectionViewThrownedImageURLs ?? []
                 
                 nsstrings.enumerated().forEach({ (index, nsstring) in
                     
@@ -566,35 +573,16 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
                         let indexPath = IndexPath(row: destinationIndexPath.row + index, section: destinationIndexPath.section)
                         indexPathes.append(indexPath)
                     }
-                    
                 })
                 
                 collectionView.performBatchUpdates({
-                    
                     self.collectionViewThrownedImageURLs = array
                     self.removeImagesActionStarts = false
                     
                     collectionView.insertItems(at: indexPathes)
                 })
-                
             }
         }
-    }
-    
-    // Parsing NSItemProviderReading
-    private func getImageData(from dragItem: NSItemProviderReading?) -> ImageData {
-        
-        let itemString = dragItem as! String
-        let data = Data(itemString.utf8)
-        var imageData: ImageData!
-        
-        do {
-            imageData = try JSONDecoder().decode(ImageData.self, from: data)
-        } catch {
-            print(ImageDataError.invalidData.localizedDescription)
-        }
-        
-        return imageData
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -603,7 +591,16 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
         
         return UICollectionViewDropProposal(operation: .copy, intent: .insertAtDestinationIndexPath)
     }
-
+    
+    // Parsing NSItemProviderReading
+    private func getImageData(from dragItem: NSItemProviderReading) -> ImageData {
+        return ImageData.instance(from: getData(from: dragItem))
+    }
+    
+    private func getData(from item: NSItemProviderReading) -> Data {
+        return Data((item as! String).utf8)
+    }
+    
   
     // MARK: Drop interaction delegate:
     
@@ -617,41 +614,78 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
     
     
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        
         session.loadObjects(ofClass: NSString.self) { items in
-            
-            let itemString = items.first as! String
-            let data = Data(itemString.utf8)
-            var imageData: ImageData!
-            
-            do {
-                imageData = try JSONDecoder().decode(ImageData.self, from: data)
-            } catch {
-                print(ImageDataError.invalidData.localizedDescription)
+            self.setTabBar(with: items)
+        }
+    }
+    
+    private func setTabBar(with droppedItems: [NSItemProviderReading]) {
+        
+        guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
+      
+        setUpFavoriteImagesViewController(with: droppedItems, in: tabBarViewControllers)
+ 
+        /*
+         Freez
+        addDetailImagesViewControllers(with: getImageData(from: droppedItems.first!).urlLarge1024, to: tabBarViewControllers)
+        */
+ 
+    }
+    
+    /// Functionality for adding favorite images
+    private func setUpFavoriteImagesViewController(with droppedItems: [NSItemProviderReading], in tabBarViewControllers: [UIViewController]) {
+        var dataArray = [Data]()
+        for droppedItem in droppedItems {
+             dataArray.append(getData(from: droppedItem))
+        }
+        
+        for data in dataArray {
+            if FavoriteManager.isOverlapTheLimit {
+                let alert = UIAlertController(title: "Favorite Image Alert", message: "Favorite images limit(\(FavoriteManager.maxImagesCount)) is overlaped. Please click 'OK' and delete some.", preferredStyle: .alert)
+                
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in self.goToFavoriteImages() } ))
+                alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+                
+                self.present(alert, animated: true)
+                break
+            } else {
+                FavoriteManager.addFavoriteImage(ImageData.instance(from: data))
             }
-            
-            let url = imageData.urlLarge1024
-            self.setTabBar(with: url)
         }
     }
     
     
-    private func insertViewControllerToTheEnd(of tabBarViewControllers: [UIViewController], _ url: URL) {
+    
+    /// Functionality to add not more than three detail image vcs more to tab bar
+   private func addDetailImagesViewControllers(with url: URL, to tabBarViewControllers: [UIViewController]) {
+        let isTabVCsLessThanMax = tabBarViewControllers.count <= ImagesViewControllerSettings.kTabBarVScMaxCount
+        
+        if isTabVCsLessThanMax {
+            
+            let imageDetailViewController = getImageDetailViewController(with: url)
+            imageDetailViewController.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
+            
+            tabBarController?.viewControllers?.append(imageDetailViewController)
+            
+        } else {
+            insertDetailImageViewController(with: url, toTheEndOf: tabBarViewControllers)
+        }
+    }
+    
+    private func insertDetailImageViewController(with url: URL, toTheEndOf tabBarViewControllers: [UIViewController]) {
         
         for (viewControllerIndex, viewController) in tabBarViewControllers.enumerated() {
             
             guard let imageDetailViewController = viewController as? ImageDetailViewController else { continue }
             
             let isTabBarNextVCExist = viewControllerIndex < tabBarViewControllers.count - 1
-            var url = url
             
             if isTabBarNextVCExist {
                 let nextVC = tabBarViewControllers[viewControllerIndex + 1] as! ImageDetailViewController
-                url = nextVC.imageURL
+                imageDetailViewController.imageURL = nextVC.imageURL
+            } else {
+                imageDetailViewController.imageURL = url
             }
-            
-            imageDetailViewController.imageURL = url
-            
         }
     }
     
@@ -665,24 +699,6 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
         return detailVC
     }
     
-    private func setTabBar(with url: URL) {
-        
-        guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
-        
-        let isTabVCsLessThanMax = tabBarViewControllers.count <= ImagesViewControllerSettings.kTabBarVScMaxCount
-        
-        if isTabVCsLessThanMax {
-            
-            let imageDetailViewController = getImageDetailViewController(with: url)
-            imageDetailViewController.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
-            
-            tabBarController?.viewControllers?.append(imageDetailViewController)
-            
-        } else {
-            insertViewControllerToTheEnd(of: tabBarViewControllers, url)
-        }
-    }
-
 
     // MARK: Drag interaction delegate:
 

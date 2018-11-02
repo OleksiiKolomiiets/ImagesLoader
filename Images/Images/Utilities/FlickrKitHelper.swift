@@ -9,12 +9,13 @@
 import Foundation
 import FlickrKit
 
-typealias FlickrKitImageDictionary = [String: Any]
-typealias FlickrKitHelperCompletionHandler = ([String: [ImageData]]?, Error?) -> Void
-
-class FlickrKitHelper {
+class FlickrKitHelper {    
+    
+    typealias FlickrKitImageDictionary = [String: Any]
+    typealias FlickrKitHelperCompletionHandler = ([String: [ImageData]]?, Error?) -> Void
     
     // MARK: - Variables:
+    
     public var imagesPerPage: Int
     
     private var imageDataDictionary: [String: [ImageData]]?
@@ -72,9 +73,9 @@ class FlickrKitHelper {
                     
                     photo.forEach({ flickrKitImageData in
                         imageDataArray.append(ImageData(title       : flickrKitImageData["title"] as! String,
-                                                        urlSmall240 : FlickrKitHelper.getFlickrUrl(forSize: .small240 , using: flickrKitImageData),
-                                                        urlSmall320 : FlickrKitHelper.getFlickrUrl(forSize: .small320 , using: flickrKitImageData),
-                                                        urlLarge1024: FlickrKitHelper.getFlickrUrl(forSize: .large1024, using: flickrKitImageData)))
+                                                        urlSmall240 : self.getFlickrUrl(forSize: .small240,  using: flickrKitImageData),
+                                                        urlSmall320 : self.getFlickrUrl(forSize: .small320,  using: flickrKitImageData),
+                                                        urlLarge1024: self.getFlickrUrl(forSize: .large1024, using: flickrKitImageData)))
                     })
                     
                     if self.imageDataDictionary != nil {
@@ -91,7 +92,7 @@ class FlickrKitHelper {
     }
     
     // Getting images URL using Flickr image data dictionary
-    static func getFlickrUrl(forSize flickrKitPhotoSize: FKPhotoSize, using flickrKitImageDictionary: FlickrKitImageDictionary) -> URL {
+    private func getFlickrUrl(forSize flickrKitPhotoSize: FKPhotoSize, using flickrKitImageDictionary: FlickrKitImageDictionary) -> URL {
         return FlickrKit.shared().photoURL(for: flickrKitPhotoSize, fromPhotoDictionary: flickrKitImageDictionary)
     }
 }

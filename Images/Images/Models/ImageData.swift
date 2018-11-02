@@ -15,13 +15,20 @@ struct ImageData: Codable {
     let urlLarge1024: URL
 }
 
-enum ImageDataError: Error, LocalizedError {
-    case invalidData
+extension ImageData {    
+    public var data: Data {
+        return try! JSONEncoder().encode(self) as Data
+    }
     
-    var errorDescription: String? {
-        switch self {
-        case .invalidData:
-            return "ImageData data invalid."
-        }
+    static public func instance(from jsonData: Data) -> ImageData {
+        return try! JSONDecoder().decode(ImageData.self, from: jsonData)
+    }
+}
+
+extension ImageData: Equatable {
+    public static func ==(lhs: ImageData, rhs: ImageData) -> Bool {
+        return (lhs.urlSmall240 == rhs.urlSmall240)
+            && (lhs.urlSmall320 == rhs.urlSmall320)
+            && (lhs.urlLarge1024 == rhs.urlLarge1024)
     }
 }

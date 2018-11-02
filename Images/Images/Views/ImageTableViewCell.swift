@@ -19,6 +19,7 @@ class ImageTableViewCell: UITableViewCell {
     // cleaning cell before reuse
     override func prepareForReuse() {
         super.prepareForReuse()
+        
         pictureImageView.image = nil
     }
     
