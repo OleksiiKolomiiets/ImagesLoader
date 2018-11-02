@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-fileprivate class CoreDataManagerSettings {
+fileprivate class FavoriteImageSettings {
     static let kEntityName = "FavoriteImage"
 }
 
@@ -18,7 +18,7 @@ class FavoriteImage: NSManagedObject {
     static private var context: NSManagedObjectContext = ((UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext)!
     
     static var allData: [FavoriteImage] {
-        let request = NSFetchRequest<FavoriteImage>(entityName: CoreDataManagerSettings.kEntityName)
+        let request = NSFetchRequest<FavoriteImage>(entityName: FavoriteImageSettings.kEntityName)
         
         do {
             let matches = try context.fetch(request)            
