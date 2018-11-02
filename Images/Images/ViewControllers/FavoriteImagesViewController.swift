@@ -34,7 +34,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FavoriteManager.getAllFavoriteImages().count
+        return CoreDataFavoriteManager.allFavoriteImages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -43,7 +43,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         
         var cellImage: UIImage?
         
-        let url = FavoriteManager.getAllFavoriteImages()[indexPath.row].urlLarge1024
+        let url = CoreDataFavoriteManager.allFavoriteImages[indexPath.row].urlLarge1024
         
         if let image = ImageLoadHelper.getImageFromCache(by: url) {
             cellImage = image
@@ -62,7 +62,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            FavoriteManager.deleteFavoriteImage(FavoriteManager.getAllFavoriteImages()[indexPath.row])
+            CoreDataFavoriteManager.deleteFavoriteImage(CoreDataFavoriteManager.allFavoriteImages[indexPath.row])
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
@@ -74,7 +74,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let url = FavoriteManager.getAllFavoriteImages()[indexPath.row].urlLarge1024
+        let url = CoreDataFavoriteManager.allFavoriteImages[indexPath.row].urlLarge1024
         let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
         let imageDetailViewController = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as! ImageDetailViewController
         

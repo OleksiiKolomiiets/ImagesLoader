@@ -23,6 +23,14 @@ extension ImageData {
     static public func instance(from jsonData: Data) -> ImageData {
         return try! JSONDecoder().decode(ImageData.self, from: jsonData)
     }
+    
+    static public func instance(from coreDataEntity: CoreDataFavoriteManager) -> ImageData {
+        return ImageData(title: coreDataEntity.title!,
+                         urlSmall240: coreDataEntity.urlSmall240!,
+                         urlSmall320: coreDataEntity.urlSmall320!,
+                         urlLarge1024: coreDataEntity.urlLarge1024!)
+    }
+    
 }
 
 extension ImageData: Equatable {
