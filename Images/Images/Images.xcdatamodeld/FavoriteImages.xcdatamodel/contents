@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14315.18" systemVersion="17G65" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="FavoriteImage" representedClassName=".FavoriteManager" syncable="YES" codeGenerationType="category">
+    <entity name="FavoriteImage" representedClassName=".FavoriteImage" syncable="YES" codeGenerationType="category">
         <attribute name="title" attributeType="String" syncable="YES"/>
         <attribute name="urlLarge1024" attributeType="URI" syncable="YES"/>
         <attribute name="urlSmall240" attributeType="URI" syncable="YES"/>

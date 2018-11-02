@@ -24,7 +24,7 @@ extension ImageData {
         return try! JSONDecoder().decode(ImageData.self, from: jsonData)
     }
     
-    static public func instance(from coreDataEntity: CoreDataFavoriteManager) -> ImageData {
+    static public func instance(from coreDataEntity: FavoriteImage) -> ImageData {
         return ImageData(title: coreDataEntity.title!,
                          urlSmall240: coreDataEntity.urlSmall240!,
                          urlSmall320: coreDataEntity.urlSmall320!,

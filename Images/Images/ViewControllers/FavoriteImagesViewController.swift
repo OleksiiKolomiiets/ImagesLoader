@@ -34,7 +34,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     // MARK: UITableViewDataSource
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return CoreDataFavoriteManager.allFavoriteImages.count
+        return FavoriteManager.allFavoriteImages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -43,7 +43,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         
         var cellImage: UIImage?
         
-        let url = CoreDataFavoriteManager.allFavoriteImages[indexPath.row].urlLarge1024
+        let url = FavoriteManager.allFavoriteImages[indexPath.row].urlLarge1024
         
         if let image = ImageLoadHelper.getImageFromCache(by: url) {
             cellImage = image
@@ -62,7 +62,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            CoreDataFavoriteManager.deleteFavoriteImage(CoreDataFavoriteManager.allFavoriteImages[indexPath.row])
+            FavoriteManager.deleteFavoriteImage(FavoriteManager.allFavoriteImages[indexPath.row])
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
@@ -74,7 +74,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let url = CoreDataFavoriteManager.allFavoriteImages[indexPath.row].urlLarge1024
+        let url = FavoriteManager.allFavoriteImages[indexPath.row].urlLarge1024
         let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
         let imageDetailViewController = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as! ImageDetailViewController
         
