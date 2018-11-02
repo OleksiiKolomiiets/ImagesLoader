@@ -16,6 +16,7 @@ class ShadowView: UIView {
     
     // MARK: - Variables:
     public weak var delegate: ShadowViewDelegate!
+    
     private let shadowLayer = CAShapeLayer()
     private var isOpenShadow = false
     private var touchGesture: UITapGestureRecognizer!
@@ -39,8 +40,7 @@ class ShadowView: UIView {
         addGestureRecognizer(touchGesture)
     }
     
-    @objc private func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {
-        
+    @objc private func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {        
         shadowLayer.removeAllAnimations()
         layer.mask = nil
         let radius = min(highlightedFrame.size.height, highlightedFrame.size.width) * 0.9 / 2
@@ -64,13 +64,8 @@ class ShadowView: UIView {
         
         isOpenShadow = true
         
-        // Setting pathes by frame
         let shadowedPath = getCirclePath(by: frame, inverse: true)
-       
-        // Setting animation layer
-        shadowLayer.fillRule = .evenOdd
-        shadowLayer.path = shadowedPath.cgPath
-        layer.mask = shadowLayer
+        setUpShadowLayer(shadowLayer, with: shadowedPath.cgPath, inside: layer)
         
         // Adding animation
         if animated {
@@ -79,17 +74,19 @@ class ShadowView: UIView {
         }
     }
     
+    private func setUpShadowLayer(_ shadowLayer: CAShapeLayer, with path: CGPath, inside layer: CALayer) {
+        // Setting animation layer
+        shadowLayer.fillRule = .evenOdd
+        shadowLayer.path = path
+        layer.mask = shadowLayer
+    }
+    
     public func dismissShadow(animated: Bool, finished: @escaping () -> Void) {
         
         isOpenShadow = false
         
-        // Setting pathes by frame
         let unshadowedPath = getCirclePath(inverse: true)
-        
-        // Setting animation layer
-        shadowLayer.fillRule = .evenOdd
-        shadowLayer.path = unshadowedPath.cgPath
-        layer.mask = shadowLayer
+        setUpShadowLayer(shadowLayer, with: unshadowedPath.cgPath, inside: layer)
         
         // Adding animation
         if animated {

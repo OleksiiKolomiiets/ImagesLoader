@@ -9,6 +9,7 @@
 import Foundation
 
 protocol FavoriteManagerProtocol {
+    var maxImagesCount: Int { get }
     var isOverlapTheLimit: Bool { get }
     func getAllFavoriteImages() -> [ImageData]
     func addFavoriteImage(_ image: ImageData)
@@ -54,18 +55,11 @@ class FavoriteManager: FavoriteManagerProtocol {
     
     public func deleteFavoriteImage(_ image: ImageData) {
         let imagesData = getAllFavoriteImages()
-        let filtredImageData = imagesData.filter { imageData -> Bool in
-            imageData != image
-        }
+        let filtredImageData = imagesData.filter { imageData -> Bool in imageData != image }
         UserDefaults.standard.set(filtredImageData.map() { $0.data }, forKey: FavoriteManagerSettings.kUserDefaultsKey)
     }  
     
     private func getImageDataCollection(from dataCollection: [Data]) -> [ImageData] {
-        var imageDataCollection = [ImageData]()
-        for data in dataCollection {
-            let imageData = ImageData.instance(from: data)
-            imageDataCollection.append(imageData)
-        }
-        return imageDataCollection
+        return dataCollection.map() { ImageData.instance(from: $0) }
     }
 }

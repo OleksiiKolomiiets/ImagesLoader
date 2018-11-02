@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="qYG-6m-VhN">
-    <device id="retina6_5" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -15,11 +11,11 @@
             <objects>
                 <viewController storyboardIdentifier="ImageDetailViewController" automaticallyAdjustsScrollViewInsets="NO" id="qYG-6m-VhN" customClass="ImageDetailViewController" customModule="Images___iOS_Application" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uoc-9l-vqh">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="2" translatesAutoresizingMaskIntoConstraints="NO" id="Rcy-BJ-E0f">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="736" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3jd-eq-ORT">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
@@ -37,7 +33,7 @@
                                 </connections>
                             </scrollView>
                             <button contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u38-O6-q7G">
-                                <rect key="frame" x="16" y="60" width="100" height="34"/>
+                                <rect key="frame" x="16" y="36" width="100" height="34"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="100" id="ZJF-nz-c3j"/>
@@ -46,11 +42,11 @@
                                 <color key="tintColor" name="selectedKnobColor" catalog="System" colorSpace="catalog"/>
                                 <state key="normal" title="Done"/>
                                 <connections>
-                                    <action selector="done:" destination="qYG-6m-VhN" eventType="touchUpInside" id="WZ3-JS-sm9"/>
+                                    <action selector="doneButtonTouched:" destination="qYG-6m-VhN" eventType="touchUpInside" id="WZ3-JS-sm9"/>
                                 </connections>
                             </button>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="ETv-gh-k2k">
-                                <rect key="frame" x="188.66666666666666" y="429.66666666666669" width="37" height="37"/>
+                                <rect key="frame" x="281.5" y="281.5" width="37" height="37"/>
                                 <color key="color" name="selectedKnobColor" catalog="System" colorSpace="catalog"/>
                             </activityIndicatorView>
                         </subviews>
@@ -73,8 +69,8 @@
                     <connections>
                         <outlet property="doneButton" destination="u38-O6-q7G" id="dhe-Ff-Y0o"/>
                         <outlet property="imageView" destination="3jd-eq-ORT" id="Iae-FL-Z1N"/>
-                        <outlet property="loadActivityIndicator" destination="ETv-gh-k2k" id="dEx-Gj-tAT"/>
                         <outlet property="scrollView" destination="Rcy-BJ-E0f" id="Y0U-6r-P28"/>
+                        <outlet property="spinner" destination="ETv-gh-k2k" id="dEx-Gj-tAT"/>
                         <outlet property="tabButton" destination="yMO-jB-Ws3" id="Yet-fT-MnC"/>
                     </connections>
                 </viewController>

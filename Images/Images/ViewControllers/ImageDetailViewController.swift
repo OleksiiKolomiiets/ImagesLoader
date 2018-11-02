@@ -8,44 +8,39 @@
 
 import UIKit
 
-class ImageDetailViewController: UIViewController {
+class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
+    
     
     // MARK: - Outlets:
-    @IBOutlet weak var scrollView           : UIScrollView!
-    @IBOutlet weak var imageView            : UIImageView!
-    @IBOutlet weak var loadActivityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var tabButton            : UITabBarItem!
-    @IBOutlet weak var doneButton           : UIButton!
+    
+    @IBOutlet weak var scrollView : UIScrollView!
+    @IBOutlet weak var imageView  : UIImageView!
+    @IBOutlet weak var spinner    : UIActivityIndicatorView!
+    @IBOutlet weak var tabButton  : UITabBarItem!
+    @IBOutlet weak var doneButton : UIButton!
+    
     
     // MARK: - Variables:
-    var isDoneButtonHidden = true
-    var isImageDataSetted = false
-    var imageURL: URL! {
-        willSet {
-            isImageDataSetted = true
-            if imageView != nil {
-                imageView.image = nil
-            }
-        }
-    }
-    var image: UIImage? {
+    
+    private var isImageDataSetted = false
+    
+    public var isDoneButtonHidden = true    
+    public var imageURL: URL! {
         didSet {
-            imageView.image = image
-            imageView.sizeToFit()
-            centerImageView(imageView, in: scrollView)
-            setUpMinMaxZoomScale(for: scrollView, dependingOnSizeOf: image!)
-            scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+            isImageDataSetted = true
         }
     }
     
+    
     // MARK: - Actions:
+    
     // action for ending display selected image
-    @IBAction func done(_ sender: UIButton) {
+    @IBAction func doneButtonTouched(_ sender: UIButton) {
         self.dismiss(animated: true)
     }
     
     // action when immage tapped twice
-    @objc func doubleTapped(sender: UITapGestureRecognizer) {
+    @objc private func doubleTapped(sender: UITapGestureRecognizer) {
         if scrollView.zoomScale == scrollView.minimumZoomScale {
             scrollView.setZoomScale(scrollView.maximumZoomScale, animated: true)
         } else {
@@ -53,13 +48,14 @@ class ImageDetailViewController: UIViewController {
         }
     }
     
-    // MARK: - Functions:
+    
+    // MARK: - VC Lifecycle:
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        addDoubleTapGesture(for: view)
+        addDoubleTapGesture(to: view)
         doneButton.isHidden = isDoneButtonHidden
-        
     }
     
     // Making bar content light on black background
@@ -71,8 +67,7 @@ class ImageDetailViewController: UIViewController {
         super.viewWillAppear(animated)
         
         scrollView.frame = view.frame
-        if imageView != nil,
-            isImageDataSetted {
+        if imageView != nil, isImageDataSetted {
             fetchImage()
         }
     }
@@ -81,9 +76,24 @@ class ImageDetailViewController: UIViewController {
         super.viewWillDisappear(animated)
         
         isImageDataSetted = false
-    }    
+    }
     
-    private func addDoubleTapGesture(for view: UIView) {
+    
+    // MARK: - Functions:
+    
+    private func setUpImageView(_ imageView: UIImageView, with image: UIImage?) {
+        imageView.image = image
+        imageView.sizeToFit()
+        centerImageView(imageView, in: imageView.superview as! UIScrollView)
+    }
+    
+    private func setUpScrolView(_ scrollView: UIScrollView, with image: UIImage?) {
+        guard let image = image else { return }
+        setUpMinMaxZoomScale(for: scrollView, dependingOnSizeOf: image)
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+    }
+    
+    private func addDoubleTapGesture(to view: UIView) {
         // adding double tap gesture recognizer
         let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped(sender:)))
         tap.numberOfTapsRequired = 2
@@ -91,11 +101,10 @@ class ImageDetailViewController: UIViewController {
     }
     
     private func centerImageView(_ imageView: UIImageView, in scrollView: UIScrollView) {
-        
-        let imageViewSize = imageView.frame.size
-        let scrollViewSize = scrollView.bounds.size
-        let verticalInset = imageViewSize.height < scrollViewSize.height ? (scrollViewSize.height - imageViewSize.height) / 2 : 1
-        let horizontalInset = imageViewSize.width < scrollViewSize.width ? (scrollViewSize.width - imageViewSize.width) / 2 : 1
+        let imageViewSize   = imageView.frame.size
+        let scrollViewSize  = scrollView.bounds.size
+        let verticalInset   = imageViewSize.height < scrollViewSize.height ? (scrollViewSize.height - imageViewSize.height) / 2 : 1
+        let horizontalInset = imageViewSize.width  < scrollViewSize.width  ? (scrollViewSize.width - imageViewSize.width)   / 2 : 1
         
         scrollView.contentInset = UIEdgeInsets(top: verticalInset, left: horizontalInset, bottom: verticalInset, right: horizontalInset) 
     }
@@ -121,20 +130,22 @@ class ImageDetailViewController: UIViewController {
     // Fetching image to display
     private func fetchImage() {
         if let cachedImage = ImageLoadHelper.getImageFromCache(by: imageURL) {
-            self.image = cachedImage
+            self.setUpImageView(self.imageView, with: cachedImage)
+            self.setUpScrolView(self.scrollView, with: cachedImage)
         } else {
-            loadActivityIndicator.startAnimating()
-            ImageLoadHelper.loadImage(by: imageURL) { loadedImage in
-                self.loadActivityIndicator.stopAnimating()
-                self.image = loadedImage
+            spinner.startAnimating()
+            ImageLoadHelper.loadImage(by: imageURL) { [weak self] loadedImage in
+                guard let strongSelf = self else { return }
+                strongSelf.spinner.stopAnimating()
+                strongSelf.setUpImageView(strongSelf.imageView, with: loadedImage)
+                strongSelf.setUpScrolView(strongSelf.scrollView, with: loadedImage)
             }
         }
     }
 
-}
 
-// MARK: - UIScrollViewDelegate:
-extension ImageDetailViewController: UIScrollViewDelegate {
+    // MARK: - UIScrollViewDelegate:
+    
     // Using scroll delegate method for zooming the image
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView

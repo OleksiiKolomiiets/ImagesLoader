@@ -15,7 +15,7 @@ class CustomSectionHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - Function:
     public func setTitle(_ title: String) {
-        titleLabel.text = title.uppercased()
+        titleLabel.text = title
     }
     
 }
