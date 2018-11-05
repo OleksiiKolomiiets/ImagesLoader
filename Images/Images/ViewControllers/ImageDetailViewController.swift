@@ -39,6 +39,18 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         self.dismiss(animated: true)
     }
     
+    // show geo coordinate of an image
+    @IBAction func geoButtinTapped(_ sender: UIButton) {
+        
+        let helper = FlickrKitHelper(imagesPerPage: 10)
+        helper.getLocationBy(imageId: imageData.id) { imageGeoData in
+            let geoLocationViewController = UIStoryboard(name: "GEOLocation", bundle: nil).instantiateViewController(withIdentifier: "GEOLocationViewController") as! GEOLocationViewController
+            geoLocationViewController.imageGeoData = imageGeoData
+            self.present(geoLocationViewController, animated: true)
+        }
+        
+    }
+    
     // action when immage tapped twice
     @objc private func doubleTapped(sender: UITapGestureRecognizer) {
         if scrollView.zoomScale == scrollView.minimumZoomScale {
