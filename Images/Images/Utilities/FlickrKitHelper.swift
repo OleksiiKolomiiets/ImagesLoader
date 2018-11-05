@@ -52,16 +52,22 @@ class FlickrKitHelper {
     public func getLocationBy(imageId: String, completion: @escaping (ImageGeoData) -> Void) {
         
         flickrKitHelperDispatchQueue.async {
-            FlickrKit.shared().call("flickr.photos.geo.getLocation", args: ["api_key": "60b5143bcc14e2d43ff380b7b26b2430", "photo_id": imageId] ) { (response, error) -> Void in
-                let photo  = response!["photo"] as! FlickrKitImageDictionary
-                let location = photo["location"] as! FlickrKitImageDictionary
-                let country = location["country"] as! FlickrKitImageDictionary
-                let region = location["region"] as! FlickrKitImageDictionary
-                DispatchQueue.main.async {
-                    completion(ImageGeoData(country: country["_content"] as! String,
-                                            latitude: Double(location["latitude"] as! String)!,
-                                            longitude: Double(location["longitude"] as! String)!,
-                                            region: region["_content"] as! String))
+            FlickrKit.shared().call("flickr.photos.geo.getLocation", args: ["api_key": "60b5143bcc14e2d43ff380b7b26b2430", "photo_id": imageId ] ) { (response, error) -> Void in
+                
+                if let error = error {
+                    print(error.localizedDescription)
+                } else if let response = response {
+                    let photo  = response["photo"] as! FlickrKitImageDictionary
+                    let location = photo["location"] as! FlickrKitImageDictionary
+                    let country = location["country"] as! FlickrKitImageDictionary
+                    let region = location["region"] as! FlickrKitImageDictionary
+                    
+                    DispatchQueue.main.async {
+                        completion(ImageGeoData(country: country["_content"] as! String,
+                                                latitude: Double(location["latitude"] as! String)!,
+                                                longitude: Double(location["longitude"] as! String)!,
+                                                region: region["_content"] as! String))
+                    }
                 }
             }
         }
