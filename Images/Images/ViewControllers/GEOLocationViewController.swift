@@ -29,7 +29,7 @@ class GEOLocationViewController: UIViewController {
         super.viewDidLoad()
         
         let pointAnnotation = MKPointAnnotation()
-        pointAnnotation.title = imageGeoData.country + " - " + imageGeoData.region
+        pointAnnotation.title = imageGeoData.region + ", " + imageGeoData.country
         pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: imageGeoData.latitude, longitude: imageGeoData.longitude)
         mapView.setCenter(pointAnnotation.coordinate, animated: true)
         mapView.addAnnotation(pointAnnotation)
