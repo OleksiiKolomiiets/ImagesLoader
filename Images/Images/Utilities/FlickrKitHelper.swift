@@ -56,8 +56,7 @@ class FlickrKitHelper {
         let perPageString = String(perPage)
         
         flickrKitHelperDispatchQueue.async {
-            
-            FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": perPageString] ) { (response, error) -> Void in
+            FlickrKit.shared().call("flickr.photos.search", args: ["tags": tag, "per_page": perPageString, "has_geo": "1"] ) { (response, error) -> Void in
                 
                 if let error = error {
                     if self.flickrError == nil {

@@ -16,7 +16,7 @@ fileprivate class ImagesViewControllerSettings {
     
     //Uploading images constants
     static let kImagesPerPage       = 20
-    static let kTags                = ["sun", "mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"]
+    static let kTags                = ["Greenland", "Australia", "Yellowstone", "California", "Nepal", "Ireland", "Venezuela", "Galapagos", "Peru", "Jordan"]
     static let kTagsCountInOneLoad  = 3
     static let kTabBarVScMaxCount   = 3
     
