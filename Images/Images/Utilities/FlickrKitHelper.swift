@@ -71,7 +71,8 @@ class FlickrKitHelper {
                     var imageDataArray = [ImageData]()
                     
                     photo.forEach({ flickrKitImageData in
-                        imageDataArray.append(ImageData(title       : flickrKitImageData["title"] as! String,
+                        imageDataArray.append(ImageData(id          : flickrKitImageData["id"] as! String,
+                                                        title       : flickrKitImageData["title"] as! String,
                                                         urlSmall240 : self.getFlickrUrl(forSize: .small240,  using: flickrKitImageData),
                                                         urlSmall320 : self.getFlickrUrl(forSize: .small320,  using: flickrKitImageData),
                                                         urlLarge1024: self.getFlickrUrl(forSize: .large1024, using: flickrKitImageData)))

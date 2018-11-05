@@ -334,9 +334,8 @@ extension ImagesViewController: ShadowViewDelegate {
             if didUserTapOnHighlightedFrame {
                 
                 let imageData = self.getImageData(by: self.selectedCellPath)
-                let url = imageData.urlLarge1024
                 
-                let imageDetailViewController = self.getImageDetailViewController(with: url)
+                let imageDetailViewController = self.getImageDetailViewController(with: imageData)
                 
                 imageDetailViewController.isDoneButtonHidden = false
                 
@@ -657,22 +656,22 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
     
     
     /// Functionality to add not more than three detail image vcs more to tab bar
-   private func addDetailImagesViewControllers(with url: URL, to tabBarViewControllers: [UIViewController]) {
+   private func addDetailImagesViewControllers(with imageData: ImageData, to tabBarViewControllers: [UIViewController]) {
         let isTabVCsLessThanMax = tabBarViewControllers.count <= ImagesViewControllerSettings.kTabBarVScMaxCount
         
         if isTabVCsLessThanMax {
             
-            let imageDetailViewController = getImageDetailViewController(with: url)
+            let imageDetailViewController = getImageDetailViewController(with: imageData)
             imageDetailViewController.tabBarItem.title = "Item №\(self.tabBarController!.viewControllers!.endIndex)"
             
             tabBarController?.viewControllers?.append(imageDetailViewController)
             
         } else {
-            insertDetailImageViewController(with: url, toTheEndOf: tabBarViewControllers)
+            insertDetailImageViewController(with: imageData, toTheEndOf: tabBarViewControllers)
         }
     }
     
-    private func insertDetailImageViewController(with url: URL, toTheEndOf tabBarViewControllers: [UIViewController]) {
+    private func insertDetailImageViewController(with imageData: ImageData, toTheEndOf tabBarViewControllers: [UIViewController]) {
         
         for (viewControllerIndex, viewController) in tabBarViewControllers.enumerated() {
             
@@ -682,19 +681,19 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
             
             if isTabBarNextVCExist {
                 let nextVC = tabBarViewControllers[viewControllerIndex + 1] as! ImageDetailViewController
-                imageDetailViewController.imageURL = nextVC.imageURL
+                imageDetailViewController.imageData = nextVC.imageData
             } else {
-                imageDetailViewController.imageURL = url
+                imageDetailViewController.imageData = imageData
             }
         }
     }
     
-    private func getImageDetailViewController(with url: URL) -> ImageDetailViewController {
+    private func getImageDetailViewController(with imageData: ImageData) -> ImageDetailViewController {
         
         let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
         let detailVC = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as! ImageDetailViewController
         
-        detailVC.imageURL = url
+        detailVC.imageData = imageData
         
         return detailVC
     }

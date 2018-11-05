@@ -9,6 +9,7 @@
 import UIKit
 
 struct ImageData: Codable {
+    let id          : String
     let title       : String
     let urlSmall240 : URL
     let urlSmall320 : URL

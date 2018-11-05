@@ -74,11 +74,11 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let url = FavoriteManager.getAllFavoriteImages()[indexPath.row].urlLarge1024
+        let imageData = FavoriteManager.getAllFavoriteImages()[indexPath.row]
         let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
         let imageDetailViewController = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as! ImageDetailViewController
         
-        imageDetailViewController.imageURL = url
+        imageDetailViewController.imageData = imageData
         imageDetailViewController.isDoneButtonHidden = false
         
         self.present(imageDetailViewController, animated: true)

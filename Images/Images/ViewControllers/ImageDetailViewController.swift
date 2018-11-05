@@ -25,7 +25,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     private var isImageDataSetted = false
     
     public var isDoneButtonHidden = true    
-    public var imageURL: URL! {
+    public var imageData: ImageData! {
         didSet {
             isImageDataSetted = true
         }
@@ -129,12 +129,12 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     // Fetching image to display
     private func fetchImage() {
-        if let cachedImage = ImageLoadHelper.getImageFromCache(by: imageURL) {
+        if let cachedImage = ImageLoadHelper.getImageFromCache(by: imageData.urlLarge1024) {
             self.setUpImageView(self.imageView, with: cachedImage)
             self.setUpScrolView(self.scrollView, with: cachedImage)
         } else {
             spinner.startAnimating()
-            ImageLoadHelper.loadImage(by: imageURL) { [weak self] loadedImage in
+            ImageLoadHelper.loadImage(by: imageData.urlLarge1024) { [weak self] loadedImage in
                 guard let strongSelf = self else { return }
                 strongSelf.spinner.stopAnimating()
                 strongSelf.setUpImageView(strongSelf.imageView, with: loadedImage)
