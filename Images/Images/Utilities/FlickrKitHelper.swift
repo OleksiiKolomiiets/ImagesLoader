@@ -16,8 +16,6 @@ class FlickrKitHelper {
     
     // MARK: - Variables:
     
-    public var imagesPerPage: Int
-    
     private var imageDataDictionary: [String: [ImageData]]?
     private var flickrError: Error?
     
@@ -41,18 +39,14 @@ class FlickrKitHelper {
     
     // MARK: - Functions:
     
-    init(imagesPerPage: Int) {
-        self.imagesPerPage = imagesPerPage
-    }
-    
     // Starting to load images data
-    public func load(for tags: [String], completion: @escaping FlickrKitHelperCompletionHandler) {
+    public func load(for tags: [String], perPage: Int, completion: @escaping FlickrKitHelperCompletionHandler) {
         
         imageDataDictionary?.removeAll()
         flickrError = nil
         
         tags.forEach() { tag in
-            self.startLoadingData(for: tag, self.imagesPerPage) 
+            self.startLoadingData(for: tag, perPage) 
         }
         
         flickrKitHelperDispatchGroup.notify(queue: .main) {
