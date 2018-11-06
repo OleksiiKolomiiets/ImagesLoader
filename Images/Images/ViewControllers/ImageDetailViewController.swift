@@ -25,7 +25,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     private var isImageDataSetted = false
     
     public var isDoneButtonHidden = true    
-    public var imageURL: URL! {
+    public var imageData: ImageData! {
         didSet {
             isImageDataSetted = true
         }
@@ -37,6 +37,19 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     // action for ending display selected image
     @IBAction func doneButtonTouched(_ sender: UIButton) {
         self.dismiss(animated: true)
+    }
+    
+    // show geo coordinate of an image
+    @IBAction func geoButtonTapped(_ sender: UIButton) {
+        
+        let helper = FlickrKitHelper(imagesPerPage: 10) // TODO: make helper's method static
+        helper.getLocationBy(imageId: imageData.id) { imageGeoData in
+            
+            let geoLocationViewController = UIStoryboard(name: "GEOLocation", bundle: nil).instantiateViewController(withIdentifier: "GEOLocationViewController") as! GEOLocationViewController
+            geoLocationViewController.imageGeoData = imageGeoData
+            self.present(geoLocationViewController, animated: true)
+        }
+        
     }
     
     // action when immage tapped twice
@@ -129,12 +142,12 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     // Fetching image to display
     private func fetchImage() {
-        if let cachedImage = ImageLoadHelper.getImageFromCache(by: imageURL) {
+        if let cachedImage = ImageLoadHelper.getImageFromCache(by: imageData.urlLarge1024) {
             self.setUpImageView(self.imageView, with: cachedImage)
             self.setUpScrolView(self.scrollView, with: cachedImage)
         } else {
             spinner.startAnimating()
-            ImageLoadHelper.loadImage(by: imageURL) { [weak self] loadedImage in
+            ImageLoadHelper.loadImage(by: imageData.urlLarge1024) { [weak self] loadedImage in
                 guard let strongSelf = self else { return }
                 strongSelf.spinner.stopAnimating()
                 strongSelf.setUpImageView(strongSelf.imageView, with: loadedImage)

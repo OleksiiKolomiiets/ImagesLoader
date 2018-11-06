@@ -9,6 +9,7 @@
 import UIKit
 
 struct ImageData: Codable {
+    let id          : String
     let title       : String
     let urlSmall240 : URL
     let urlSmall320 : URL
@@ -25,7 +26,8 @@ extension ImageData {
     }
     
     static public func instance(from coreDataEntity: FavoriteImage) -> ImageData {
-        return ImageData(title: coreDataEntity.title!,
+        return ImageData(id: coreDataEntity.id!,
+                         title: coreDataEntity.title!,
                          urlSmall240: coreDataEntity.urlSmall240!,
                          urlSmall320: coreDataEntity.urlSmall320!,
                          urlLarge1024: coreDataEntity.urlLarge1024!)
@@ -35,8 +37,6 @@ extension ImageData {
 
 extension ImageData: Equatable {
     public static func ==(lhs: ImageData, rhs: ImageData) -> Bool {
-        return (lhs.urlSmall240 == rhs.urlSmall240)
-            && (lhs.urlSmall320 == rhs.urlSmall320)
-            && (lhs.urlLarge1024 == rhs.urlLarge1024)
+        return lhs.id == rhs.id
     }
 }
