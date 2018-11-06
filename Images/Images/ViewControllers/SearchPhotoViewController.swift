@@ -14,12 +14,18 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var searchTextField: UITextField!
     
+    
+    // MARK: - Properties:
+    
+    private var helper: FlickrKitHelper!
+    
 
     // MARK: - Lifecycle SearchPhotoViewController:
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        helper = FlickrKitHelper()
         searchTextField.delegate = self
     }
     
@@ -30,19 +36,14 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
         textField.becomeFirstResponder()
     }
     
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        print("'\(textField.text!)'")
-        print("'\(string)'")
-        
-        return true
-    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
         if let text = textField.text,
             !text.isEmpty {
-            
+            helper.load(for: [text], perPage: Int.random(in: 5 ... 10)) { (dictionary, error) in
+                
+            }
         }
         
         return true

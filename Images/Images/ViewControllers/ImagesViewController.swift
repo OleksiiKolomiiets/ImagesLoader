@@ -56,7 +56,7 @@ class ImagesViewController: UIViewController {
 
     // MARK: Properties:
 
-    private var flickrHelper = FlickrKitHelper(imagesPerPage: ImagesViewControllerSettings.kImagesPerPage)
+    private var flickrHelper = FlickrKitHelper()
     private var imageDataDictionary: [String: [ImageData]]?
     private var imageTags: [String]?
 
@@ -247,7 +247,7 @@ class ImagesViewController: UIViewController {
 
         let tags = randomTags
 
-        flickrHelper.load(for: tags) { imageDataDictionary, errors in
+        flickrHelper.load(for: tags, perPage: ImagesViewControllerSettings.kImagesPerPage) { imageDataDictionary, errors in
 
             if errors != nil {
 
