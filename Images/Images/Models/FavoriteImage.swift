@@ -31,16 +31,20 @@ class FavoriteImage: NSManagedObject {
     }
     
     static func createData(_ image: ImageData) {
-        let favoriteImage = FavoriteImage(context: context)
-        favoriteImage.urlLarge1024 = image.urlLarge1024
-        favoriteImage.urlSmall320 = image.urlSmall320
-        favoriteImage.urlSmall240 = image.urlSmall240
-        favoriteImage.title = image.title
-        
-        do {
-            try context.save()
-        } catch {
-            print("Save errors.")
+        let allImageData = allData.map() { ImageData.instance(from: $0)}
+        if !allImageData.contains(image) {
+            let favoriteImage = FavoriteImage(context: context)
+            favoriteImage.urlLarge1024 = image.urlLarge1024
+            favoriteImage.urlSmall320 = image.urlSmall320
+            favoriteImage.urlSmall240 = image.urlSmall240
+            favoriteImage.title = image.title
+            favoriteImage.id = image.id
+            
+            do {
+                try context.save()
+            } catch {
+                print("Save error: \(error.localizedDescription).")
+            }
         }
     }
     
@@ -55,10 +59,10 @@ class FavoriteImage: NSManagedObject {
             do {
                 try context.save()
             } catch {
-                print("Save errors.")
+                print("Save error: \(error.localizedDescription).")
             }
         } catch {
-            print("DeleteFavoriteImage errors.")
+            print("DeleteFavoriteImage error: \(error.localizedDescription).")
         }
         
     }
