@@ -39,7 +39,6 @@ class GEOLocationViewController: UIViewController {
     // MARK: - Actions:
     
     @IBAction func doneButtonTouched(_ sender: UIButton) {
-        print(imageGeoData)
         self.dismiss(animated: true)
     }
 }

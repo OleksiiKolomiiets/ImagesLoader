@@ -74,7 +74,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
 
         tableView.deselectRow(at: indexPath, animated: true)
 
-        let imageData = FavoriteManager.getAllFavoriteImages()[indexPath.row]
+        let imageData = FavoriteManager.allFavoriteImages[indexPath.row]
         let storyboard = UIStoryboard(name: "DetailImage", bundle: Bundle.main)
         let imageDetailViewController = storyboard.instantiateViewController(withIdentifier: "ImageDetailViewController") as! ImageDetailViewController
 

@@ -30,7 +30,6 @@
 		79A58B162182122900A10DDD /* FavoriteImageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A58B152182122900A10DDD /* FavoriteImageTableViewCell.swift */; };
 		79A58B1E2189949700A10DDD /* FavoriteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A58B1D2189949700A10DDD /* FavoriteManager.swift */; };
 		79A58B42218C508C00A10DDD /* Images.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 79A58B40218C508C00A10DDD /* Images.xcdatamodeld */; };
-		79A58B44218C5B1200A10DDD /* FavoriteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A58B43218C5B1200A10DDD /* FavoriteImage.swift */; };
 		79A58B46218C8D5400A10DDD /* FavoriteManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A58B45218C8D5400A10DDD /* FavoriteManagerProtocol.swift */; };
 		79C1563C212EE53F00E486C1 /* CustomSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C1563B212EE53F00E486C1 /* CustomSectionHeaderView.swift */; };
 		79D368C6213545DB007E14AE /* CustomSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79D368C5213545DB007E14AE /* CustomSectionHeaderView.xib */; };
@@ -372,7 +371,6 @@
 			files = (
 				798EF883215CF98D0060452C /* ShadowView.swift in Sources */,
 				7984CBCE2191A02E00858CE9 /* FavoriteImage.swift in Sources */,
-				79A58B44218C5B1200A10DDD /* FavoriteImage.swift in Sources */,
 				79A58B1E2189949700A10DDD /* FavoriteManager.swift in Sources */,
 				79A58B162182122900A10DDD /* FavoriteImageTableViewCell.swift in Sources */,
 				7967344D2133F120008AC1DA /* ImageData.swift in Sources */,
