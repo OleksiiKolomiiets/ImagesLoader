@@ -40,7 +40,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     }
     
     // show geo coordinate of an image
-    @IBAction func geoButtinTapped(_ sender: UIButton) {
+    @IBAction func geoButtonTapped(_ sender: UIButton) {
         
         let helper = FlickrKitHelper(imagesPerPage: 10) // TODO: make helper's method static
         helper.getLocationBy(imageId: imageData.id) { imageGeoData in

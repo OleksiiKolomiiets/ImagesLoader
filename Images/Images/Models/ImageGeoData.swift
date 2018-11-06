@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import CoreLocation
 
 struct ImageGeoData {
     let country    : String

@@ -42,7 +42,7 @@
                                 <color key="tintColor" red="0.45138680930000002" green="0.99309605359999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="GEO"/>
                                 <connections>
-                                    <action selector="geoButtinTapped:" destination="qYG-6m-VhN" eventType="touchUpInside" id="dPE-eb-LLT"/>
+                                    <action selector="geoButtonTapped:" destination="qYG-6m-VhN" eventType="touchUpInside" id="dPE-eb-LLT"/>
                                 </connections>
                             </button>
                             <button contentMode="scaleToFill" verticalHuggingPriority="251" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u38-O6-q7G">

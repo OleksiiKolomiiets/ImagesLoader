@@ -24,6 +24,20 @@ class FlickrKitHelper {
     private let flickrKitHelperDispatchQueue = DispatchQueue(label: "FlickrKitHelper")
     private let flickrKitHelperDispatchGroup = DispatchGroup()
     
+    private enum FlickrKitHelperError: Error, LocalizedError {
+        case responseKeyInvalid(String)
+        case feildTypeInvalid
+        
+        var errorDescription: String? {
+            switch self {
+            case .responseKeyInvalid(let key):
+                return "Response key:\(key) is invalid."
+            case .feildTypeInvalid:
+                return "Feild type is invalid."
+            }
+        }
+    }
+    
     
     // MARK: - Functions:
     
@@ -57,16 +71,43 @@ class FlickrKitHelper {
                 if let error = error {
                     print(error.localizedDescription)
                 } else if let response = response {
-                    let photo  = response["photo"] as! FlickrKitImageDictionary
-                    let location = photo["location"] as! FlickrKitImageDictionary
-                    let country = location["country"] as! FlickrKitImageDictionary
-                    let region = location["region"] as! FlickrKitImageDictionary
+                    guard let photo  = response["photo"] as? FlickrKitImageDictionary else {
+                        print(FlickrKitHelperError.responseKeyInvalid("photo"))
+                        return
+                    }
+                    
+                    guard let location = photo["location"] as? FlickrKitImageDictionary else {
+                        print(FlickrKitHelperError.responseKeyInvalid("location"))
+                        return
+                    }
+                    guard let latitudeString = location["latitude"] as? String else {
+                        print(FlickrKitHelperError.responseKeyInvalid("latitude"))
+                        return
+                    }
+                    guard let longitudeString = location["longitude"] as? String else {
+                        print(FlickrKitHelperError.responseKeyInvalid("longitude"))
+                        return
+                    }
+                    
+                    guard let countryInfo = location["country"] as? FlickrKitImageDictionary,
+                        let country = countryInfo["_content"] as? String else {
+                        print(FlickrKitHelperError.responseKeyInvalid("country"))
+                        return
+                    }
+                    
+                    guard let regionInfo = location["region"] as? FlickrKitImageDictionary,
+                        let region = regionInfo["_content"] as? String else {
+                        print(FlickrKitHelperError.responseKeyInvalid("region"))
+                        return
+                    }
+                    
+                    guard let latitude = Double(latitudeString), let longitude = Double(longitudeString) else {
+                        print(FlickrKitHelperError.feildTypeInvalid)
+                        return
+                    }
                     
                     DispatchQueue.main.async {
-                        completion(ImageGeoData(country: country["_content"] as! String,
-                                                latitude: Double(location["latitude"] as! String)!,
-                                                longitude: Double(location["longitude"] as! String)!,
-                                                region: region["_content"] as! String))
+                        completion(ImageGeoData(country: country, latitude: latitude, longitude: longitude, region: region))
                     }
                 }
             }
