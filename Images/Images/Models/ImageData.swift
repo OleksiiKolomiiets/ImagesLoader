@@ -6,7 +6,7 @@
 //  Copyright © 2018 Oleksii  Kolomiets. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 struct ImageData: Codable {
     let id          : String
