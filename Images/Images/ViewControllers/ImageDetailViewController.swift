@@ -43,7 +43,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     @IBAction func geoButtonTapped(_ sender: UIButton) {
         
         let helper = FlickrKitHelper() // TODO: make helper's method static
-        helper.getLocationBy(imageId: imageData.id) { imageGeoData in
+        helper.loadLocationBy(imageId: imageData.id) { imageGeoData in
             
             let geoLocationViewController = UIStoryboard(name: "GEOLocation", bundle: nil).instantiateViewController(withIdentifier: "GEOLocationViewController") as! GEOLocationViewController
             geoLocationViewController.imageGeoData = imageGeoData

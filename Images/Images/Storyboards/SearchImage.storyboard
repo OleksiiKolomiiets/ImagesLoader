@@ -28,18 +28,26 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
                             </textField>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="hybridFlyover" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDa-t1-S4n">
+                                <rect key="frame" x="16" y="148" width="343" height="454"/>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" name="knobColor" catalog="System" colorSpace="catalog"/>
                         <constraints>
                             <constraint firstItem="jjQ-G8-C7H" firstAttribute="trailing" secondItem="59f-A6-cLA" secondAttribute="trailing" constant="16" id="2ye-GC-ITk"/>
+                            <constraint firstItem="RDa-t1-S4n" firstAttribute="top" secondItem="59f-A6-cLA" secondAttribute="bottom" constant="64" id="8P7-ud-jIZ"/>
                             <constraint firstItem="59f-A6-cLA" firstAttribute="top" secondItem="jjQ-G8-C7H" secondAttribute="top" constant="32" id="Fna-lg-O1s"/>
                             <constraint firstItem="59f-A6-cLA" firstAttribute="leading" secondItem="jjQ-G8-C7H" secondAttribute="leading" constant="16" id="Kdc-g7-JoM"/>
+                            <constraint firstItem="RDa-t1-S4n" firstAttribute="trailing" secondItem="59f-A6-cLA" secondAttribute="trailing" id="Rp4-gt-QOr"/>
+                            <constraint firstItem="jjQ-G8-C7H" firstAttribute="bottom" secondItem="RDa-t1-S4n" secondAttribute="bottom" constant="16" id="WEj-xH-Zt1"/>
+                            <constraint firstItem="RDa-t1-S4n" firstAttribute="leading" secondItem="59f-A6-cLA" secondAttribute="leading" id="pHL-Lf-ozZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jjQ-G8-C7H"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Search" image="search" id="mGi-WN-yuA"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="mapView" destination="RDa-t1-S4n" id="UxJ-g4-8AH"/>
                         <outlet property="searchTextField" destination="59f-A6-cLA" id="gbS-zV-5dw"/>
                     </connections>
                 </viewController>
