@@ -9,10 +9,22 @@
 import Foundation
 
 struct ImageGeoData {
-    let imageID    : String
-    let country    : String
-    let latitude   : Double
-    let longitude  : Double
-    let region     : String
-    let iconURL    : URL
+    public let imageID  : String
+    public let country  : String
+    public let latitude : Double
+    public let longitude: Double
+    public let region   : String
+    public let iconURL  : URL
+}
+
+extension ImageGeoData {
+    init(with imageData: ImageData, _ country: String, _ latitude: Double,  _ longitude: Double,  _ region:String ) {
+        self.country = country
+        self.latitude = latitude
+        self.longitude = longitude
+        self.region = region
+        
+        imageID = imageData.id
+        iconURL = imageData.urlSmall75
+    }
 }

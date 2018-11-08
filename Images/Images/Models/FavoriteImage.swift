@@ -24,10 +24,9 @@ class FavoriteImage: NSManagedObject {
             let matches = try context.fetch(request)            
             return matches
         } catch {
-            print("AllData errors.")
+           return []
         }
         
-        return []
     }
     
     static func createData(_ image: ImageData) {
@@ -42,9 +41,7 @@ class FavoriteImage: NSManagedObject {
             
             do {
                 try context.save()
-            } catch {
-                print("Save error: \(error.localizedDescription).")
-            }
+            } catch { }
         }
     }
     
@@ -58,12 +55,8 @@ class FavoriteImage: NSManagedObject {
             context.delete(matches[0])
             do {
                 try context.save()
-            } catch {
-                print("Save error: \(error.localizedDescription).")
-            }
-        } catch {
-            print("DeleteFavoriteImage error: \(error.localizedDescription).")
-        }
+            } catch { }
+        } catch { }
         
     }
     
@@ -73,9 +66,7 @@ class FavoriteImage: NSManagedObject {
         
         do {
             try context.execute(deleteRequest)
-        } catch {
-            print("Delet all error: \(error.localizedDescription).")
-        }
+        } catch { }
     }
     
 }
