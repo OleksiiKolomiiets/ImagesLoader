@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class SearchPhotoViewController: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
+class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Outlets:
     
@@ -39,11 +39,13 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate, MKMapVie
     
     private func loadImageGeoDataBySearchText(_ text: String) {
         helper.loadPolygonLocation(for: text, perPage: Int.random(in: 5 ... 10)) { imagesGeoData in
-            self.imagesGeoData = imagesGeoData
+            guard let loadedGeoData = imagesGeoData else { return }
             
-            let coordinates = imagesGeoData.map() { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
+            self.imagesGeoData = loadedGeoData
+            let coordinates = loadedGeoData.map() { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
             
             self.setUpVisibleMapRectForMapView(self.mapView, with: coordinates)
+            self.setUpAnnotationsForMapView(self.mapView, with: self.imagesGeoData)
         }
     }
     
@@ -60,15 +62,6 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate, MKMapVie
         let rectEdgePadding = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
         
         mapView.setVisibleMapRect(fittingRect, edgePadding: rectEdgePadding, animated: true)
-    }
-    
-    
-    // MARK: - MKMapViewDelegate:
-    
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        if animated {
-            self.setUpAnnotationsForMapView(self.mapView, with: self.imagesGeoData)
-        }
     }
     
     

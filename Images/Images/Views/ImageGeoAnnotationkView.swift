@@ -28,6 +28,12 @@ class ImageGeoAnnotationkView: MKAnnotationView {
     
     // MARK: - Functions:
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        image = nil
+    }
+    
     private func setUpAnnotationView(with imageGeoAnnotation: ImageGeoAnnotation) {
         setUpSizeOf(self, with: ImageGeoAnnotationkViewSettings.kSizeOfImage)
         
