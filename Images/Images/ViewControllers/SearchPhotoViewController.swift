@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
+class SearchPhotoViewController: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     
     // MARK: - Outlets:
     
@@ -21,9 +21,7 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
     
     private var helper: FlickrKitHelper!
     
-    private var coordinates: [CLLocationCoordinate2D] = []
-    
-    private var defaultVisibleMapRect: MKMapRect!
+    private var imagesGeoData: [ImageGeoData]!
     
 
     // MARK: - Lifecycle SearchPhotoViewController:
@@ -31,10 +29,46 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        defaultVisibleMapRect = self.mapView.visibleMapRect
+        mapView.register(ImageGeoAnnotationkView.self,
+                         forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         
         helper = FlickrKitHelper()
-        searchTextField.delegate = self
+    }
+    
+    // MARK: - Functions:
+    
+    private func loadImageGeoDataBySearchText(_ text: String) {
+        helper.loadPolygonLocation(for: text, perPage: Int.random(in: 5 ... 10)) { imagesGeoData in
+            self.imagesGeoData = imagesGeoData
+            
+            let coordinates = imagesGeoData.map() { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
+            
+            self.setUpVisibleMapRectForMapView(self.mapView, with: coordinates)
+        }
+    }
+    
+    private func setUpAnnotationsForMapView(_ mapView: MKMapView, with imagesGeoData: [ImageGeoData]) {
+        mapView.addAnnotations(imagesGeoData.map() { ImageGeoAnnotation(with: $0) })
+    }
+    
+    private func setUpVisibleMapRectForMapView(_ mapView: MKMapView, with coordinates: [CLLocationCoordinate2D]) {
+        let mapRects = coordinates.map { coordinate in
+            MKMapRect(origin: MKMapPoint(coordinate), size: MKMapSize())
+        }
+        let fittingRect = mapRects.reduce(MKMapRect.null) { $0.union($1) }
+        let inset: CGFloat = 75
+        let rectEdgePadding = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
+        
+        mapView.setVisibleMapRect(fittingRect, edgePadding: rectEdgePadding, animated: true)
+    }
+    
+    
+    // MARK: - MKMapViewDelegate:
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        if animated {
+            self.setUpAnnotationsForMapView(self.mapView, with: self.imagesGeoData)
+        }
     }
     
     
@@ -47,32 +81,13 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
-        coordinates.removeAll()
-        mapView.removeAnnotations(self.mapView.annotations)
+        if !mapView.annotations.isEmpty {
+            mapView.removeAnnotations(mapView.annotations)
+        }
         
         if let text = textField.text,
             !text.isEmpty {
-            
-            helper.loadPolygonLocation(for: text, perPage: Int.random(in: 5 ... 10), completion: { imagesGeoDataDictionary in
-                
-                imagesGeoDataDictionary.forEach() { (imageId, imageGeoData) in
-                    let pointAnnotation = MKPointAnnotation()
-                    pointAnnotation.title = imageGeoData.region + ", " + imageGeoData.country
-                    let coordinate = CLLocationCoordinate2D(latitude: imageGeoData.latitude, longitude: imageGeoData.longitude)
-                    pointAnnotation.coordinate = coordinate
-                    self.coordinates.append(coordinate)
-                    self.mapView.addAnnotation(pointAnnotation)
-                }
-                
-                let rects = self.coordinates.map { MKMapRect(origin: MKMapPoint($0), size: MKMapSize()) }
-                let fittingRect = rects.reduce(MKMapRect.null) { $0.union($1) }
-                let inset:CGFloat = 32
-                let rectEdgePadding = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
-                
-                self.mapView.setVisibleMapRect(fittingRect, edgePadding: rectEdgePadding, animated: true)
-            })
-        } else {
-            self.mapView.setVisibleMapRect(defaultVisibleMapRect, animated: true)
+            loadImageGeoDataBySearchText(text)
         }
         
         return true

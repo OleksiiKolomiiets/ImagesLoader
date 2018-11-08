@@ -27,9 +27,15 @@
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <connections>
+                                    <outlet property="delegate" destination="UM2-Hd-PJy" id="wHx-FJ-aiv"/>
+                                </connections>
                             </textField>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="hybridFlyover" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDa-t1-S4n">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="satelliteFlyover" showsUserLocation="YES" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDa-t1-S4n">
                                 <rect key="frame" x="16" y="148" width="343" height="454"/>
+                                <connections>
+                                    <outlet property="delegate" destination="UM2-Hd-PJy" id="nHN-a8-kiS"/>
+                                </connections>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" name="knobColor" catalog="System" colorSpace="catalog"/>

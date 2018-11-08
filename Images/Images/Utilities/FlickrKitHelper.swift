@@ -13,14 +13,12 @@ class FlickrKitHelper {
     
     typealias FlickrKitImageDictionary = [String: Any]
     
-    typealias ImageGeoDataDictionary = [String: ImageGeoData]
-    
     typealias FlickrKitHelperCompletionHandler = ([String: [ImageData]]?, Error?) -> Void
     
     // MARK: - Variables:
     
     private var imageDataDictionary   : [String: [ImageData]]?
-    private var imageGeoDataDictionary: [String: ImageGeoData] = [:]
+    private var imageGeoDataDictionary: [ImageGeoData] = []
     
     private var flickrError: Error?
     
@@ -74,15 +72,13 @@ class FlickrKitHelper {
     
     
     //Loading image geo data for polygon by tag
-    public func loadPolygonLocation(for tag: String, perPage: Int, completion: @escaping (ImageGeoDataDictionary) -> Void) {
+    public func loadPolygonLocation(for tag: String, perPage: Int, completion: @escaping ([ImageGeoData]) -> Void) {
         
         imageGeoDataDictionary.removeAll()
         
         self.startLoadingData(for: tag, perPage) { imagesDataArray in
             
-            let imagesId = imagesDataArray.map() { $0.id }
-            
-            self.loadLocationFor(imagesId: imagesId) { imagesGeoDataDictionary in
+            self.loadLocationFor(imagesData: imagesDataArray) { imagesGeoDataDictionary in
                 
                completion(imagesGeoDataDictionary)
             }
@@ -92,13 +88,15 @@ class FlickrKitHelper {
     }
     
     // Loading dictionary with image geo data by its IDs
-    public func loadLocationFor(imagesId: [String], completion: @escaping (ImageGeoDataDictionary) -> Void) {
+    public func loadLocationFor(imagesData: [ImageData], completion: @escaping ([ImageGeoData]) -> Void) {
         
-        imagesId.forEach() { imageId in
+        imagesData.forEach() { imageData in
             loadingPolygonGeoDataDispatchGroup.enter()
             
-            loadLocationBy(imageId: imageId, completion: { imageGeoData in
-                self.imageGeoDataDictionary[imageId] = imageGeoData
+            loadLocationBy(imageData: imageData, completion: { imageGeoData in
+                if let imageGeoData = imageGeoData {
+                    self.imageGeoDataDictionary.append(imageGeoData)
+                }
                 
                 self.loadingPolygonGeoDataDispatchGroup.leave()
             })
@@ -111,10 +109,10 @@ class FlickrKitHelper {
     }
     
     // Loading image geo data by image ID
-    public func loadLocationBy(imageId: String, completion: @escaping (ImageGeoData?) -> Void) {
+    public func loadLocationBy(imageData: ImageData, completion: @escaping (ImageGeoData?) -> Void) {
         
         flickrKitHelperDispatchQueue.async {
-            FlickrKit.shared().call("flickr.photos.geo.getLocation", args: ["api_key": "60b5143bcc14e2d43ff380b7b26b2430", "photo_id": imageId ] ) { (response, error) -> Void in
+            FlickrKit.shared().call("flickr.photos.geo.getLocation", args: ["api_key": "60b5143bcc14e2d43ff380b7b26b2430", "photo_id": imageData.id ] ) { (response, error) -> Void in
                 
                 var imageGeoData: ImageGeoData?
                 
@@ -163,7 +161,12 @@ class FlickrKitHelper {
                         return
                     }
                     
-                    imageGeoData = ImageGeoData(country: country, latitude: latitude, longitude: longitude, region: region)
+                    imageGeoData = ImageGeoData(imageID: imageData.id,
+                                                country: country,
+                                                latitude: latitude,
+                                                longitude: longitude,
+                                                region: region,
+                                                iconURL: imageData.urlSmall75)
                     
                 }
                 
@@ -214,7 +217,12 @@ class FlickrKitHelper {
                         let url240 = self.getFlickrUrl(forSize: .small240,  using: flickrKitImageData)
                         let url320 = self.getFlickrUrl(forSize: .small320,  using: flickrKitImageData)
                         let url1024 = self.getFlickrUrl(forSize: .large1024, using: flickrKitImageData)
-                        let imageData = ImageData(id : id, title : title, urlSmall240 : url240, urlSmall320 : url320, urlLarge1024: url1024)
+                        let url75 = self.getFlickrUrl(forSize: .smallSquare75, using: flickrKitImageData)
+                        let imageData = ImageData(id: id, title: title,
+                                                  urlSmall75  : url75,
+                                                  urlSmall240 : url240,
+                                                  urlSmall320 : url320,
+                                                  urlLarge1024: url1024)
                         
                         imageDataArray.append(imageData)
                     }

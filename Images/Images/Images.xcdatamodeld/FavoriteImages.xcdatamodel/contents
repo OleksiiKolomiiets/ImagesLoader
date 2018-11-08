@@ -4,10 +4,11 @@
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" attributeType="String" syncable="YES"/>
         <attribute name="urlLarge1024" attributeType="URI" syncable="YES"/>
+        <attribute name="urlSmall75" optional="YES" attributeType="URI" syncable="YES"/>
         <attribute name="urlSmall240" attributeType="URI" syncable="YES"/>
         <attribute name="urlSmall320" attributeType="URI" syncable="YES"/>
     </entity>
     <elements>
-        <element name="FavoriteImage" positionX="-17296.00390625" positionY="3079.01953125" width="126.02734375" height="120"/>
+        <element name="FavoriteImage" positionX="-17296.00390625" positionY="3079.01953125" width="126.02734375" height="135"/>
     </elements>
 </model>

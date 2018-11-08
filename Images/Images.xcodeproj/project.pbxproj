@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		1FD230B41F723921EA3528C9 /* Pods_Images.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FB4E4296920BD7AF5821D8C /* Pods_Images.framework */; };
 		7915DF1B21786BC70094002B /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7915DF1A21786BC70094002B /* Extension.swift */; };
+		791976C921934C50009615C7 /* ImageGeoAnnotationkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 791976C821934C50009615C7 /* ImageGeoAnnotationkView.swift */; };
 		792348D521429A87007903E1 /* ImageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792348D421429A87007903E1 /* ImageDetailViewController.swift */; };
 		792B68972191D62C0010269C /* SearchPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792B68962191D62C0010269C /* SearchPhotoViewController.swift */; };
+		792B689D21933D9C0010269C /* ImageGeoAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792B689C21933D9C0010269C /* ImageGeoAnnotation.swift */; };
 		794C9D6B212D53D40034E77F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C9D6A212D53D40034E77F /* AppDelegate.swift */; };
 		794C9D6D212D53D40034E77F /* ImagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 794C9D6C212D53D40034E77F /* ImagesViewController.swift */; };
 		794C9D70212D53D40034E77F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 794C9D6E212D53D40034E77F /* Main.storyboard */; };
@@ -43,8 +45,10 @@
 		036CCFB8390B50C8A051E189 /* Pods-Images.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Images.release.xcconfig"; path = "Pods/Target Support Files/Pods-Images/Pods-Images.release.xcconfig"; sourceTree = "<group>"; };
 		1FB4E4296920BD7AF5821D8C /* Pods_Images.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Images.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7915DF1A21786BC70094002B /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		791976C821934C50009615C7 /* ImageGeoAnnotationkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGeoAnnotationkView.swift; sourceTree = "<group>"; };
 		792348D421429A87007903E1 /* ImageDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailViewController.swift; sourceTree = "<group>"; };
 		792B68962191D62C0010269C /* SearchPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchPhotoViewController.swift; sourceTree = "<group>"; };
+		792B689C21933D9C0010269C /* ImageGeoAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGeoAnnotation.swift; sourceTree = "<group>"; };
 		794C9D67212D53D40034E77F /* Images - iOS Application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Images - iOS Application.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		794C9D6A212D53D40034E77F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		794C9D6C212D53D40034E77F /* ImagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesViewController.swift; sourceTree = "<group>"; };
@@ -176,6 +180,8 @@
 				79A58B152182122900A10DDD /* FavoriteImageTableViewCell.swift */,
 				795B8B7A212D815A00E18F16 /* ImageCollectionViewCell.swift */,
 				798EF882215CF98D0060452C /* ShadowView.swift */,
+				792B689C21933D9C0010269C /* ImageGeoAnnotation.swift */,
+				791976C821934C50009615C7 /* ImageGeoAnnotationkView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -377,6 +383,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				798EF883215CF98D0060452C /* ShadowView.swift in Sources */,
+				792B689D21933D9C0010269C /* ImageGeoAnnotation.swift in Sources */,
 				7984CBCE2191A02E00858CE9 /* FavoriteImage.swift in Sources */,
 				79A58B1E2189949700A10DDD /* FavoriteManager.swift in Sources */,
 				79A58B162182122900A10DDD /* FavoriteImageTableViewCell.swift in Sources */,
@@ -392,6 +399,7 @@
 				792B68972191D62C0010269C /* SearchPhotoViewController.swift in Sources */,
 				792348D521429A87007903E1 /* ImageDetailViewController.swift in Sources */,
 				7984CBC82190351700858CE9 /* GEOLocationViewController.swift in Sources */,
+				791976C921934C50009615C7 /* ImageGeoAnnotationkView.swift in Sources */,
 				7915DF1B21786BC70094002B /* Extension.swift in Sources */,
 				795B8B7B212D815A00E18F16 /* ImageCollectionViewCell.swift in Sources */,
 				797E9739212D9B2F0016985D /* FlickrKitHelper.swift in Sources */,

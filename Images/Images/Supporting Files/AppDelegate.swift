@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {        
         FlickrKit.shared().initialize(withAPIKey: "60b5143bcc14e2d43ff380b7b26b2430", sharedSecret: "7f02ee698709cbaf")
         // Override point for customization after application launch.
+        FavoriteImage.deleteAll()
         return true
     }
 

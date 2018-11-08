@@ -67,4 +67,15 @@ class FavoriteImage: NSManagedObject {
         
     }
     
+    static func deleteAll() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "FavoriteImage")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try context.execute(deleteRequest)
+        } catch {
+            print("Delet all error: \(error.localizedDescription).")
+        }
+    }
+    
 }

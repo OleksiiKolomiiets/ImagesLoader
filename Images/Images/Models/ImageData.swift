@@ -11,6 +11,7 @@ import Foundation
 struct ImageData: Codable {
     let id          : String
     let title       : String
+    let urlSmall75  : URL
     let urlSmall240 : URL
     let urlSmall320 : URL
     let urlLarge1024: URL
@@ -26,10 +27,11 @@ extension ImageData {
     }
     
     static public func instance(from coreDataEntity: FavoriteImage) -> ImageData {
-        return ImageData(id: coreDataEntity.id!,
-                         title: coreDataEntity.title!,
-                         urlSmall240: coreDataEntity.urlSmall240!,
-                         urlSmall320: coreDataEntity.urlSmall320!,
+        return ImageData(id          : coreDataEntity.id!,
+                         title       : coreDataEntity.title!,
+                         urlSmall75  : coreDataEntity.urlSmall75!,
+                         urlSmall240 : coreDataEntity.urlSmall240!,
+                         urlSmall320 : coreDataEntity.urlSmall320!,
                          urlLarge1024: coreDataEntity.urlLarge1024!)
     }
     
