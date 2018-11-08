@@ -15,8 +15,9 @@ fileprivate class FavoriteImageSettings {
 
 class FavoriteImage: NSManagedObject {
     
-    // Version of FavoriteImage in CoreData increments hardcodly if entity would changed
-    static public let versionOfEntity = 1
+    // *hard code* Version of FavoriteImage in CoreData increments if entity would changed
+    static private let versionOfEntity = 1
+    static public let isOldVersion = UserDefaults.standard.integer(forKey: "FavoriteImageVersion") != FavoriteImage.versionOfEntity
     
     static private var context: NSManagedObjectContext = ((UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext)!
     
@@ -65,13 +66,16 @@ class FavoriteImage: NSManagedObject {
     }
     
     static func deleteAll() {
-        print("All data for key: \"FavoriteImage\" was delete.")
         let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "FavoriteImage")
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         
         do {
             try context.execute(deleteRequest)
         } catch { }
+    }
+    
+    static func updateVersion() {
+        UserDefaults.standard.set(FavoriteImage.versionOfEntity, forKey: "FavoriteImageVersion")
     }
     
 }
