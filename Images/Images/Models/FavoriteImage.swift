@@ -39,6 +39,7 @@ class FavoriteImage: NSManagedObject {
             favoriteImage.urlLarge1024 = image.urlLarge1024
             favoriteImage.urlSmall320 = image.urlSmall320
             favoriteImage.urlSmall240 = image.urlSmall240
+            favoriteImage.urlSmall75 = image.urlSmall75
             favoriteImage.title = image.title
             favoriteImage.id = image.id
             
