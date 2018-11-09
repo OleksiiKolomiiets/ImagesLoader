@@ -4,8 +4,8 @@ ImagesLoader is cool app where I've implemented a lot of features and improved m
 
 There are three tabs:
  - Loaded images: photo by three random categories displayed via table and collection views(to put there any image just drag it from table view).
- - Favorited images: list of image that yu like ( to put there image you found good just drag it from table view and drop to highlighted zone).
- - Map with images: there you can find from 5 to 10 images by tag you wroute on search feild. 
+ - Favorite images: list of image that you like ( to put there image just drag it from table view and drop to highlight zone).
+ - Map with images: there you can find from 5 to 10 images by tag you wrote on search field. 
  
  Every 30sec all Loaded images are reloading with three random tags.
  
