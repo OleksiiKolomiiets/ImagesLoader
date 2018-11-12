@@ -18,6 +18,8 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
 
     @IBOutlet weak var tableView: UITableView!
     
+    @IBOutlet private weak var showInMapButton: UIButton!
+    
     // Making bar content light on dark background
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -29,6 +31,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
         super.viewWillAppear(animated)
 
         tableView.reloadData()
+        showInMapButton.rounded()
     }
 
     // MARK: UITableViewDataSource

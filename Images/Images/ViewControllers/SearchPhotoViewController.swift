@@ -28,7 +28,7 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         mapView.register(ImageGeoAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-        searchTextField.layer.cornerRadius = searchTextField.frame.height / 2
+        searchTextField.rounded()
     }
     
    
