@@ -8,23 +8,23 @@
 
 import Foundation
 
-struct ImageGeoData {
-    public let imageID  : String
+struct ImageGeoData: Codable {
     public let country  : String
     public let latitude : Double
     public let longitude: Double
     public let region   : String
-    public let iconURL  : URL
 }
 
 extension ImageGeoData {
-    init(with imageData: ImageData, _ country: String, _ latitude: Double,  _ longitude: Double,  _ region:String ) {
+    init( _ country: String, _ latitude: Double,  _ longitude: Double,  _ region:String ) {
         self.country = country
         self.latitude = latitude
         self.longitude = longitude
         self.region = region
-        
-        imageID = imageData.id
-        iconURL = imageData.urlSmall75
+    }
+    
+    static func instance(from data: Data?) -> ImageGeoData? {
+        guard let data = data else { return nil }
+        return try? JSONDecoder().decode(ImageGeoData.self, from: data)
     }
 }

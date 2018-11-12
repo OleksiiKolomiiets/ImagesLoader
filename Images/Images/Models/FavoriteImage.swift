@@ -16,7 +16,7 @@ fileprivate class FavoriteImageSettings {
 class FavoriteImage: NSManagedObject {
     
     // *hard code* Version of FavoriteImage in CoreData increments if entity would changed
-    static private let versionOfEntity = 1
+    static private let versionOfEntity = 2
     static public let isOldVersion = UserDefaults.standard.integer(forKey: "FavoriteImageVersion") != FavoriteImage.versionOfEntity
     
     static private var context: NSManagedObjectContext = ((UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext)!

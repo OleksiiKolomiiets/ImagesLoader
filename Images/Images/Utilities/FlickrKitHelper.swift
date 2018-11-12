@@ -18,20 +18,19 @@ class FlickrKitHelper {
     
     // MARK: - Variables:
     
-    private var imageDataDictionary: [String: [ImageData]]?
-    private var imageGeoDataDictionary: [ImageGeoData] = []
+    private static var imageDataDictionary: [String: [ImageData]]?
     
-    private var flickrError: Error?
+    private static var flickrError: Error?
     
-    private let flickrKitHelperDispatchQueue = DispatchQueue(label: "FlickrKitHelper")
-    private let loadingImageDataDispatchGroup = DispatchGroup()
-    private let loadingPolygonGeoDataDispatchGroup = DispatchGroup()
+    private static let flickrKitHelperDispatchQueue  = DispatchQueue(label: "FlickrKitHelper")
+    private static let loadingImageDataDispatchGroup = DispatchGroup()
+    private static let loadingGeoDataDispatchGroup   = DispatchGroup()
     
     
     // MARK: - Functions:
     
     // Load images data by tags
-    public func load(for tags: [String], perPage: Int, completion: @escaping FlickrKitHelperCompletionHandler) {
+    public static func load(for tags: [String], perPage: Int, completion: @escaping FlickrKitHelperCompletionHandler) {
         
         imageDataDictionary?.removeAll()
         flickrError = nil
@@ -60,17 +59,18 @@ class FlickrKitHelper {
     
     
     //Loading image geo data for polygon by tag
-    public func loadPolygonLocation(for tag: String, perPage: Int, completion: @escaping ([ImageGeoData]?) -> Void) {
-        
-        imageGeoDataDictionary.removeAll()
+    public static func loadPolygonLocation(for tag: String, perPage: Int, completion: @escaping ([ImageData]?) -> Void) {
         
         self.startLoadingData(for: tag, perPage) { imagesDataArray in
             guard let imagesDataArray = imagesDataArray else {
                 completion(nil)
                 return
             }
-            self.loadLocationFor(imagesData: imagesDataArray) { imagesGeoDataDictionary in
-               completion(imagesGeoDataDictionary)
+            
+            self.imageDataDictionary = [tag: imagesDataArray]
+            
+            self.loadLocationFor(imagesData: imagesDataArray) { imagesData in
+               completion(imagesData)
             }
         }
         
@@ -78,28 +78,30 @@ class FlickrKitHelper {
     }
     
     // Loading dictionary with image geo data by its IDs
-    public func loadLocationFor(imagesData: [ImageData], completion: @escaping ([ImageGeoData]) -> Void) {
-        
+    public static func loadLocationFor(imagesData: [ImageData], completion: @escaping ([ImageData]) -> Void) {
+        var imageDataWithLocation = [ImageData]()
         imagesData.forEach() { imageData in
-            loadingPolygonGeoDataDispatchGroup.enter()
+            loadingGeoDataDispatchGroup.enter()
             
             loadLocationBy(imageData: imageData, completion: { imageGeoData in
                 if let imageGeoData = imageGeoData {
-                    self.imageGeoDataDictionary.append(imageGeoData)
+                    var copyImageData = imageData
+                    copyImageData.geoData = imageGeoData
+                    imageDataWithLocation.append(copyImageData)
                 }
                 
-                self.loadingPolygonGeoDataDispatchGroup.leave()
+                self.loadingGeoDataDispatchGroup.leave()
             })
         }
         
-        loadingPolygonGeoDataDispatchGroup.notify(queue: .main) {
-            completion(self.imageGeoDataDictionary)
+        loadingGeoDataDispatchGroup.notify(queue: .main) {
+            completion(imageDataWithLocation)
         }
         
     }
     
     // Loading image geo data by image ID
-    public func loadLocationBy(imageData: ImageData, completion: @escaping (ImageGeoData?) -> Void) {
+    public static func loadLocationBy(imageData: ImageData, completion: @escaping (ImageGeoData?) -> Void) {
         
         flickrKitHelperDispatchQueue.async {
             FlickrKit.shared().call("flickr.photos.geo.getLocation", args: ["api_key": "60b5143bcc14e2d43ff380b7b26b2430", "photo_id": imageData.id ] ) { (response, error) -> Void in
@@ -116,7 +118,8 @@ class FlickrKitHelper {
                     let country = countryInfo["_content"] as? String,
                     let region  = regionInfo["_content"]  as? String,
                     
-                    let latitude = Double(latitudeString), let longitude = Double(longitudeString)
+                    let latitude  = Double(latitudeString),
+                    let longitude = Double(longitudeString)
                     
                     else {
                         DispatchQueue.main.async {
@@ -125,7 +128,7 @@ class FlickrKitHelper {
                         return
                 }
                 
-                let imageGeoData = ImageGeoData(with: imageData, country, latitude, longitude, region)
+                let imageGeoData = ImageGeoData(country, latitude, longitude, region)
                 
                 DispatchQueue.main.async {
                     completion(imageGeoData)
@@ -136,7 +139,7 @@ class FlickrKitHelper {
     }
     
     // Loading images data by tag
-    public func startLoadingData(for tag: String, _ perPage: Int, completion: @escaping ([ImageData]?) -> Void) {
+    public static func startLoadingData(for tag: String, _ perPage: Int, completion: @escaping ([ImageData]?) -> Void) {
         
         let perPageString = String(perPage)
         
@@ -187,7 +190,7 @@ class FlickrKitHelper {
     }
     
     // Getting images URL using Flickr image data dictionary
-    private func getFlickrUrl(forSize flickrKitPhotoSize: FKPhotoSize, using flickrKitImageDictionary: FlickrKitImageDictionary) -> URL {
+    private static func getFlickrUrl(forSize flickrKitPhotoSize: FKPhotoSize, using flickrKitImageDictionary: FlickrKitImageDictionary) -> URL {
         return FlickrKit.shared().photoURL(for: flickrKitPhotoSize, fromPhotoDictionary: flickrKitImageDictionary)
     }
 }

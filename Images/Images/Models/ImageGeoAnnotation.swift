@@ -23,11 +23,11 @@ class ImageGeoAnnotation: NSObject, MKAnnotation {
     
     // MARK: - Constructor:
     
-    init(with imageGeoData: ImageGeoData) {
-        self.imageID = imageGeoData.imageID
-        self.title = imageGeoData.country + ", " + imageGeoData.region
-        self.coordinate = CLLocationCoordinate2D(latitude: imageGeoData.latitude, longitude: imageGeoData.longitude)
-        self.markerIconURL = imageGeoData.iconURL
+    init(with imageData: ImageData) {
+        self.imageID = imageData.id
+        self.title = imageData.geoData!.country + ", " + imageData.geoData!.region
+        self.coordinate = CLLocationCoordinate2D(latitude: imageData.geoData!.latitude, longitude: imageData.geoData!.longitude)
+        self.markerIconURL = imageData.urlSmall75
         
         super.init()
     }

@@ -13,15 +13,13 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Outlets:
     
-    @IBOutlet weak var searchTextField: UITextField!
+    @IBOutlet weak var searchTextField: SearchTextField!
     @IBOutlet weak var mapView: MKMapView!
     
     
     // MARK: - Properties:
     
-    private var helper: FlickrKitHelper!
-    
-    private var imagesGeoData: [ImageGeoData]!
+    private var imagesData: [ImageData]!
     
 
     // MARK: - Lifecycle SearchPhotoViewController:
@@ -29,27 +27,28 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mapView.register(ImageGeoAnnotationkView.self,
-                         forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
-        
-        helper = FlickrKitHelper()
+        mapView.register(ImageGeoAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        searchTextField.layer.cornerRadius = searchTextField.frame.height / 2
     }
     
+   
     // MARK: - Functions:
     
     private func loadImageGeoDataBySearchText(_ text: String) {
-        helper.loadPolygonLocation(for: text, perPage: Int.random(in: 5 ... 10)) { imagesGeoData in
-            guard let loadedGeoData = imagesGeoData else { return }
+        FlickrKitHelper.loadPolygonLocation(for: text, perPage: Int.random(in: 5 ... 10)) { imagesData in
+            guard let loadedData = imagesData else { return }
             
-            self.imagesGeoData = loadedGeoData
-            let coordinates = loadedGeoData.map() { CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude) }
+            self.imagesData = loadedData
+            let coordinates = loadedData.map() { imgageData in
+                CLLocationCoordinate2D(latitude: imgageData.geoData!.latitude, longitude: imgageData.geoData!.longitude)
+            }
             
             self.setUpVisibleMapRectForMapView(self.mapView, with: coordinates)
-            self.setUpAnnotationsForMapView(self.mapView, with: self.imagesGeoData)
+            self.setUpAnnotationsForMapView(self.mapView, with: self.imagesData)
         }
     }
     
-    private func setUpAnnotationsForMapView(_ mapView: MKMapView, with imagesGeoData: [ImageGeoData]) {
+    private func setUpAnnotationsForMapView(_ mapView: MKMapView, with imagesGeoData: [ImageData]) {
         mapView.addAnnotations(imagesGeoData.map() { ImageGeoAnnotation(with: $0) })
     }
     

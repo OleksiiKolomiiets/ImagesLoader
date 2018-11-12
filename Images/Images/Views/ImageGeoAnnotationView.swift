@@ -9,12 +9,12 @@
 import Foundation
 import MapKit
 
-fileprivate class ImageGeoAnnotationkViewSettings {
+fileprivate class ImageGeoAnnotationViewSettings {
     static let kSizeOfImage   = 30
     static let kCalloutOffset = CGPoint(x: -5, y: 5)
 }
 
-class ImageGeoAnnotationkView: MKAnnotationView {
+class ImageGeoAnnotationView: MKAnnotationView {
     
     // MARK: - Property:
     
@@ -35,9 +35,9 @@ class ImageGeoAnnotationkView: MKAnnotationView {
     }
     
     private func setUpAnnotationView(with imageGeoAnnotation: ImageGeoAnnotation) {
-        setUpSizeOf(self, with: ImageGeoAnnotationkViewSettings.kSizeOfImage)
+        setUpSizeOf(self, with: ImageGeoAnnotationViewSettings.kSizeOfImage)
         
-        setUpCalloutBy(offset: ImageGeoAnnotationkViewSettings.kCalloutOffset)
+        setUpCalloutBy(offset: ImageGeoAnnotationViewSettings.kCalloutOffset)
         
         setUpAnnotationImageFor(self, with: imageGeoAnnotation)
     }
