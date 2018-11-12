@@ -15,6 +15,10 @@ fileprivate class FavoriteImageSettings {
 
 class FavoriteImage: NSManagedObject {
     
+    // *hard code* Version of FavoriteImage in CoreData increments if entity would changed
+    static private let versionOfEntity = 2
+    static public let isOldVersion = UserDefaults.standard.integer(forKey: "FavoriteImageVersion") != FavoriteImage.versionOfEntity
+    
     static private var context: NSManagedObjectContext = ((UIApplication.shared.delegate as? AppDelegate)?.persistentContainer.viewContext)!
     
     static var allData: [FavoriteImage] {
@@ -24,10 +28,9 @@ class FavoriteImage: NSManagedObject {
             let matches = try context.fetch(request)            
             return matches
         } catch {
-            print("AllData errors.")
+           return []
         }
         
-        return []
     }
     
     static func createData(_ image: ImageData) {
@@ -37,14 +40,13 @@ class FavoriteImage: NSManagedObject {
             favoriteImage.urlLarge1024 = image.urlLarge1024
             favoriteImage.urlSmall320 = image.urlSmall320
             favoriteImage.urlSmall240 = image.urlSmall240
+            favoriteImage.urlSmall75 = image.urlSmall75
             favoriteImage.title = image.title
             favoriteImage.id = image.id
             
             do {
                 try context.save()
-            } catch {
-                print("Save error: \(error.localizedDescription).")
-            }
+            } catch { }
         }
     }
     
@@ -58,13 +60,22 @@ class FavoriteImage: NSManagedObject {
             context.delete(matches[0])
             do {
                 try context.save()
-            } catch {
-                print("Save error: \(error.localizedDescription).")
-            }
-        } catch {
-            print("DeleteFavoriteImage error: \(error.localizedDescription).")
-        }
+            } catch { }
+        } catch { }
         
+    }
+    
+    static func deleteAll() {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "FavoriteImage")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try context.execute(deleteRequest)
+        } catch { }
+    }
+    
+    static func updateVersion() {
+        UserDefaults.standard.set(FavoriteImage.versionOfEntity, forKey: "FavoriteImageVersion")
     }
     
 }
