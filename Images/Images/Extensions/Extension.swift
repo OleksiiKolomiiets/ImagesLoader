@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 extension Bool {
     mutating func toggle() {
@@ -14,3 +15,8 @@ extension Bool {
     }
 }
 
+extension UIView {
+    func rounded() {
+        layer.cornerRadius = min(frame.size.width, frame.size.height) / 2
+    }
+}
