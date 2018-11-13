@@ -15,11 +15,17 @@ fileprivate class ImagesMapViewSetings {
 
 class ImagesMapView: MKMapView {
     
+    
+    // MARK: - Initialization
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         register(ImageGeoAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
     }
+    
+    
+    // MARK: - Functions:
     
     public func setUpMapView(with imagesData: [ImageData]) {
         

@@ -7,7 +7,6 @@
 //
 
 import Foundation
-
 import MapKit
 
 class ImageGeoAnnotation: NSObject, MKAnnotation {

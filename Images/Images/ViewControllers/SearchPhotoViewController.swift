@@ -7,14 +7,13 @@
 //
 
 import UIKit
-import MapKit
 
 class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Outlets:
     
-    @IBOutlet weak var searchTextField: SearchTextField!
-    @IBOutlet weak var mapView: ImagesMapView!
+    @IBOutlet private weak var searchTextField: SearchTextField!
+    @IBOutlet private weak var mapView: ImagesMapView!
     
     
     // MARK: - Lifecycle SearchPhotoViewController:

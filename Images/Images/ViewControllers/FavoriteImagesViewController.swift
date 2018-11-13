@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import MapKit
+
 fileprivate class FavoriteImagesSettings {
     static let kCellIdentifier = "favoriteImageCelIdentifier"
 }
@@ -16,7 +16,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
 
     // MARK: - Outlets:
 
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
     
     @IBOutlet private weak var showInMapButton: UIButton!
     
@@ -27,7 +27,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     // MARK: - Action:
 
-    @IBAction func showFavoriteImagesInMap(_ sender: UIButton) {
+    @IBAction private func showFavoriteImagesInMap(_ sender: UIButton) {
         let storyboard = UIStoryboard(name: "GEOLocation", bundle: Bundle.main)
         let geoLocationViewController = storyboard.instantiateViewController(withIdentifier: "GEOLocationViewController") as! GEOLocationViewController
         geoLocationViewController.imagesData = FavoriteManager.allFavoriteImages

@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import CoreLocation
-import MapKit
 
 class GEOLocationViewController: UIViewController {
     
