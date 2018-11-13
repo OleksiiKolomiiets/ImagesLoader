@@ -15,12 +15,12 @@ class GEOLocationViewController: UIViewController {
     
     // MARK: - Outlets:
     
-    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var mapView: ImagesMapView!
     
     
     // MARK: - Properties:
     
-    public var imageGeoData: ImageGeoData!    
+    public var imagesData: [ImageData]!
     
     
     // MARK: - Lifecycle methods of view cintroller
@@ -28,11 +28,7 @@ class GEOLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let pointAnnotation = MKPointAnnotation()
-        pointAnnotation.title = imageGeoData.region + ", " + imageGeoData.country
-        pointAnnotation.coordinate = CLLocationCoordinate2D(latitude: imageGeoData.latitude, longitude: imageGeoData.longitude)
-        mapView.setCenter(pointAnnotation.coordinate, animated: true)
-        mapView.addAnnotation(pointAnnotation)
+        mapView.setUpMapView(with: imagesData)
     }
     
     

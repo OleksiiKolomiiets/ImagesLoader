@@ -38,11 +38,12 @@ class FavoriteImage: NSManagedObject {
         if !allImageData.contains(image) {
             let favoriteImage = FavoriteImage(context: context)
             favoriteImage.urlLarge1024 = image.urlLarge1024
-            favoriteImage.urlSmall320 = image.urlSmall320
-            favoriteImage.urlSmall240 = image.urlSmall240
-            favoriteImage.urlSmall75 = image.urlSmall75
-            favoriteImage.title = image.title
-            favoriteImage.id = image.id
+            favoriteImage.urlSmall320  = image.urlSmall320
+            favoriteImage.urlSmall240  = image.urlSmall240
+            favoriteImage.urlSmall75   = image.urlSmall75
+            favoriteImage.title        = image.title
+            favoriteImage.geoData      = image.geoData!.data
+            favoriteImage.id           = image.id
             
             do {
                 try context.save()

@@ -14,20 +14,14 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
     // MARK: - Outlets:
     
     @IBOutlet weak var searchTextField: SearchTextField!
-    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var mapView: ImagesMapView!
     
     
-    // MARK: - Properties:
-    
-    private var imagesData: [ImageData]!
-    
-
     // MARK: - Lifecycle SearchPhotoViewController:
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mapView.register(ImageGeoAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         searchTextField.rounded()
     }
     
@@ -37,30 +31,9 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
     private func loadImageGeoDataBySearchText(_ text: String) {
         FlickrKitHelper.loadPolygonLocation(for: text, perPage: Int.random(in: 5 ... 10)) { imagesData in
             guard let loadedData = imagesData else { return }
-            
-            self.imagesData = loadedData
-            let coordinates = loadedData.map() { imgageData in
-                CLLocationCoordinate2D(latitude: imgageData.geoData!.latitude, longitude: imgageData.geoData!.longitude)
-            }
-            
-            self.setUpVisibleMapRectForMapView(self.mapView, with: coordinates)
-            self.setUpAnnotationsForMapView(self.mapView, with: self.imagesData)
+           
+            self.mapView.setUpMapView(with: loadedData)
         }
-    }
-    
-    private func setUpAnnotationsForMapView(_ mapView: MKMapView, with imagesGeoData: [ImageData]) {
-        mapView.addAnnotations(imagesGeoData.map() { ImageGeoAnnotation(with: $0) })
-    }
-    
-    private func setUpVisibleMapRectForMapView(_ mapView: MKMapView, with coordinates: [CLLocationCoordinate2D]) {
-        let mapRects = coordinates.map { coordinate in
-            MKMapRect(origin: MKMapPoint(coordinate), size: MKMapSize())
-        }
-        let fittingRect = mapRects.reduce(MKMapRect.null) { $0.union($1) }
-        let inset: CGFloat = 75
-        let rectEdgePadding = UIEdgeInsets(top: inset, left: inset, bottom: inset, right: inset)
-        
-        mapView.setVisibleMapRect(fittingRect, edgePadding: rectEdgePadding, animated: true)
     }
     
     

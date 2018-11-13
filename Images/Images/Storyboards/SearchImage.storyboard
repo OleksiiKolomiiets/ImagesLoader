@@ -31,7 +31,7 @@
                                     <outlet property="delegate" destination="UM2-Hd-PJy" id="wHx-FJ-aiv"/>
                                 </connections>
                             </textField>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="247" verticalHuggingPriority="248" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" mapType="mutedStandard" showsUserLocation="YES" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDa-t1-S4n">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="247" verticalHuggingPriority="248" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" mapType="mutedStandard" showsUserLocation="YES" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDa-t1-S4n" customClass="ImagesMapView" customModule="Images___iOS_Application" customModuleProvider="target">
                                 <rect key="frame" x="16" y="93" width="343" height="509"/>
                                 <connections>
                                     <outlet property="delegate" destination="UM2-Hd-PJy" id="nHN-a8-kiS"/>

@@ -38,15 +38,21 @@ class FlickrKitHelper {
         tags.forEach() { tag in
             loadingImageDataDispatchGroup.enter()
             
-            self.startLoadingData(for: tag, perPage) { imagesDataArray in
+            startLoadingData(for: tag, perPage) { imagesDataArray in
                 guard let imagesDataArray = imagesDataArray else { return }
-                if self.imageDataDictionary != nil {
-                    self.imageDataDictionary![tag] = imagesDataArray
-                } else {
-                    self.imageDataDictionary = [tag: imagesDataArray]
-                }
                 
-                self.loadingImageDataDispatchGroup.leave()
+                
+                loadLocationFor(imagesData: imagesDataArray, completion: { imageDataWithLocation in
+                    if self.imageDataDictionary != nil {
+                        self.imageDataDictionary![tag] = imageDataWithLocation
+                    } else {
+                        self.imageDataDictionary = [tag: imageDataWithLocation]
+                    }
+                    
+                    self.loadingImageDataDispatchGroup.leave()
+                })
+                
+                
             }
         }
         

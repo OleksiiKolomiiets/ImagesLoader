@@ -72,6 +72,9 @@
                                 </constraints>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="SHOW IN MAP"/>
+                                <connections>
+                                    <action selector="showFavoriteImagesInMap:" destination="Z7f-bM-ARg" eventType="touchUpInside" id="MSJ-3N-eOj"/>
+                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" name="knobColor" catalog="System" colorSpace="catalog"/>
