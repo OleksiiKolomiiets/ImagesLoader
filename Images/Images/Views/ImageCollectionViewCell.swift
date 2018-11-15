@@ -30,9 +30,13 @@ class ImageCollectionViewCell: UICollectionViewCell {
     public func configure(with image: UIImage?) {
         
         if image != nil {
-            spinner.stopAnimating()
+            spinner.stopAnimating()            
+            UIView.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseIn, animations: {
+                self.pictureImageView.alpha = 1.0
+            }, completion: nil)
         } else {
             spinner.startAnimating()
+            pictureImageView.alpha = 0.0
         }
         
         pictureImageView.image = image
