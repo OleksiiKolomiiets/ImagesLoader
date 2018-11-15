@@ -14,7 +14,7 @@
             <objects>
                 <tabBarController extendedLayoutIncludesOpaqueBars="YES" id="VsQ-xI-R4a" sceneMemberID="viewController">
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
-                    <tabBar key="tabBar" hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ptJ-qQ-9u3">
+                    <tabBar key="tabBar" clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ptJ-qQ-9u3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -34,7 +34,7 @@
         <scene sceneID="6BP-rg-ucO">
             <objects>
                 <viewControllerPlaceholder storyboardName="Images" id="m79-je-d0L" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="3iN-KG-0T3"/>
+                    <tabBarItem key="tabBarItem" enabled="NO" title="Item" id="3iN-KG-0T3"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uex-Dd-Uw9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -44,7 +44,7 @@
         <scene sceneID="QMj-Ki-jhM">
             <objects>
                 <viewControllerPlaceholder storyboardName="SearchImage" id="E1c-Zq-rBa" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="afl-3L-88l"/>
+                    <tabBarItem key="tabBarItem" enabled="NO" title="Item" id="afl-3L-88l"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VS2-su-Oo7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -54,7 +54,7 @@
         <scene sceneID="mh9-Xi-pfB">
             <objects>
                 <viewControllerPlaceholder storyboardName="FavoriteImages" id="5Po-VC-SiL" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="d9K-yz-O7J"/>
+                    <tabBarItem key="tabBarItem" enabled="NO" title="Item" id="d9K-yz-O7J"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XNd-8K-sXa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

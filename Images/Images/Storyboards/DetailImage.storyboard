@@ -21,7 +21,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="2" translatesAutoresizingMaskIntoConstraints="NO" id="Rcy-BJ-E0f">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="736" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3jd-eq-ORT">
+                                    <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="736" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3jd-eq-ORT">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                                         <gestureRecognizers/>
                                     </imageView>

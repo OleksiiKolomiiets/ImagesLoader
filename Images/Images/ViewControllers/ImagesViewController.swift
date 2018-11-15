@@ -40,13 +40,13 @@ class ImagesViewController: UIViewController {
 
     // MARK: Outlets:
 
+    @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var shadowView: ShadowView!
     @IBOutlet weak var proposeForDropLable: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
-    @IBOutlet weak var proccesingView: UIView!
-    @IBOutlet weak var coverImageView: UIImageView!
+    
     @IBOutlet weak var dropZoneView: UIView! {
         didSet {
             dropZoneView.addInteraction(UIDropInteraction(delegate: self))
@@ -251,7 +251,6 @@ class ImagesViewController: UIViewController {
             if errors != nil {
 
                 self.hasNetworkProblems = true
-                self.customizeOpacityAnimation(for: self.coverImageView)
 
             } else {
                 self.hasNetworkProblems = false
@@ -263,8 +262,17 @@ class ImagesViewController: UIViewController {
             }
 
             self.startReloadTimer(with: self.hasNetworkProblems ? ImagesViewControllerSettings.kTimeLimitAfterFail : ImagesViewControllerSettings.kTimeLimit)
-            self.proccesingView.isHidden = !self.hasNetworkProblems
-            self.tabBarController?.tabBar.isHidden = self.hasNetworkProblems
+            
+            UIView.animate(withDuration: 0.5, delay: 0.4, options: .curveEaseIn, animations: {
+                self.headerView.alpha = 1.0
+            }, completion: { _ in
+                UIView.animate(withDuration: 0.5, delay: 0.1, options: .curveEaseOut, animations: {
+                    self.tableView.alpha = 1.0
+                }, completion: { _ in
+                    self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = true }
+                })
+            })
+            
         }
     }
 

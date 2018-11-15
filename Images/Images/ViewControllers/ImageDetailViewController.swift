@@ -94,6 +94,9 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         imageView.image = image
         imageView.sizeToFit()
         centerImageView(imageView, in: imageView.superview as! UIScrollView)
+        UIView.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseOut, animations: {
+            self.imageView.alpha = 1.0
+        }, completion: nil)
     }
     
     private func setUpScrolView(_ scrollView: UIScrollView, with image: UIImage?) {

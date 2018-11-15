@@ -20,7 +20,7 @@
                         <subviews>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="59f-A6-cLA" customClass="SearchTextField" customModule="Images___iOS_Application" customModuleProvider="target">
                                 <rect key="frame" x="16" y="53" width="343" height="32"/>
-                                <color key="backgroundColor" name="selectedKnobColor" catalog="System" colorSpace="catalog"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="0.5076519692" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="uG2-Ox-a44"/>
                                 </constraints>
@@ -40,11 +40,10 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="   Images Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1a4-jw-OaQ">
                                 <rect key="frame" x="16" y="28" width="343" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" name="knobColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="0.66641695209999996" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="RDa-t1-S4n" firstAttribute="trailing" secondItem="1a4-jw-OaQ" secondAttribute="trailing" id="1nH-lN-MqP"/>
                             <constraint firstItem="1a4-jw-OaQ" firstAttribute="top" secondItem="jjQ-G8-C7H" secondAttribute="top" constant="8" id="2az-p8-h1G"/>
@@ -59,7 +58,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jjQ-G8-C7H"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Search" image="search" id="mGi-WN-yuA"/>
+                    <tabBarItem key="tabBarItem" enabled="NO" title="Search" image="search" id="mGi-WN-yuA"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="mapView" destination="RDa-t1-S4n" id="UxJ-g4-8AH"/>
