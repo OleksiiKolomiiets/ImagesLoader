@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import MapKit
 
-class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
+class SearchPhotoViewController: UIViewController, UITextFieldDelegate, MKMapViewDelegate {
     
     // MARK: - Outlets:
     
@@ -35,14 +36,22 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    private func animateAlpha(to alpha: CGFloat, for view: UIView) {
+        UIView.animate(withDuration: 0.5, animations: {
+            view.alpha = alpha
+        })
+    }
+    
     
     // MARK: - UITextFieldDelegate:
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        animateAlpha(to: 0.8, for: searchTextField)
         textField.becomeFirstResponder()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        animateAlpha(to: 0.2, for: searchTextField)
         textField.resignFirstResponder()
         
         if !mapView.annotations.isEmpty {
@@ -58,5 +67,10 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate {
     }
     
     
+    // MARK: - MKMapViewDelegate:
+    
+    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
+        animateAlpha(to: 1.0, for: mapView)
+    }
     
 }

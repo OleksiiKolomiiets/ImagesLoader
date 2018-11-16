@@ -18,25 +18,27 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R03-YX-wwm">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="16"/>
-                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" red="0.25132454048917602" green="0.48915284089375521" blue="0.79842163705786795" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="16" id="aXM-kz-4TF"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FCn-LQ-Vqg">
-                    <rect key="frame" x="0.0" y="79" width="375" height="1"/>
-                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <rect key="frame" x="0.0" y="72" width="375" height="8"/>
+                    <color key="backgroundColor" red="0.25132454050000003" green="0.4891528409" blue="0.79842163710000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="1" id="Dph-L4-g2E"/>
+                        <constraint firstAttribute="height" constant="8" id="Dph-L4-g2E"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oK5-H1-avN">
-                    <rect key="frame" x="0.0" y="16" width="375" height="63"/>
+                    <rect key="frame" x="0.0" y="16" width="375" height="56"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Aj-QG-jEY">
-                            <rect key="frame" x="160" y="18.5" width="55" height="26.5"/>
-                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
+                            <rect key="frame" x="159.5" y="15" width="56.5" height="26.5"/>
+                            <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                            <color key="textColor" red="0.25132454050000003" green="0.4891528409" blue="0.79842163710000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
+                            <size key="shadowOffset" width="0.0" height="7"/>
                         </label>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -46,6 +48,7 @@
                     </constraints>
                 </view>
             </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
                 <constraint firstItem="oK5-H1-avN" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="0ZV-ZL-Wb3"/>
                 <constraint firstItem="oK5-H1-avN" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="5dM-aJ-ose"/>

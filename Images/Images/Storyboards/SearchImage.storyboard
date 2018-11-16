@@ -18,42 +18,51 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="59f-A6-cLA" customClass="SearchTextField" customModule="Images___iOS_Application" customModuleProvider="target">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="247" verticalHuggingPriority="248" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" mapType="mutedStandard" showsUserLocation="YES" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDa-t1-S4n" customClass="ImagesMapView" customModule="Images___iOS_Application" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
+                                <connections>
+                                    <outlet property="delegate" destination="UM2-Hd-PJy" id="nHN-a8-kiS"/>
+                                </connections>
+                            </mapView>
+                            <textField opaque="NO" clipsSubviews="YES" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="59f-A6-cLA" customClass="SearchTextField" customModule="Images___iOS_Application" customModuleProvider="target">
                                 <rect key="frame" x="16" y="53" width="343" height="32"/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="0.5076519692" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.25132454050000003" green="0.4891528409" blue="0.79842163710000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="uG2-Ox-a44"/>
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="leftViewTintColor">
+                                        <color key="value" red="0.99953407049999998" green="0.98835557699999999" blue="0.47265523669999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="rightViewTintColor">
+                                        <color key="value" red="0.22102877500000001" green="0.76200133560000005" blue="0.84233474730000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
                                 <connections>
                                     <outlet property="delegate" destination="UM2-Hd-PJy" id="wHx-FJ-aiv"/>
                                 </connections>
                             </textField>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="247" verticalHuggingPriority="248" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" mapType="mutedStandard" showsUserLocation="YES" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDa-t1-S4n" customClass="ImagesMapView" customModule="Images___iOS_Application" customModuleProvider="target">
-                                <rect key="frame" x="16" y="93" width="343" height="509"/>
-                                <connections>
-                                    <outlet property="delegate" destination="UM2-Hd-PJy" id="nHN-a8-kiS"/>
-                                </connections>
-                            </mapView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="   Images Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1a4-jw-OaQ">
                                 <rect key="frame" x="16" y="28" width="343" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="0.83234566450000003" blue="0.47320586440000001" alpha="0.66641695209999996" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="RDa-t1-S4n" firstAttribute="trailing" secondItem="1a4-jw-OaQ" secondAttribute="trailing" id="1nH-lN-MqP"/>
                             <constraint firstItem="1a4-jw-OaQ" firstAttribute="top" secondItem="jjQ-G8-C7H" secondAttribute="top" constant="8" id="2az-p8-h1G"/>
+                            <constraint firstItem="jjQ-G8-C7H" firstAttribute="bottom" secondItem="RDa-t1-S4n" secondAttribute="bottom" id="Cd1-2K-YvQ"/>
                             <constraint firstItem="59f-A6-cLA" firstAttribute="leading" secondItem="1a4-jw-OaQ" secondAttribute="leading" id="Da0-BV-36t"/>
+                            <constraint firstItem="RDa-t1-S4n" firstAttribute="leading" secondItem="lG2-Fx-8G3" secondAttribute="leading" id="Eh7-Gp-aPo"/>
                             <constraint firstItem="59f-A6-cLA" firstAttribute="trailing" secondItem="1a4-jw-OaQ" secondAttribute="trailing" id="L33-a3-CnK"/>
                             <constraint firstItem="59f-A6-cLA" firstAttribute="top" secondItem="1a4-jw-OaQ" secondAttribute="bottom" constant="8" id="QdD-9f-lm0"/>
-                            <constraint firstItem="RDa-t1-S4n" firstAttribute="leading" secondItem="1a4-jw-OaQ" secondAttribute="leading" id="Xyk-7E-93K"/>
-                            <constraint firstItem="RDa-t1-S4n" firstAttribute="top" secondItem="59f-A6-cLA" secondAttribute="bottom" constant="8" id="hhl-7M-AXX"/>
+                            <constraint firstAttribute="trailing" secondItem="RDa-t1-S4n" secondAttribute="trailing" id="WP4-iq-02b"/>
                             <constraint firstItem="jjQ-G8-C7H" firstAttribute="trailing" secondItem="1a4-jw-OaQ" secondAttribute="trailing" constant="16" id="k1d-Ek-LZf"/>
-                            <constraint firstItem="jjQ-G8-C7H" firstAttribute="bottom" secondItem="RDa-t1-S4n" secondAttribute="bottom" constant="16" id="n2C-YN-MJa"/>
+                            <constraint firstItem="RDa-t1-S4n" firstAttribute="top" secondItem="lG2-Fx-8G3" secondAttribute="top" id="kYn-MY-cjC"/>
                             <constraint firstItem="1a4-jw-OaQ" firstAttribute="leading" secondItem="jjQ-G8-C7H" secondAttribute="leading" constant="16" id="xMs-lt-vHL"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jjQ-G8-C7H"/>
