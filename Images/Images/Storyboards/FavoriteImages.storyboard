@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Z7f-bM-ARg">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Z7f-bM-ARg">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="272" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="tEO-kM-Pw9">
-                                <rect key="frame" x="0.0" y="20" width="320" height="499"/>
+                                <rect key="frame" x="0.0" y="100" width="320" height="419"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
@@ -64,12 +64,27 @@
                                     <outlet property="delegate" destination="Z7f-bM-ARg" id="ZkM-2r-WxQ"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GEQ-fN-Eat">
+                                <rect key="frame" x="16" y="52" width="288" height="32"/>
+                                <color key="backgroundColor" name="selectedKnobColor" catalog="System" colorSpace="catalog"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="odH-HU-1HX"/>
+                                </constraints>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="SHOW IN MAP"/>
+                                <connections>
+                                    <action selector="showFavoriteImagesInMap:" destination="Z7f-bM-ARg" eventType="touchUpInside" id="MSJ-3N-eOj"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" name="knobColor" catalog="System" colorSpace="catalog"/>
                         <constraints>
+                            <constraint firstItem="GEQ-fN-Eat" firstAttribute="leading" secondItem="bGP-uN-xVs" secondAttribute="leading" constant="16" id="FvV-rV-DMM"/>
                             <constraint firstItem="tEO-kM-Pw9" firstAttribute="leading" secondItem="bGP-uN-xVs" secondAttribute="leading" id="MZw-a4-TNW"/>
-                            <constraint firstItem="tEO-kM-Pw9" firstAttribute="top" secondItem="bGP-uN-xVs" secondAttribute="top" id="SmC-vg-i3S"/>
+                            <constraint firstItem="bGP-uN-xVs" firstAttribute="trailing" secondItem="GEQ-fN-Eat" secondAttribute="trailing" constant="16" id="T2J-gm-blp"/>
                             <constraint firstItem="tEO-kM-Pw9" firstAttribute="bottom" secondItem="bGP-uN-xVs" secondAttribute="bottom" id="dsK-mp-utw"/>
+                            <constraint firstItem="GEQ-fN-Eat" firstAttribute="top" secondItem="bGP-uN-xVs" secondAttribute="top" constant="32" id="hrF-3A-7BS"/>
+                            <constraint firstItem="tEO-kM-Pw9" firstAttribute="top" secondItem="GEQ-fN-Eat" secondAttribute="bottom" constant="16" id="kXD-wF-JMi"/>
                             <constraint firstItem="tEO-kM-Pw9" firstAttribute="trailing" secondItem="bGP-uN-xVs" secondAttribute="trailing" id="ubb-Hy-IMi"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bGP-uN-xVs"/>
@@ -77,12 +92,13 @@
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="Cxt-a5-Eg8"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
+                        <outlet property="showInMapButton" destination="GEQ-fN-Eat" id="qSp-c2-kB9"/>
                         <outlet property="tableView" destination="tEO-kM-Pw9" id="hhR-x0-fDs"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yll-CJ-Hjd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="60" y="-80.50974512743629"/>
+            <point key="canvasLocation" x="60" y="-81.338028169014081"/>
         </scene>
     </scenes>
 </document>

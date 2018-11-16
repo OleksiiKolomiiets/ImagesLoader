@@ -27,4 +27,8 @@ extension ImageGeoData {
         guard let data = data else { return nil }
         return try? JSONDecoder().decode(ImageGeoData.self, from: data)
     }
+    
+    public var data: Data {
+        return try! JSONEncoder().encode(self) as Data
+    }
 }

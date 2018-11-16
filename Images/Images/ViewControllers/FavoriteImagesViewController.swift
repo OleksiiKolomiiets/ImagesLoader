@@ -14,24 +14,38 @@ fileprivate class FavoriteImagesSettings {
 
 class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    // MARK: Outlets:
+    // MARK: - Outlets:
 
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet private weak var tableView: UITableView!
+    
+    @IBOutlet private weak var showInMapButton: UIButton!
     
     // Making bar content light on dark background
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
+    
+    // MARK: - Action:
 
-    // MARK: VC Lifrcycle:
+    @IBAction private func showFavoriteImagesInMap(_ sender: UIButton) {
+        let storyboard = UIStoryboard(name: "GEOLocation", bundle: Bundle.main)
+        let geoLocationViewController = storyboard.instantiateViewController(withIdentifier: "GEOLocationViewController") as! GEOLocationViewController
+        geoLocationViewController.imagesData = FavoriteManager.allFavoriteImages
+        
+        self.present(geoLocationViewController, animated: true)
+    }
+    
+    
+    // MARK: - VC Lifrcycle:
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         tableView.reloadData()
+        showInMapButton.rounded()
     }
 
-    // MARK: UITableViewDataSource
+    // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return FavoriteManager.allFavoriteImages.count
@@ -68,7 +82,7 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     }
 
 
-    // MARK: UITableViewDelegate
+    // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 

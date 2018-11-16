@@ -40,6 +40,7 @@
 		79D368C8213577AD007E14AE /* ImageLoadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D368C7213577AD007E14AE /* ImageLoadHelper.swift */; };
 		79DB8B6F21552A4400C0874B /* Images.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 79DB8B6E21552A4400C0874B /* Images.storyboard */; };
 		79DF2A012199C50700008EF1 /* SearchTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DF2A002199C50700008EF1 /* SearchTextField.swift */; };
+		79DF2A04219AC80600008EF1 /* ImagesMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DF2A03219AC80600008EF1 /* ImagesMapView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		79D368C7213577AD007E14AE /* ImageLoadHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadHelper.swift; sourceTree = "<group>"; };
 		79DB8B6E21552A4400C0874B /* Images.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Images.storyboard; sourceTree = "<group>"; };
 		79DF2A002199C50700008EF1 /* SearchTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTextField.swift; sourceTree = "<group>"; };
+		79DF2A03219AC80600008EF1 /* ImagesMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesMapView.swift; sourceTree = "<group>"; };
 		FA443E1265A17EE96574F84D /* Pods-Images.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Images.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Images/Pods-Images.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -184,6 +186,7 @@
 				795B8B7A212D815A00E18F16 /* ImageCollectionViewCell.swift */,
 				798EF882215CF98D0060452C /* ShadowView.swift */,
 				791976C821934C50009615C7 /* ImageGeoAnnotationView.swift */,
+				79DF2A03219AC80600008EF1 /* ImagesMapView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -406,6 +409,7 @@
 				79C1563C212EE53F00E486C1 /* CustomSectionHeaderView.swift in Sources */,
 				79D368C8213577AD007E14AE /* ImageLoadHelper.swift in Sources */,
 				794C9D6D212D53D40034E77F /* ImagesViewController.swift in Sources */,
+				79DF2A04219AC80600008EF1 /* ImagesMapView.swift in Sources */,
 				79A58B42218C508C00A10DDD /* Images.xcdatamodeld in Sources */,
 				79A58B142182110000A10DDD /* FavoriteImagesViewController.swift in Sources */,
 				792B68972191D62C0010269C /* SearchPhotoViewController.swift in Sources */,

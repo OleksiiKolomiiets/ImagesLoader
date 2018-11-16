@@ -18,34 +18,44 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" placeholder="Image Search" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="59f-A6-cLA" customClass="SearchTextField" customModule="Images___iOS_Application" customModuleProvider="target">
-                                <rect key="frame" x="16" y="52" width="343" height="32"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="59f-A6-cLA" customClass="SearchTextField" customModule="Images___iOS_Application" customModuleProvider="target">
+                                <rect key="frame" x="16" y="53" width="343" height="32"/>
                                 <color key="backgroundColor" name="selectedKnobColor" catalog="System" colorSpace="catalog"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="32" id="Nmr-nv-62w"/>
+                                    <constraint firstAttribute="height" constant="32" id="uG2-Ox-a44"/>
                                 </constraints>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" returnKeyType="done"/>
                                 <connections>
                                     <outlet property="delegate" destination="UM2-Hd-PJy" id="wHx-FJ-aiv"/>
                                 </connections>
                             </textField>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="mutedStandard" showsUserLocation="YES" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDa-t1-S4n">
-                                <rect key="frame" x="16" y="148" width="343" height="454"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="247" verticalHuggingPriority="248" horizontalCompressionResistancePriority="748" verticalCompressionResistancePriority="748" mapType="mutedStandard" showsUserLocation="YES" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RDa-t1-S4n" customClass="ImagesMapView" customModule="Images___iOS_Application" customModuleProvider="target">
+                                <rect key="frame" x="16" y="93" width="343" height="509"/>
                                 <connections>
                                     <outlet property="delegate" destination="UM2-Hd-PJy" id="nHN-a8-kiS"/>
                                 </connections>
                             </mapView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="   Images Search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1a4-jw-OaQ">
+                                <rect key="frame" x="16" y="28" width="343" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" name="knobColor" catalog="System" colorSpace="catalog"/>
                         <constraints>
-                            <constraint firstItem="jjQ-G8-C7H" firstAttribute="trailing" secondItem="59f-A6-cLA" secondAttribute="trailing" constant="16" id="2ye-GC-ITk"/>
-                            <constraint firstItem="RDa-t1-S4n" firstAttribute="top" secondItem="59f-A6-cLA" secondAttribute="bottom" constant="64" id="8P7-ud-jIZ"/>
-                            <constraint firstItem="59f-A6-cLA" firstAttribute="top" secondItem="jjQ-G8-C7H" secondAttribute="top" constant="32" id="Fna-lg-O1s"/>
-                            <constraint firstItem="59f-A6-cLA" firstAttribute="leading" secondItem="jjQ-G8-C7H" secondAttribute="leading" constant="16" id="Kdc-g7-JoM"/>
-                            <constraint firstItem="RDa-t1-S4n" firstAttribute="trailing" secondItem="59f-A6-cLA" secondAttribute="trailing" id="Rp4-gt-QOr"/>
-                            <constraint firstItem="jjQ-G8-C7H" firstAttribute="bottom" secondItem="RDa-t1-S4n" secondAttribute="bottom" constant="16" id="WEj-xH-Zt1"/>
-                            <constraint firstItem="RDa-t1-S4n" firstAttribute="leading" secondItem="59f-A6-cLA" secondAttribute="leading" id="pHL-Lf-ozZ"/>
+                            <constraint firstItem="RDa-t1-S4n" firstAttribute="trailing" secondItem="1a4-jw-OaQ" secondAttribute="trailing" id="1nH-lN-MqP"/>
+                            <constraint firstItem="1a4-jw-OaQ" firstAttribute="top" secondItem="jjQ-G8-C7H" secondAttribute="top" constant="8" id="2az-p8-h1G"/>
+                            <constraint firstItem="59f-A6-cLA" firstAttribute="leading" secondItem="1a4-jw-OaQ" secondAttribute="leading" id="Da0-BV-36t"/>
+                            <constraint firstItem="59f-A6-cLA" firstAttribute="trailing" secondItem="1a4-jw-OaQ" secondAttribute="trailing" id="L33-a3-CnK"/>
+                            <constraint firstItem="59f-A6-cLA" firstAttribute="top" secondItem="1a4-jw-OaQ" secondAttribute="bottom" constant="8" id="QdD-9f-lm0"/>
+                            <constraint firstItem="RDa-t1-S4n" firstAttribute="leading" secondItem="1a4-jw-OaQ" secondAttribute="leading" id="Xyk-7E-93K"/>
+                            <constraint firstItem="RDa-t1-S4n" firstAttribute="top" secondItem="59f-A6-cLA" secondAttribute="bottom" constant="8" id="hhl-7M-AXX"/>
+                            <constraint firstItem="jjQ-G8-C7H" firstAttribute="trailing" secondItem="1a4-jw-OaQ" secondAttribute="trailing" constant="16" id="k1d-Ek-LZf"/>
+                            <constraint firstItem="jjQ-G8-C7H" firstAttribute="bottom" secondItem="RDa-t1-S4n" secondAttribute="bottom" constant="16" id="n2C-YN-MJa"/>
+                            <constraint firstItem="1a4-jw-OaQ" firstAttribute="leading" secondItem="jjQ-G8-C7H" secondAttribute="leading" constant="16" id="xMs-lt-vHL"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jjQ-G8-C7H"/>
                     </view>

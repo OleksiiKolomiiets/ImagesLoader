@@ -16,6 +16,7 @@ fileprivate class ImageGeoAnnotationViewSettings {
 
 class ImageGeoAnnotationView: MKAnnotationView {
     
+    
     // MARK: - Property:
     
     override var annotation: MKAnnotation? {
@@ -26,13 +27,16 @@ class ImageGeoAnnotationView: MKAnnotationView {
     }
     
     
-    // MARK: - Functions:
+    // MARK: - View lifecycle methods:
     
     override func prepareForReuse() {
         super.prepareForReuse()
         
         image = nil
     }
+    
+    
+    // MARK: - Functions:
     
     private func setUpAnnotationView(with imageGeoAnnotation: ImageGeoAnnotation) {
         setUpSizeOf(self, with: ImageGeoAnnotationViewSettings.kSizeOfImage)

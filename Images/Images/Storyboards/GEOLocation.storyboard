@@ -30,7 +30,7 @@
                                     <action selector="doneButtonTouched:" destination="Vjc-b5-Bpy" eventType="touchUpInside" id="TYb-U6-gBb"/>
                                 </connections>
                             </button>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="satelliteFlyover" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9VV-sx-sHD">
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="satelliteFlyover" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9VV-sx-sHD" customClass="ImagesMapView" customModule="Images___iOS_Application" customModuleProvider="target">
                                 <rect key="frame" x="16" y="86" width="343" height="565"/>
                             </mapView>
                         </subviews>
