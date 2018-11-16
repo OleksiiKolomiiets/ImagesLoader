@@ -254,7 +254,7 @@
     </scenes>
     <resources>
         <image name="bg_collection_view" width="1511" height="872"/>
-        <image name="flickr_logo" width="800" height="242"/>
+        <image name="flickr_logo" width="1200" height="363"/>
         <image name="inbox" width="21" height="21"/>
         <image name="space" width="360" height="640"/>
     </resources>

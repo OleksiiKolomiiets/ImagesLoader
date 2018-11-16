@@ -39,8 +39,7 @@ class ImageGeoAnnotationView: MKAnnotationView {
     // MARK: - Functions:
     
     private func setUpAnnotationView(with imageGeoAnnotation: ImageGeoAnnotation) {
-        displayPriority = .defaultHigh
-        
+               
         setUpSizeOf(self, with: ImageGeoAnnotationViewSettings.kSizeOfImage)
         
         setUpCalloutBy(offset: ImageGeoAnnotationViewSettings.kCalloutOffset)

@@ -18,6 +18,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var spinner    : UIActivityIndicatorView!
     @IBOutlet weak var tabButton  : UITabBarItem!
     @IBOutlet weak var doneButton : UIButton!
+    @IBOutlet weak var geoButton  : UIButton!
     
     
     // MARK: - Variables:
@@ -65,6 +66,8 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         
         addDoubleTapGesture(to: view)
         doneButton.isHidden = isDoneButtonHidden
+        doneButton.rounded()
+        geoButton.rounded()
     }
     
     // Making bar content light on black background

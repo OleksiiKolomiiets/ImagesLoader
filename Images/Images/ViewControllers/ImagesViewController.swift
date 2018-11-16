@@ -169,7 +169,12 @@ class ImagesViewController: UIViewController {
         removingLongPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(self.longTap(_:)))
         collectionView.addGestureRecognizer(removingLongPressGesture)
     }
-
+    
+    // Making bar content light on dark background
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
@@ -286,7 +291,7 @@ class ImagesViewController: UIViewController {
         animation.repeatCount = .infinity
         animation.autoreverses = true
         // create opacity animation to view
-        view.layer.add(animation, forKey: "Propose opacity")
+        view.layer.add(animation, forKey: "opacity")
     }
 
     private func configureCollectionViewLayoutItemSize() {

@@ -20,11 +20,6 @@ class FavoriteImagesViewController: UIViewController, UITableViewDelegate, UITab
     
     @IBOutlet private weak var showInMapButton: UIButton!
     
-    // Making bar content light on dark background
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
-    
     // MARK: - Action:
 
     @IBAction private func showFavoriteImagesInMap(_ sender: UIButton) {
