@@ -18,6 +18,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var spinner    : UIActivityIndicatorView!
     @IBOutlet weak var tabButton  : UITabBarItem!
     @IBOutlet weak var doneButton : UIButton!
+    @IBOutlet weak var geoButton  : UIButton!
     
     
     // MARK: - Variables:
@@ -65,6 +66,8 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         
         addDoubleTapGesture(to: view)
         doneButton.isHidden = isDoneButtonHidden
+        doneButton.rounded()
+        geoButton.rounded()
     }
     
     // Making bar content light on black background
@@ -94,6 +97,9 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         imageView.image = image
         imageView.sizeToFit()
         centerImageView(imageView, in: imageView.superview as! UIScrollView)
+        UIView.animate(withDuration: 0.5, delay: 0.2, options: .curveEaseOut, animations: {
+            self.imageView.alpha = 1.0
+        }, completion: nil)
     }
     
     private func setUpScrolView(_ scrollView: UIScrollView, with image: UIImage?) {

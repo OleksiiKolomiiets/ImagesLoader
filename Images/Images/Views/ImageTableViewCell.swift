@@ -30,8 +30,12 @@ class ImageTableViewCell: UITableViewCell {
         
         if image != nil  {
             spinner.stopAnimating()
+            UIView.animate(withDuration: 0.3, delay: 0.2, options: .curveEaseIn, animations: {
+                self.pictureImageView.alpha = 1.0
+            }, completion: nil)            
         } else {
             spinner.startAnimating()
+            pictureImageView.alpha = 0.0
         }
         
         pictureImageView.image = image

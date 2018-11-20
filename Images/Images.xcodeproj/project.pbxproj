@@ -184,9 +184,7 @@
 				794C9D7E212D61000034E77F /* ImageTableViewCell.swift */,
 				79A58B152182122900A10DDD /* FavoriteImageTableViewCell.swift */,
 				795B8B7A212D815A00E18F16 /* ImageCollectionViewCell.swift */,
-				798EF882215CF98D0060452C /* ShadowView.swift */,
 				791976C821934C50009615C7 /* ImageGeoAnnotationView.swift */,
-				79DF2A03219AC80600008EF1 /* ImagesMapView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -240,6 +238,8 @@
 		79DF2A022199C50F00008EF1 /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
+				798EF882215CF98D0060452C /* ShadowView.swift */,
+				79DF2A03219AC80600008EF1 /* ImagesMapView.swift */,
 				79DF2A002199C50700008EF1 /* SearchTextField.swift */,
 			);
 			path = Subclasses;
