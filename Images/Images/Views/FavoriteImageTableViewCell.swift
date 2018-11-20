@@ -22,11 +22,16 @@ class FavoriteImageTableViewCell: UITableViewCell {
     
     public func setUpImageView(by image: UIImage?) {
         
-        if image == nil {
-            spinner.startAnimating()
-        } else {
+        if image != nil {
             spinner.stopAnimating()
-            favoriteImageView.image = image
+            UIView.animate(withDuration: 0.3, delay: 0.2, options: .curveEaseIn, animations: {
+                self.favoriteImageView.alpha = 1.0
+            }, completion: nil)
+        } else {
+            spinner.startAnimating()
+            favoriteImageView.alpha = 0.0
         }
+        
+        favoriteImageView.image = image
     }
 }
