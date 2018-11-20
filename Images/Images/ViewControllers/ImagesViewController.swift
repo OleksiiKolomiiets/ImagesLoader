@@ -329,6 +329,7 @@ extension ImagesViewController: ShadowViewDelegate {
         shadowView.dismissShadow(animated: true, finished: {
 
             shadowView.isHidden = true
+            self.tableView.deselectRow(at: self.selectedCellPath, animated: true)
             self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = true }
             if didUserTapOnHighlightedFrame {
 
