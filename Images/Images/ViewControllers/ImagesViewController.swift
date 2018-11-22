@@ -517,6 +517,22 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     // MARK: UICollectionViewDataSource:
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if removeImagesActionStarts {
+            let cellToDelete = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
+            cellToDelete.stopAnimateCellRemoving()
+            // remove the image and refresh the collection view
+            UIView.animate(withDuration: 0.5, delay: 0.4, options: .curveEaseIn, animations: {
+                cellToDelete.alpha = 0.1
+            }) { [weak self] _ in
+                collectionView.performBatchUpdates({
+                    collectionView.deleteItems(at: [indexPath])
+                    self?.collectionViewThrownedImageURLs?.remove(at: indexPath.row)
+                })
+            }
+        }
+    }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionViewThrownedImageURLs?.count ?? 0
