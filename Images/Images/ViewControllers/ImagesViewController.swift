@@ -71,13 +71,7 @@ class ImagesViewController: UIViewController {
             dropZoneView.isHidden = !isDragSessionWillBegin
         }
     }
-    private var collectionViewThrownedImageURLs: [URL]? {
-        didSet {
-            guard let imageURLs = collectionViewThrownedImageURLs else { return }
-            collectionView.reloadData()
-            removeImagesActionStarts = !imageURLs.isEmpty
-        }
-    }
+    private var collectionViewThrownedImageURLs: [URL]?
 
     private var randomTags: [String] {
 
@@ -96,7 +90,7 @@ class ImagesViewController: UIViewController {
     // MARK: Actions:
 
     // Method to switch remove action:
-    @objc private func longTap(_ gesture: UIGestureRecognizer){
+    @objc private func longTap(_ gesture: UIGestureRecognizer) {
 
         switch gesture.state {
 
@@ -581,6 +575,16 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
 
         var indexPathes = [IndexPath]()
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
+        
+        removingLongPressGesture.state = .ended
+        if removeImagesActionStarts {
+            removeImagesActionStarts = false
+            collectionView.visibleCells.forEach { collectionViewCell in
+                if let cell = collectionViewCell as? ImageCollectionViewCell {
+                    cell.stopAnimateCellRemoving()
+                }
+            }
+        }        
 
         coordinator.session.loadObjects(ofClass: NSString.self) { (nsstrings) in
 
@@ -604,8 +608,6 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
 
                 collectionView.performBatchUpdates({
                     self.collectionViewThrownedImageURLs = array
-                    self.removeImagesActionStarts = false
-
                     collectionView.insertItems(at: indexPathes)
                 })
             }
