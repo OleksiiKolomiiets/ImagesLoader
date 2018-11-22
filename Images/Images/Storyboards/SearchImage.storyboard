@@ -10,7 +10,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Search-->
+        <!--Search Photo View Controller-->
         <scene sceneID="Rz0-iD-aBh">
             <objects>
                 <viewController id="UM2-Hd-PJy" customClass="SearchPhotoViewController" customModule="Images___iOS_Application" customModuleProvider="target" sceneMemberID="viewController">
@@ -24,8 +24,16 @@
                                     <outlet property="delegate" destination="UM2-Hd-PJy" id="nHN-a8-kiS"/>
                                 </connections>
                             </mapView>
+                            <visualEffectView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="42e-Nd-YsM">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="84"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="ONN-qu-Syu">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="84"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                </view>
+                                <blurEffect style="regular"/>
+                            </visualEffectView>
                             <textField opaque="NO" clipsSubviews="YES" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="59f-A6-cLA" customClass="SearchTextField" customModule="Images___iOS_Application" customModuleProvider="target">
-                                <rect key="frame" x="16" y="52" width="343" height="32"/>
+                                <rect key="frame" x="16" y="36" width="343" height="32"/>
                                 <color key="backgroundColor" red="0.25132454050000003" green="0.4891528409" blue="0.79842163710000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -49,29 +57,31 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="59f-A6-cLA" firstAttribute="top" secondItem="jjQ-G8-C7H" secondAttribute="top" constant="32" id="5iu-1H-8IU"/>
+                            <constraint firstItem="59f-A6-cLA" firstAttribute="top" secondItem="jjQ-G8-C7H" secondAttribute="top" constant="16" id="5iu-1H-8IU"/>
                             <constraint firstItem="59f-A6-cLA" firstAttribute="leading" secondItem="jjQ-G8-C7H" secondAttribute="leading" constant="16" id="9Du-gS-7hI"/>
                             <constraint firstItem="jjQ-G8-C7H" firstAttribute="bottom" secondItem="RDa-t1-S4n" secondAttribute="bottom" id="Cd1-2K-YvQ"/>
                             <constraint firstItem="RDa-t1-S4n" firstAttribute="leading" secondItem="lG2-Fx-8G3" secondAttribute="leading" id="Eh7-Gp-aPo"/>
+                            <constraint firstItem="42e-Nd-YsM" firstAttribute="leading" secondItem="jjQ-G8-C7H" secondAttribute="leading" id="TB0-Zf-Ldo"/>
                             <constraint firstAttribute="trailing" secondItem="RDa-t1-S4n" secondAttribute="trailing" id="WP4-iq-02b"/>
                             <constraint firstItem="RDa-t1-S4n" firstAttribute="top" secondItem="lG2-Fx-8G3" secondAttribute="top" id="kYn-MY-cjC"/>
                             <constraint firstItem="jjQ-G8-C7H" firstAttribute="trailing" secondItem="59f-A6-cLA" secondAttribute="trailing" constant="16" id="q3e-SI-seS"/>
+                            <constraint firstItem="42e-Nd-YsM" firstAttribute="bottom" secondItem="59f-A6-cLA" secondAttribute="bottom" constant="16" id="u7g-ZZ-7t3"/>
+                            <constraint firstItem="jjQ-G8-C7H" firstAttribute="trailing" secondItem="42e-Nd-YsM" secondAttribute="trailing" id="ufh-9t-qxb"/>
+                            <constraint firstItem="42e-Nd-YsM" firstAttribute="top" secondItem="lG2-Fx-8G3" secondAttribute="top" id="wux-Vm-PHE"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jjQ-G8-C7H"/>
                     </view>
-                    <tabBarItem key="tabBarItem" enabled="NO" title="Search" image="search" id="mGi-WN-yuA"/>
+                    <tabBarItem key="tabBarItem" title="" id="mGi-WN-yuA"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="mapView" destination="RDa-t1-S4n" id="UxJ-g4-8AH"/>
                         <outlet property="searchTextField" destination="59f-A6-cLA" id="gbS-zV-5dw"/>
+                        <outlet property="serachBackgroundVisualEffectsView" destination="42e-Nd-YsM" id="HZn-8u-gZV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Z05-uO-pWY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="95" y="161"/>
+            <point key="canvasLocation" x="93.599999999999994" y="160.56971514242881"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="search" width="27" height="27"/>
-    </resources>
 </document>

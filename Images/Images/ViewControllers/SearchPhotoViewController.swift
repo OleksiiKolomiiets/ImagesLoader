@@ -14,8 +14,10 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate, MKMapVie
     // MARK: - Outlets:
     
     @IBOutlet private weak var searchTextField: SearchTextField!
+    
     @IBOutlet private weak var mapView: ImagesMapView!
     
+    @IBOutlet private weak var serachBackgroundVisualEffectsView: UIVisualEffectView!
     
     // MARK: - Lifecycle SearchPhotoViewController:
     
@@ -47,11 +49,13 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate, MKMapVie
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         animateAlpha(to: 0.8, for: searchTextField)
+        serachBackgroundVisualEffectsView.isHidden = false
         textField.becomeFirstResponder()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         animateAlpha(to: 0.2, for: searchTextField)
+        serachBackgroundVisualEffectsView.isHidden = true
         textField.resignFirstResponder()
         
         if !mapView.annotations.isEmpty {

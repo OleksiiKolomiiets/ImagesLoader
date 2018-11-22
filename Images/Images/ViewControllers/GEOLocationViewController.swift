@@ -7,14 +7,16 @@
 //
 
 import UIKit
+import MapKit
 
-class GEOLocationViewController: UIViewController {
+class GEOLocationViewController: UIViewController, MKMapViewDelegate {
     
     
     // MARK: - Outlets:
     
     @IBOutlet weak var mapView: ImagesMapView!
     
+    @IBOutlet weak var doneButton: UIButton!
     
     // MARK: - Properties:
     
@@ -27,6 +29,7 @@ class GEOLocationViewController: UIViewController {
         super.viewDidLoad()
         
         mapView.setUpMapView(with: imagesData)
+        doneButton.rounded()
     }
     
     
@@ -34,5 +37,14 @@ class GEOLocationViewController: UIViewController {
     
     @IBAction func doneButtonTouched(_ sender: UIButton) {
         self.dismiss(animated: true)
+    }
+    
+    
+    // MARK: - MKMapViewDelegate:
+    
+    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool) {
+        UIView.animate(withDuration: 0.5, animations: {
+            mapView.alpha = 1.0
+        })
     }
 }
