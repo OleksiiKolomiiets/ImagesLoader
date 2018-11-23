@@ -65,16 +65,16 @@ class ShadowView: UIView {
         isOpenShadow = true
         
         let shadowedPath = getCirclePath(by: frame, inverse: true)
-        setUpShadowLayer(shadowLayer, with: shadowedPath.cgPath, inside: layer)
+        setupShadowLayer(shadowLayer, with: shadowedPath.cgPath, inside: layer)
         
         // Adding animation
         if animated {
             let unshadowedPath = getCirclePath(inverse: true)
-            setUpAnimation(from: unshadowedPath.cgPath, to: shadowedPath.cgPath, duration: duration)
+            setupAnimation(from: unshadowedPath.cgPath, to: shadowedPath.cgPath, duration: duration)
         }
     }
     
-    private func setUpShadowLayer(_ shadowLayer: CAShapeLayer, with path: CGPath, inside layer: CALayer) {
+    private func setupShadowLayer(_ shadowLayer: CAShapeLayer, with path: CGPath, inside layer: CALayer) {
         // Setting animation layer
         shadowLayer.fillRule = .evenOdd
         shadowLayer.path = path
@@ -86,12 +86,12 @@ class ShadowView: UIView {
         isOpenShadow = false
         
         let unshadowedPath = getCirclePath(inverse: true)
-        setUpShadowLayer(shadowLayer, with: unshadowedPath.cgPath, inside: layer)
+        setupShadowLayer(shadowLayer, with: unshadowedPath.cgPath, inside: layer)
         
         // Adding animation
         if animated {
             let shadowedPath = getCirclePath(by: highlightedFrame, inverse: true)
-            setUpAnimation(from: shadowedPath.cgPath, to: unshadowedPath.cgPath, duration: duration)
+            setupAnimation(from: shadowedPath.cgPath, to: unshadowedPath.cgPath, duration: duration)
             DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
                 finished()
             }
@@ -125,7 +125,7 @@ class ShadowView: UIView {
         return path
     }
     
-    private func setUpAnimation(from: CGPath, to: CGPath, duration: Double) {
+    private func setupAnimation(from: CGPath, to: CGPath, duration: Double) {
         
         let animate = CABasicAnimation(keyPath: "path")
         

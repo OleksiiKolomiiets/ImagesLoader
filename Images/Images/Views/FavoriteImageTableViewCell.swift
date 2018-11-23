@@ -20,7 +20,7 @@ class FavoriteImageTableViewCell: UITableViewCell {
         favoriteImageView.image = nil
     }
     
-    public func setUpImageView(by image: UIImage?) {
+    public func setupImageView(by image: UIImage?) {
         
         if image != nil {
             spinner.stopAnimating()

@@ -652,7 +652,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
 
         guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
 
-        setUpFavoriteImagesViewController(with: droppedItems, in: tabBarViewControllers)
+        setupFavoriteImagesViewController(with: droppedItems, in: tabBarViewControllers)
 
         /*
          Freez
@@ -662,7 +662,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
     }
 
     /// Functionality for adding favorite images
-    private func setUpFavoriteImagesViewController(with droppedItems: [NSItemProviderReading], in tabBarViewControllers: [UIViewController]) {
+    private func setupFavoriteImagesViewController(with droppedItems: [NSItemProviderReading], in tabBarViewControllers: [UIViewController]) {
         var dataArray = [Data]()
         for droppedItem in droppedItems {
              dataArray.append(getData(from: droppedItem))

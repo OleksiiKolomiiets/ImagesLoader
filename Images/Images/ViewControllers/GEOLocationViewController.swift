@@ -26,7 +26,7 @@ class GEOLocationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        mapView.setUpMapView(with: imagesData)
+        mapView.setupMapView(with: imagesData)
     }
     
     
