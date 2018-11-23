@@ -128,14 +128,7 @@ class ImagesViewController: UIViewController {
     // Remove elements from collection view method:
     @IBAction private func removeButtonTouch(_ sender: UIButton) {
 
-        let hitPoint = sender.convert(CGPoint.zero, to: collectionView)
-        let hitIndex = collectionView.indexPathForItem(at: hitPoint)!
-
-        // remove the image and refresh the collection view
-        collectionView.performBatchUpdates({
-            collectionView.deleteItems(at: [hitIndex])
-            collectionViewThrownedImageURLs?.remove(at: hitIndex.row)
-        })
+       
     }
 
 
@@ -186,6 +179,9 @@ class ImagesViewController: UIViewController {
         // ending timer work when user go to anothe screen
 
         stopReloadTimer()
+        
+        stopAnimateVisibleCellsIfAnimating(for: collectionView)
+        
     }
 
 
@@ -323,6 +319,18 @@ class ImagesViewController: UIViewController {
 
         return imageDataSource![row]
     }
+    
+    private func stopAnimateVisibleCellsIfAnimating(for collectionView: UICollectionView) {
+        if removeImagesActionStarts {
+            removeImagesActionStarts = false
+            collectionView.visibleCells.forEach { collectionViewCell in
+                if let cell = collectionViewCell as? ImageCollectionViewCell {
+                    cell.stopAnimateCellRemoving()
+                }
+            }
+        }
+    }
+    
 
 
 }
@@ -517,8 +525,8 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
             let cellToDelete = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
             cellToDelete.stopAnimateCellRemoving()
             // remove the image and refresh the collection view
-            UIView.animate(withDuration: 0.5, delay: 0.4, options: .curveEaseIn, animations: {
-                cellToDelete.alpha = 0.1
+            UIView.animate(withDuration: 0.5, delay: 0.1, options: .curveEaseIn, animations: {
+                cellToDelete.alpha = 0.5
             }) { [weak self] _ in
                 collectionView.performBatchUpdates({
                     collectionView.deleteItems(at: [indexPath])
@@ -577,14 +585,8 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
         
         removingLongPressGesture.state = .ended
-        if removeImagesActionStarts {
-            removeImagesActionStarts = false
-            collectionView.visibleCells.forEach { collectionViewCell in
-                if let cell = collectionViewCell as? ImageCollectionViewCell {
-                    cell.stopAnimateCellRemoving()
-                }
-            }
-        }        
+        
+        stopAnimateVisibleCellsIfAnimating(for: collectionView)
 
         coordinator.session.loadObjects(ofClass: NSString.self) { (nsstrings) in
 
