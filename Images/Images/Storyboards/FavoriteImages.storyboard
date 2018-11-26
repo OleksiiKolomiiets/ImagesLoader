@@ -15,7 +15,7 @@
             <objects>
                 <viewController storyboardIdentifier="FavoriteImagesViewController" id="Z7f-bM-ARg" customClass="FavoriteImagesViewController" customModule="Images___iOS_Application" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Tbq-Vz-6iA">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="272" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="tEO-kM-Pw9">
@@ -89,8 +89,8 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bGP-uN-xVs"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" id="Cxt-a5-Eg8"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <tabBarItem key="tabBarItem" title="" selectedImage="favourite-selected" id="Cxt-a5-Eg8"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <outlet property="showInMapButton" destination="GEQ-fN-Eat" id="qSp-c2-kB9"/>
                         <outlet property="tableView" destination="tEO-kM-Pw9" id="hhR-x0-fDs"/>
@@ -98,7 +98,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yll-CJ-Hjd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="60" y="-81.338028169014081"/>
+            <point key="canvasLocation" x="1057.5" y="-81.338028169014081"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="favourite-selected" width="30" height="30"/>
+    </resources>
 </document>

@@ -30,7 +30,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="84"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 </view>
-                                <blurEffect style="regular"/>
+                                <blurEffect style="dark"/>
                             </visualEffectView>
                             <textField opaque="NO" clipsSubviews="YES" alpha="0.20000000000000001" contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" horizontalCompressionResistancePriority="749" contentHorizontalAlignment="center" contentVerticalAlignment="center" clearsOnBeginEditing="YES" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="59f-A6-cLA" customClass="SearchTextField" customModule="Images___iOS_Application" customModuleProvider="target">
                                 <rect key="frame" x="16" y="36" width="343" height="32"/>
@@ -71,7 +71,13 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="jjQ-G8-C7H"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" id="mGi-WN-yuA"/>
+                    <tabBarItem key="tabBarItem" title="" selectedImage="search-selected" id="mGi-WN-yuA">
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="color" keyPath="imageTint">
+                                <color key="value" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
+                    </tabBarItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="mapView" destination="RDa-t1-S4n" id="UxJ-g4-8AH"/>
@@ -84,4 +90,7 @@
             <point key="canvasLocation" x="93.599999999999994" y="160.56971514242881"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="search-selected" width="27" height="27"/>
+    </resources>
 </document>

@@ -149,7 +149,7 @@
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="5" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="NxR-Dk-fRa">
                                                     <rect key="frame" x="132" y="48.666666666666664" width="0.0" height="0.0"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="thin" pointSize="15"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="sN0-A1-Hku">
@@ -239,7 +239,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="KH4-IR-CVc"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="" id="BSE-e8-cd4"/>
+                    <tabBarItem key="tabBarItem" title="" selectedImage="iamges-selected" id="BSE-e8-cd4"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
@@ -260,6 +260,7 @@
     </scenes>
     <resources>
         <image name="flickr_logo" width="1200" height="363"/>
+        <image name="iamges-selected" width="21" height="21"/>
         <image name="space" width="360" height="640"/>
     </resources>
 </document>

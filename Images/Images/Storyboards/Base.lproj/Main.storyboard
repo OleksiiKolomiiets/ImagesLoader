@@ -13,12 +13,12 @@
         <scene sceneID="mzv-ts-vYz">
             <objects>
                 <tabBarController extendedLayoutIncludesOpaqueBars="YES" id="VsQ-xI-R4a" sceneMemberID="viewController">
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
-                    <tabBar key="tabBar" clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ptJ-qQ-9u3">
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <tabBar key="tabBar" clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" barStyle="black" id="ptJ-qQ-9u3">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="selectedImageTintColor" red="0.25132454050000003" green="0.4891528409" blue="0.79842163710000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
                     <connections>
                         <segue destination="m79-je-d0L" kind="relationship" relationship="viewControllers" id="Pyz-vx-rAG"/>
@@ -54,7 +54,9 @@
         <scene sceneID="mh9-Xi-pfB">
             <objects>
                 <viewControllerPlaceholder storyboardName="FavoriteImages" id="5Po-VC-SiL" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" enabled="NO" title="Item" id="d9K-yz-O7J"/>
+                    <tabBarItem key="tabBarItem" enabled="NO" title="Item" id="d9K-yz-O7J">
+                        <color key="badgeColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
+                    </tabBarItem>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XNd-8K-sXa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
