@@ -370,17 +370,40 @@ extension ImagesViewController: ImageTableViewCellDelegate {
         guard let indexPath = tableView.indexPathForRow(at: sender.location(in: tableView)) else { return }
         selectedCellPath = indexPath
         let globalRectangle = getGlobalRectangleForCell(at: indexPath)
-        
-        
         let tappedLocation = sender.location(in: view)
-        let tappedRect = CGRect(x: tappedLocation.x - CGFloat(25),
-                                y: tappedLocation.y - CGFloat(25),
-                                width: 50,
-                                height: 50)
+        
+        let tappedRect = getTappedRect(for: tappedLocation, in: globalRectangle)
         
         self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = false }
         shadowView.isHidden = false
         shadowView.showShadow(for: tappedRect, animated: true)
+    }
+    
+    private func getTappedRect(for point: CGPoint, in container: CGRect) -> CGRect {
+        let tappedRadius  : CGFloat = 25
+        let tappedDiameter: CGFloat = tappedRadius * CGFloat(2)
+        let rectSize = CGSize(width: tappedDiameter, height: tappedDiameter)
+        let pointX: CGFloat = point.x - tappedRadius
+        let pointY: CGFloat = point.y - tappedRadius
+        
+        var tappedRect = CGRect(origin: CGPoint(x: pointX, y: pointY), size: rectSize)
+        
+        if !container.contains(tappedRect) {
+            
+            if container.origin.x >= pointX {
+                tappedRect.origin.x = container.origin.x
+            } else if container.origin.x + container.width <= pointX + tappedDiameter {
+                tappedRect.origin.x = container.origin.x + container.width - tappedDiameter
+            }
+            
+            if container.origin.y >= pointY {
+                tappedRect.origin.y = container.origin.y
+            } else if container.origin.y + container.height <= pointY + tappedDiameter {
+                tappedRect.origin.y = container.origin.y + container.height - tappedDiameter
+            }
+            
+        }
+        return tappedRect
     }
 }
 
