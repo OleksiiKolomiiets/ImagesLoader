@@ -360,6 +360,31 @@ extension ImagesViewController: ShadowViewDelegate {
 }
 
 
+// MARK: - ImageTableViewCellDelegate:
+
+extension ImagesViewController: ImageTableViewCellDelegate {
+    func cellTapped(by sender: UITapGestureRecognizer) {
+        print(sender.location(in: tableView))
+        print(sender.location(in: view))
+        
+        guard let indexPath = tableView.indexPathForRow(at: sender.location(in: tableView)) else { return }
+        selectedCellPath = indexPath
+        let globalRectangle = getGlobalRectangleForCell(at: indexPath)
+        
+        
+        let tappedLocation = sender.location(in: view)
+        let tappedRect = CGRect(x: tappedLocation.x - CGFloat(25),
+                                y: tappedLocation.y - CGFloat(25),
+                                width: 50,
+                                height: 50)
+        
+        self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = false }
+        shadowView.isHidden = false
+        shadowView.showShadow(for: tappedRect, animated: true)
+    }
+}
+
+
 // MARK: - Table view extension
 
 extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
@@ -385,6 +410,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
                 self.configureTableViewCell(by: indexPath, image: image, title: title)
             })
         }
+        cell.delegate = self
 
         cell.configure(with: cellImage, title) // cell always should be init  cell.imageView.image = nil
 
