@@ -364,22 +364,29 @@ extension ImagesViewController: ShadowViewDelegate {
 
 extension ImagesViewController: ImageTableViewCellDelegate {
     func cellTapped(by sender: UITapGestureRecognizer) {
-        print(sender.location(in: tableView))
-        print(sender.location(in: view))
+        let tapLocationInTableView = sender.location(in: tableView)
         
-        guard let indexPath = tableView.indexPathForRow(at: sender.location(in: tableView)) else { return }
+        guard let indexPath = tableView.indexPathForRow(at: tapLocationInTableView) else { return }
+        
         selectedCellPath = indexPath
-        let globalRectangle = getGlobalRectangleForCell(at: indexPath)
-        let tappedLocation = sender.location(in: view)
         
-        let tappedRect = getTappedRect(for: tappedLocation, in: globalRectangle)
+        let tapCellFrame = tableView.rectForRow(at:indexPath)
+        let isTappedCellOutOfVissibleScreen = !tableView.bounds.contains(tapCellFrame)
+        if isTappedCellOutOfVissibleScreen {
+            tableView.scrollRectToVisible(tapCellFrame, animated: false)
+        }
+        
+        let tapCellFrameInShadowView = tableView.convert(tapCellFrame, to: shadowView)
+        let tapLocationInRootView = sender.location(in: view)
+        let shadowAnimationRect = getShadowAnimationRect(for: tapLocationInRootView, in: tapCellFrameInShadowView)
         
         self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = false }
+        
         shadowView.isHidden = false
-        shadowView.showShadow(for: tappedRect, animated: true)
+        shadowView.showShadow(for: shadowAnimationRect, animated: true)
     }
     
-    private func getTappedRect(for point: CGPoint, in container: CGRect) -> CGRect {
+    private func getShadowAnimationRect(for point: CGPoint, in container: CGRect) -> CGRect {
         let tappedRadius  : CGFloat = 25
         let tappedDiameter: CGFloat = tappedRadius * CGFloat(2)
         let rectSize = CGSize(width: tappedDiameter, height: tappedDiameter)
@@ -482,18 +489,15 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
     }
 
     // Send selected data to ImageDetailViewController and present it
-    private func getGlobalRectangleForCell(at indexPath: IndexPath) -> CGRect {
-        return tableView.convert(tableView.rectForRow(at: indexPath), to: shadowView)
-    }
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         selectedCellPath = indexPath
-        let globalRectangle = getGlobalRectangleForCell(at: indexPath)
+        let tapCellFrame = tableView.rectForRow(at:indexPath)
+        let tapCellFrameInShadowView = tableView.convert(tapCellFrame, to: shadowView)
 
         self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = false }
         shadowView.isHidden = false
-        shadowView.showShadow(for: globalRectangle, animated: true)
+        shadowView.showShadow(for: tapCellFrameInShadowView, animated: true)
     }
 
 }
