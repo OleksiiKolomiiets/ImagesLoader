@@ -30,7 +30,7 @@ class ImagesMapView: MKMapView {
     
     // MARK: - Functions:
     
-    public func setUpMapView(with imagesData: [ImageData]) {
+    public func setupMapView(with imagesData: [ImageData]) {
         
         addAnnotations(imagesData.map() { ImageGeoAnnotation(with: $0) })
         
@@ -40,11 +40,11 @@ class ImagesMapView: MKMapView {
             let singlePoint = cootdinates.first {
             setCenter(singlePoint, animated: true)
         } else {
-            setUpVisibleMapRectForMapView(with: cootdinates)
+            setupVisibleMapRectForMapView(with: cootdinates)
         }
     }
     
-    private func setUpVisibleMapRectForMapView(with coordinates: [CLLocationCoordinate2D]) {
+    private func setupVisibleMapRectForMapView(with coordinates: [CLLocationCoordinate2D]) {
         let mapRects = coordinates.map { coordinate in
             MKMapRect(origin: MKMapPoint(coordinate), size: MKMapSize())
         }

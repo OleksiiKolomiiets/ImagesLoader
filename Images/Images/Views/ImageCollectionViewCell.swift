@@ -48,10 +48,10 @@ class ImageCollectionViewCell: UICollectionViewCell {
         
         let shakeAnimation = CABasicAnimation(keyPath: "transform.rotation")
         shakeAnimation.autoreverses = true
-        shakeAnimation.duration = 0.25
+        shakeAnimation.duration = 0.2
         shakeAnimation.repeatCount = .infinity
         
-        let startAngle: Float = (-2) * Float.pi/180
+        let startAngle: Float = -.pi/720
         let stopAngle = -startAngle
         
         shakeAnimation.fromValue = NSNumber(value: startAngle as Float)

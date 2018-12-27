@@ -127,7 +127,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H1M-TR-gbN">
-                                <rect key="frame" x="0.0" y="348" width="375" height="464"/>
+                                <rect key="frame" x="0.0" y="348" width="375" height="381"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -235,7 +235,7 @@
                             <constraint firstItem="KH4-IR-CVc" firstAttribute="trailing" secondItem="tdN-RT-arj" secondAttribute="trailing" id="nrO-LM-8v0"/>
                             <constraint firstItem="PIo-gh-jkD" firstAttribute="top" secondItem="j0g-xs-tP2" secondAttribute="bottom" id="oOS-1l-cmk"/>
                             <constraint firstItem="0un-16-oP2" firstAttribute="leading" secondItem="umi-wv-8HL" secondAttribute="leading" id="wB9-fx-9Qr"/>
-                            <constraint firstItem="H1M-TR-gbN" firstAttribute="bottom" secondItem="umi-wv-8HL" secondAttribute="bottom" id="zLZ-hF-FGC"/>
+                            <constraint firstItem="H1M-TR-gbN" firstAttribute="bottom" secondItem="KH4-IR-CVc" secondAttribute="bottom" id="zLZ-hF-FGC"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="KH4-IR-CVc"/>
                     </view>
@@ -255,12 +255,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pvZ-L4-HU0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2894.202898550725" y="110.05434782608697"/>
+            <point key="canvasLocation" x="2893.5999999999999" y="109.35960591133005"/>
         </scene>
     </scenes>
     <resources>
-        <image name="flickr_logo" width="1200" height="363"/>
-        <image name="iamges-selected" width="21" height="21"/>
-        <image name="space" width="360" height="640"/>
+        <image name="flickr_logo" width="2400" height="726"/>
+        <image name="iamges-selected" width="51.200000762939453" height="51.200000762939453"/>
+        <image name="space" width="1080" height="1920"/>
     </resources>
 </document>

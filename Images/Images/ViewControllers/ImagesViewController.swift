@@ -25,11 +25,12 @@ fileprivate class ImagesViewControllerSettings {
     static let kTimeLimitAfterFail  = 5.0
 
     // TV == TableView constants
-    static let kTVHeightForRow:     CGFloat = 91
-    static let kTVHeightForHeader:  CGFloat = 80
+    static let kTVHeightForRow      : CGFloat = 91
+    static let kTVHeightForHeader   : CGFloat = 80
     static let kTVCellIdentifier    = "imageCell"
     static let kTVHeaderIdentifier  = "CustomSectionHeaderView"
     static let kTVCellDefaultTitle  = "Title doesn't exist"
+    static let kTVTappedRadius      : CGFloat = 25
 
     // CV == CollectionView constants
     static let kCVCellIdentifier    = "imageCollectionView"
@@ -68,7 +69,12 @@ class ImagesViewController: UIViewController {
     private var removeImagesActionStarts = false
     private var indexOfCellBeforeDragging = 0
     private var removingLongPressGesture: UILongPressGestureRecognizer!
+    
     private var selectedCellPath: IndexPath!
+    private var tappedLocation: CGPoint!
+    
+    private var lastTableViewContentOffset: CGFloat = 0
+    private var isScrollForced = false
     private var hasNetworkProblems = false
     private var isDragSessionWillBegin: Bool! {
         didSet {
@@ -76,13 +82,7 @@ class ImagesViewController: UIViewController {
             dropZoneView.isHidden = !isDragSessionWillBegin
         }
     }
-    private var collectionViewThrownedImageURLs: [URL]? {
-        didSet {
-            guard let imageURLs = collectionViewThrownedImageURLs else { return }
-            collectionView.reloadData()
-            removeImagesActionStarts = !imageURLs.isEmpty
-        }
-    }
+    private var collectionViewThrownedImageURLs: [URL]?
 
     private var randomTags: [String] {
 
@@ -101,7 +101,7 @@ class ImagesViewController: UIViewController {
     // MARK: Actions:
 
     // Method to switch remove action:
-    @objc private func longTap(_ gesture: UIGestureRecognizer){
+    @objc private func longTap(_ gesture: UIGestureRecognizer) {
 
         switch gesture.state {
 
@@ -139,14 +139,7 @@ class ImagesViewController: UIViewController {
     // Remove elements from collection view method:
     @IBAction private func removeButtonTouch(_ sender: UIButton) {
 
-        let hitPoint = sender.convert(CGPoint.zero, to: collectionView)
-        let hitIndex = collectionView.indexPathForItem(at: hitPoint)!
-
-        // remove the image and refresh the collection view
-        collectionView.performBatchUpdates({
-            collectionView.deleteItems(at: [hitIndex])
-            collectionViewThrownedImageURLs?.remove(at: hitIndex.row)
-        })
+       
     }
 
 
@@ -199,6 +192,9 @@ class ImagesViewController: UIViewController {
         // ending timer work when user go to anothe screen
 
         stopReloadTimer()
+        
+        stopAnimateVisibleCellsIfAnimating(for: collectionView)
+        
     }
 
 
@@ -341,6 +337,18 @@ class ImagesViewController: UIViewController {
 
         return imageDataSource![row]
     }
+    
+    private func stopAnimateVisibleCellsIfAnimating(for collectionView: UICollectionView) {
+        if removeImagesActionStarts {
+            removeImagesActionStarts = false
+            collectionView.visibleCells.forEach { collectionViewCell in
+                if let cell = collectionViewCell as? ImageCollectionViewCell {
+                    cell.stopAnimateCellRemoving()
+                }
+            }
+        }
+    }
+    
 
 
 }
@@ -373,6 +381,98 @@ extension ImagesViewController: ShadowViewDelegate {
 }
 
 
+// MARK: - ImageTableViewCellDelegate:
+
+extension ImagesViewController: ImageTableViewCellDelegate {
+    
+    private func showAnimatingShadowFor(frame: CGRect) {
+        
+        let tapCellFrameInShadowView = tableView.convert(frame, to: shadowView)
+        let shadowAnimationRect = getShadowAnimationRect(for: tappedLocation, in: tapCellFrameInShadowView)
+        
+        self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = false }
+        
+        shadowView.isHidden = false
+        shadowView.showShadow(for: shadowAnimationRect, animated: true)
+    }
+    
+    func cellTapped(by sender: UITapGestureRecognizer) {
+        let tapLocationInTableView = sender.location(in: tableView)
+        
+        guard let indexPath = tableView.indexPathForRow(at: tapLocationInTableView) else { return }
+        
+        selectedCellPath = indexPath
+        
+        let tapCellFrameInTableView = tableView.rectForRow(at: indexPath)
+        let cellsRect = getCellsRect(of: tableView)
+        
+        tappedLocation = sender.location(in: self.view)
+        let isTappedOnCoveredCell = !cellsRect.contains(tapCellFrameInTableView)
+        if isTappedOnCoveredCell {
+            tableView.scrollToRow(at: indexPath, at: UITableView.ScrollPosition.none, animated: true)
+            isScrollForced = true
+        } else {
+            showAnimatingShadowFor(frame:tapCellFrameInTableView)
+        }
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        if scrollView == tableView,
+            isScrollForced {
+            
+            isScrollForced = false
+            let tapCellFrameInTableView  = tableView.rectForRow(at: selectedCellPath)
+            
+            showAnimatingShadowFor(frame:tapCellFrameInTableView)
+        }
+    }
+    
+    private func getCellsRect(of tableView: UITableView) -> CGRect {
+        let headerHeight = ImagesViewControllerSettings.kTVHeightForHeader
+        let cellsOrigin  = CGPoint(x: tableView.bounds.origin.x, y: tableView.bounds.origin.y + headerHeight)
+        let cellsSize    = CGSize (width: tableView.bounds.width, height: tableView.bounds.height - headerHeight)
+        
+        return CGRect(origin: cellsOrigin, size: cellsSize)
+    }
+    
+    private func getShadowAnimationRect(for point: CGPoint, in container: CGRect) -> CGRect {
+        let tapRadius = ImagesViewControllerSettings.kTVTappedRadius
+        
+        let tapTopPointX = point.x - tapRadius
+        let tapTopPointY = point.y - tapRadius
+        let tapDiameter  = tapRadius * CGFloat(2)
+        
+        let tapSize  = CGSize(width: tapDiameter, height: tapDiameter)
+        let tapPoint = CGPoint(x: tapTopPointX, y: tapTopPointY)
+        
+        var tapRect = CGRect(origin: tapPoint, size: tapSize)
+        
+        let isShadowRectOutOfCell = !container.contains(tapRect)
+        
+        if isShadowRectOutOfCell {
+            let bottomPointX = point.x + tapRadius
+            let bottomPointY = point.y + tapRadius
+            let cellBottomPointX = container.origin.x + container.width
+            let cellBottomPointY = container.origin.y + container.height
+            
+            if container.origin.x >= tapTopPointX {
+                tapRect.origin.x = container.origin.x
+            } else if cellBottomPointX <= bottomPointX {
+                tapRect.origin.x = cellBottomPointX - tapDiameter
+            }
+            
+            if container.origin.y >= tapTopPointY {
+                tapRect.origin.y = container.origin.y
+            } else if cellBottomPointY <= bottomPointY {
+                tapRect.origin.y = cellBottomPointY - tapDiameter
+            }
+            
+        }
+        return tapRect
+    }
+}
+
+
 // MARK: - Table view extension
 
 extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
@@ -398,6 +498,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
                 self.configureTableViewCell(by: indexPath, image: image, title: title)
             })
         }
+        cell.delegate = self
 
         cell.configure(with: cellImage, title) // cell always should be init  cell.imageView.image = nil
 
@@ -443,21 +544,6 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return ImagesViewControllerSettings.kTVHeightForRow
-    }
-
-    // Send selected data to ImageDetailViewController and present it
-    private func getGlobalRectangleForCell(at indexPath: IndexPath) -> CGRect {
-        return tableView.convert(tableView.rectForRow(at: indexPath), to: shadowView)
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        selectedCellPath = indexPath
-        let globalRectangle = getGlobalRectangleForCell(at: indexPath)
-
-        self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = false }
-        shadowView.isHidden = false
-        shadowView.showShadow(for: globalRectangle, animated: true)
     }
 
 }
@@ -514,6 +600,12 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
                 let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
                 collectionViewFlowLayout.collectionView!.scrollToItem(at: indexPath, at: .left, animated: true)
             }
+        } else {
+            if scrollView.contentOffset.y < 0 {
+                lastTableViewContentOffset = 0
+            } else {
+                lastTableViewContentOffset = scrollView.contentOffset.y
+            }
         }
     }
 
@@ -530,6 +622,22 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     // MARK: UICollectionViewDataSource:
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if removeImagesActionStarts {
+            let cellToDelete = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
+            cellToDelete.stopAnimateCellRemoving()
+            // remove the image and refresh the collection view
+            UIView.animate(withDuration: 0.5, delay: 0.1, options: .curveEaseIn, animations: {
+                cellToDelete.alpha = 0.5
+            }) { [weak self] _ in
+                collectionView.performBatchUpdates({
+                    collectionView.deleteItems(at: [indexPath])
+                    self?.collectionViewThrownedImageURLs?.remove(at: indexPath.row)
+                })
+            }
+        }
+    }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionViewThrownedImageURLs?.count ?? 0
@@ -578,6 +686,10 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
 
         var indexPathes = [IndexPath]()
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
+        
+        removingLongPressGesture.state = .ended
+        
+        stopAnimateVisibleCellsIfAnimating(for: collectionView)
 
         coordinator.session.loadObjects(ofClass: NSString.self) { (nsstrings) in
 
@@ -601,8 +713,6 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
 
                 collectionView.performBatchUpdates({
                     self.collectionViewThrownedImageURLs = array
-                    self.removeImagesActionStarts = false
-
                     collectionView.insertItems(at: indexPathes)
                 })
             }
@@ -647,7 +757,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
 
         guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
 
-        setUpFavoriteImagesViewController(with: droppedItems, in: tabBarViewControllers)
+        setupFavoriteImagesViewController(with: droppedItems, in: tabBarViewControllers)
 
         /*
          Freez
@@ -657,7 +767,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
     }
 
     /// Functionality for adding favorite images
-    private func setUpFavoriteImagesViewController(with droppedItems: [NSItemProviderReading], in tabBarViewControllers: [UIViewController]) {
+    private func setupFavoriteImagesViewController(with droppedItems: [NSItemProviderReading], in tabBarViewControllers: [UIViewController]) {
         var dataArray = [Data]()
         for droppedItem in droppedItems {
              dataArray.append(getData(from: droppedItem))

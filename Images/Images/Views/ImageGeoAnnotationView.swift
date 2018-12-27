@@ -22,7 +22,7 @@ class ImageGeoAnnotationView: MKAnnotationView {
     override var annotation: MKAnnotation? {
         willSet {
             guard let imageGeoAnnotation = newValue as? ImageGeoAnnotation else {return}            
-            setUpAnnotationView(with: imageGeoAnnotation)
+            setupAnnotationView(with: imageGeoAnnotation)
         }
     }
     
@@ -38,16 +38,16 @@ class ImageGeoAnnotationView: MKAnnotationView {
     
     // MARK: - Functions:
     
-    private func setUpAnnotationView(with imageGeoAnnotation: ImageGeoAnnotation) {
+    private func setupAnnotationView(with imageGeoAnnotation: ImageGeoAnnotation) {
                
-        setUpSizeOf(self, with: ImageGeoAnnotationViewSettings.kSizeOfImage)
+        setupSizeOf(self, with: ImageGeoAnnotationViewSettings.kSizeOfImage)
         
-        setUpCalloutBy(offset: ImageGeoAnnotationViewSettings.kCalloutOffset)
+        setupCalloutBy(offset: ImageGeoAnnotationViewSettings.kCalloutOffset)
         
-        setUpAnnotationImageFor(self, with: imageGeoAnnotation)
+        setupAnnotationImageFor(self, with: imageGeoAnnotation)
     }
     
-    private func setUpAnnotationImageFor(_ view: MKAnnotationView, with imageGeoAnnotation: ImageGeoAnnotation) {
+    private func setupAnnotationImageFor(_ view: MKAnnotationView, with imageGeoAnnotation: ImageGeoAnnotation) {
         if let image = ImageLoadHelper.getImageFromCache(by: imageGeoAnnotation.markerIconURL) {
             view.image = image
         } else {
@@ -57,12 +57,12 @@ class ImageGeoAnnotationView: MKAnnotationView {
         }
     }
     
-    private func setUpCalloutBy(offset: CGPoint) {
+    private func setupCalloutBy(offset: CGPoint) {
         canShowCallout = true
         calloutOffset = offset
     }
     
-    private func setUpSizeOf(_ view: MKAnnotationView, with ratio: Int) {
+    private func setupSizeOf(_ view: MKAnnotationView, with ratio: Int) {
         view.frame.size = CGSize(width: ratio, height: ratio)
     }
 }
