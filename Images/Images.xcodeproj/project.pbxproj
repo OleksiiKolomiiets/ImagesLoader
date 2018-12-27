@@ -35,6 +35,7 @@
 		79A58B1E2189949700A10DDD /* FavoriteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A58B1D2189949700A10DDD /* FavoriteManager.swift */; };
 		79A58B42218C508C00A10DDD /* Images.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 79A58B40218C508C00A10DDD /* Images.xcdatamodeld */; };
 		79A58B46218C8D5400A10DDD /* FavoriteManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A58B45218C8D5400A10DDD /* FavoriteManagerProtocol.swift */; };
+		79AB406121A69D3900E278FA /* TabBarType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79AB406021A69D3900E278FA /* TabBarType.swift */; };
 		79C1563C212EE53F00E486C1 /* CustomSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79C1563B212EE53F00E486C1 /* CustomSectionHeaderView.swift */; };
 		79D368C6213545DB007E14AE /* CustomSectionHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 79D368C5213545DB007E14AE /* CustomSectionHeaderView.xib */; };
 		79D368C8213577AD007E14AE /* ImageLoadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79D368C7213577AD007E14AE /* ImageLoadHelper.swift */; };
@@ -76,6 +77,7 @@
 		79A58B41218C508C00A10DDD /* FavoriteImages.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FavoriteImages.xcdatamodel; sourceTree = "<group>"; };
 		79A58B43218C5B1200A10DDD /* FavoriteImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteImage.swift; sourceTree = "<group>"; };
 		79A58B45218C8D5400A10DDD /* FavoriteManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteManagerProtocol.swift; sourceTree = "<group>"; };
+		79AB406021A69D3900E278FA /* TabBarType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarType.swift; sourceTree = "<group>"; };
 		79C1563B212EE53F00E486C1 /* CustomSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSectionHeaderView.swift; sourceTree = "<group>"; };
 		79D368C5213545DB007E14AE /* CustomSectionHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomSectionHeaderView.xib; sourceTree = "<group>"; };
 		79D368C7213577AD007E14AE /* ImageLoadHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoadHelper.swift; sourceTree = "<group>"; };
@@ -127,6 +129,7 @@
 		794C9D69212D53D40034E77F /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				79AB406021A69D3900E278FA /* TabBarType.swift */,
 				79DF2A022199C50F00008EF1 /* Subclasses */,
 				79A58B40218C508C00A10DDD /* Images.xcdatamodeld */,
 				79A58B47218C8D6900A10DDD /* Protocols */,
@@ -412,6 +415,7 @@
 				79DF2A04219AC80600008EF1 /* ImagesMapView.swift in Sources */,
 				79A58B42218C508C00A10DDD /* Images.xcdatamodeld in Sources */,
 				79A58B142182110000A10DDD /* FavoriteImagesViewController.swift in Sources */,
+				79AB406121A69D3900E278FA /* TabBarType.swift in Sources */,
 				792B68972191D62C0010269C /* SearchPhotoViewController.swift in Sources */,
 				792348D521429A87007903E1 /* ImageDetailViewController.swift in Sources */,
 				7984CBC82190351700858CE9 /* GEOLocationViewController.swift in Sources */,

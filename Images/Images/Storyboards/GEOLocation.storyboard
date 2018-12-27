@@ -50,7 +50,7 @@
                         <viewLayoutGuide key="safeArea" id="29U-qK-cc7"/>
                     </view>
                     <connections>
-                        <outlet property="doneButton" destination="tXS-ee-h39" id="05W-cU-zRh"/>
+                        <outlet property="doneButton" destination="tXS-ee-h39" id="5BE-OY-QHU"/>
                         <outlet property="mapView" destination="9VV-sx-sHD" id="iYJ-Yh-grb"/>
                     </connections>
                 </viewController>

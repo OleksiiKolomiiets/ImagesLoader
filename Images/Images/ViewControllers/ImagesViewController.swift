@@ -34,6 +34,10 @@ fileprivate class ImagesViewControllerSettings {
 
     // CV == CollectionView constants
     static let kCVCellIdentifier    = "imageCollectionView"
+    
+    // Animation constants
+    
+    static let kOpacityAnimationKey = "opacity"
 }
 
 // MARK: -
@@ -41,13 +45,13 @@ class ImagesViewController: UIViewController {
 
     // MARK: Outlets:
 
+    @IBOutlet weak var logoImageView: UIImageView!
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var shadowView: ShadowView!
     @IBOutlet weak var proposeForDropLable: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
-    @IBOutlet weak var headerViewHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var dropZoneView: UIView! {
         didSet {
@@ -144,6 +148,8 @@ class ImagesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        customizeOpacityAnimation(for: logoImageView)
+        
         shadowView.delegate = self
 
         // reload image data from helper
@@ -267,11 +273,16 @@ class ImagesViewController: UIViewController {
             
             UIView.animate(withDuration: 0.5, delay: 0.4, options: .curveEaseIn, animations: {
                 self.headerView.alpha = 1.0
+                self.logoImageView.layer.removeAllAnimations()
             }, completion: { _ in
-                UIView.animate(withDuration: 0.5, delay: 0.1, options: .curveEaseOut, animations: {
+                UIView.animate(withDuration: 0.5, delay: 0.1, options: .curveEaseIn, animations: {
                     self.tableView.alpha = 1.0
                 }, completion: { _ in
-                    self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = true }
+                    self.tabBarController?.tabBar.items?.enumerated().forEach() { (index, item) in
+                        let tabItemType = TabBarType(rawValue: index)
+                        item.image = tabItemType?.image
+                        item.title = tabItemType?.title
+                    }
                 })
             })
             
@@ -280,7 +291,7 @@ class ImagesViewController: UIViewController {
 
     private func customizeOpacityAnimation(for view: UIView) {
         // create opacity animation
-        let animation = CABasicAnimation(keyPath: "opacity")
+        let animation = CABasicAnimation(keyPath: ImagesViewControllerSettings.kOpacityAnimationKey)
 
         animation.fromValue = 0.7
         animation.toValue = 1
@@ -288,7 +299,7 @@ class ImagesViewController: UIViewController {
         animation.repeatCount = .infinity
         animation.autoreverses = true
         // create opacity animation to view
-        view.layer.add(animation, forKey: "opacity")
+        view.layer.add(animation, forKey: ImagesViewControllerSettings.kOpacityAnimationKey)
     }
 
     private func configureCollectionViewLayoutItemSize() {
@@ -415,13 +426,6 @@ extension ImagesViewController: ImageTableViewCellDelegate {
             showAnimatingShadowFor(frame:tapCellFrameInTableView)
         }
     }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == tableView {
-//            print(scrollView.decelerationRate)
-        }
-    }
-    
     
     private func getCellsRect(of tableView: UITableView) -> CGRect {
         let headerHeight = ImagesViewControllerSettings.kTVHeightForHeader
@@ -555,18 +559,8 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
         if scrollView == collectionView {
             indexOfCellBeforeDragging = indexOfMajorCell()
-        } else {
-            if lastTableViewContentOffset < scrollView.contentOffset.y {
-                print("up")
-                headerViewHeightConstraint.constant = 250
-            } else if lastTableViewContentOffset > scrollView.contentOffset.y {
-                print("down")
-            } else {
-                print("stay")
-            }
         }
     }
-   
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
 

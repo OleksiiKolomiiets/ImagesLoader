@@ -15,11 +15,11 @@
             <objects>
                 <viewController storyboardIdentifier="FavoriteImagesViewController" id="Z7f-bM-ARg" customClass="FavoriteImagesViewController" customModule="Images___iOS_Application" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Tbq-Vz-6iA">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="272" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="tEO-kM-Pw9">
-                                <rect key="frame" x="0.0" y="100" width="320" height="419"/>
+                                <rect key="frame" x="0.0" y="84" width="320" height="435"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
@@ -38,7 +38,7 @@
                                                 </imageView>
                                                 <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="0Nr-lf-ZeG">
                                                     <rect key="frame" x="141.5" y="117.5" width="37" height="37"/>
-                                                    <color key="color" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="color" red="0.25132454050000003" green="0.4891528409" blue="0.79842163710000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 </activityIndicatorView>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -65,7 +65,7 @@
                                 </connections>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GEQ-fN-Eat">
-                                <rect key="frame" x="16" y="52" width="288" height="32"/>
+                                <rect key="frame" x="16" y="36" width="288" height="32"/>
                                 <color key="backgroundColor" red="0.25132454050000003" green="0.4891528409" blue="0.79842163710000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="odH-HU-1HX"/>
@@ -83,14 +83,14 @@
                             <constraint firstItem="tEO-kM-Pw9" firstAttribute="leading" secondItem="bGP-uN-xVs" secondAttribute="leading" id="MZw-a4-TNW"/>
                             <constraint firstItem="bGP-uN-xVs" firstAttribute="trailing" secondItem="GEQ-fN-Eat" secondAttribute="trailing" constant="16" id="T2J-gm-blp"/>
                             <constraint firstItem="tEO-kM-Pw9" firstAttribute="bottom" secondItem="bGP-uN-xVs" secondAttribute="bottom" id="dsK-mp-utw"/>
-                            <constraint firstItem="GEQ-fN-Eat" firstAttribute="top" secondItem="bGP-uN-xVs" secondAttribute="top" constant="32" id="hrF-3A-7BS"/>
+                            <constraint firstItem="GEQ-fN-Eat" firstAttribute="top" secondItem="bGP-uN-xVs" secondAttribute="top" constant="16" id="hrF-3A-7BS"/>
                             <constraint firstItem="tEO-kM-Pw9" firstAttribute="top" secondItem="GEQ-fN-Eat" secondAttribute="bottom" constant="16" id="kXD-wF-JMi"/>
                             <constraint firstItem="tEO-kM-Pw9" firstAttribute="trailing" secondItem="bGP-uN-xVs" secondAttribute="trailing" id="ubb-Hy-IMi"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="bGP-uN-xVs"/>
                     </view>
-                    <tabBarItem key="tabBarItem" enabled="NO" systemItem="favorites" id="Cxt-a5-Eg8"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <tabBarItem key="tabBarItem" title="" selectedImage="favourite-selected" id="Cxt-a5-Eg8"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
                     <connections>
                         <outlet property="showInMapButton" destination="GEQ-fN-Eat" id="qSp-c2-kB9"/>
                         <outlet property="tableView" destination="tEO-kM-Pw9" id="hhR-x0-fDs"/>
@@ -98,7 +98,10 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yll-CJ-Hjd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="60" y="-81.338028169014081"/>
+            <point key="canvasLocation" x="1057.5" y="-81.338028169014081"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="favourite-selected" width="30" height="30"/>
+    </resources>
 </document>

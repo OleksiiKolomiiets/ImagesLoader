@@ -22,6 +22,9 @@ class ImagesMapView: MKMapView {
         super.init(coder: aDecoder)
         
         register(ImageGeoAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        
+        showsScale = false
+        showsCompass = false
     }
     
     
