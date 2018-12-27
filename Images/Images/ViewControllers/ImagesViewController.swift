@@ -25,11 +25,12 @@ fileprivate class ImagesViewControllerSettings {
     static let kTimeLimitAfterFail  = 5.0
 
     // TV == TableView constants
-    static let kTVHeightForRow:     CGFloat = 91
-    static let kTVHeightForHeader:  CGFloat = 80
+    static let kTVHeightForRow      : CGFloat = 91
+    static let kTVHeightForHeader   : CGFloat = 80
     static let kTVCellIdentifier    = "imageCell"
     static let kTVHeaderIdentifier  = "CustomSectionHeaderView"
     static let kTVCellDefaultTitle  = "Title doesn't exist"
+    static let kTVTappedRadius      : CGFloat = 25
 
     // CV == CollectionView constants
     static let kCVCellIdentifier    = "imageCollectionView"
@@ -361,6 +362,71 @@ extension ImagesViewController: ShadowViewDelegate {
 }
 
 
+// MARK: - ImageTableViewCellDelegate:
+
+extension ImagesViewController: ImageTableViewCellDelegate {
+    func cellTapped(by sender: UITapGestureRecognizer) {
+        let tapLocationInTableView = sender.location(in: tableView)
+        
+        guard let indexPath = tableView.indexPathForRow(at: tapLocationInTableView) else { return }
+        
+        selectedCellPath = indexPath
+        
+        let tapCellFrame = tableView.rectForRow(at:indexPath)
+        let isTappedOnCoveredCell = !tableView.bounds.contains(tapCellFrame)
+        
+        if isTappedOnCoveredCell {
+            tableView.scrollRectToVisible(tapCellFrame, animated: false)
+        }
+        
+        let tapCellFrameInShadowView = tableView.convert(tapCellFrame, to: shadowView)
+        let tapLocationInRootView = sender.location(in: view)
+        let shadowAnimationRect = getShadowAnimationRect(for: tapLocationInRootView, in: tapCellFrameInShadowView)
+        
+        self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = false }
+        
+        shadowView.isHidden = false
+        shadowView.showShadow(for: shadowAnimationRect, animated: true)
+    }
+    
+    private func getShadowAnimationRect(for point: CGPoint, in container: CGRect) -> CGRect {
+        let tapRadius = ImagesViewControllerSettings.kTVTappedRadius
+        
+        let tapTopPointX = point.x - tapRadius
+        let tapTopPointY = point.y - tapRadius
+        let tapDiameter  = tapRadius * CGFloat(2)
+        
+        let tapSize  = CGSize(width: tapDiameter, height: tapDiameter)
+        let tapPoint = CGPoint(x: tapTopPointX, y: tapTopPointY)
+        
+        var tapRect = CGRect(origin: tapPoint, size: tapSize)
+        
+        let isShadowRectOutOfCell = !container.contains(tapRect)
+        
+        if isShadowRectOutOfCell {
+            let bottomPointX = point.x + tapRadius
+            let bottomPointY = point.y + tapRadius
+            let cellBottomPointX = container.origin.x + container.width
+            let cellBottomPointY = container.origin.y + container.height
+            
+            if container.origin.x >= tapTopPointX {
+                tapRect.origin.x = container.origin.x
+            } else if cellBottomPointX <= bottomPointX {
+                tapRect.origin.x = cellBottomPointX - tapDiameter
+            }
+            
+            if container.origin.y >= tapTopPointY {
+                tapRect.origin.y = container.origin.y
+            } else if cellBottomPointY <= bottomPointY {
+                tapRect.origin.y = cellBottomPointY - tapDiameter
+            }
+            
+        }
+        return tapRect
+    }
+}
+
+
 // MARK: - Table view extension
 
 extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
@@ -386,6 +452,7 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
                 self.configureTableViewCell(by: indexPath, image: image, title: title)
             })
         }
+        cell.delegate = self
 
         cell.configure(with: cellImage, title) // cell always should be init  cell.imageView.image = nil
 
@@ -431,21 +498,6 @@ extension ImagesViewController: UITableViewDataSource, UITableViewDelegate  {
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return ImagesViewControllerSettings.kTVHeightForRow
-    }
-
-    // Send selected data to ImageDetailViewController and present it
-    private func getGlobalRectangleForCell(at indexPath: IndexPath) -> CGRect {
-        return tableView.convert(tableView.rectForRow(at: indexPath), to: shadowView)
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        selectedCellPath = indexPath
-        let globalRectangle = getGlobalRectangleForCell(at: indexPath)
-
-        self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = false }
-        shadowView.isHidden = false
-        shadowView.showShadow(for: globalRectangle, animated: true)
     }
 
 }
