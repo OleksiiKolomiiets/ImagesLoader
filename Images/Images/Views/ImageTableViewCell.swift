@@ -8,14 +8,34 @@
 
 import UIKit
 
+protocol ImageTableViewCellDelegate {
+    func cellTapped(by sender: UITapGestureRecognizer)
+}
+
 class ImageTableViewCell: UITableViewCell {
     
+    
     // MARK: - Outlets:
+    
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var pictureImageView: UIImageView!
-    @IBOutlet private weak var spinner: UIActivityIndicatorView!    
+    @IBOutlet private weak var spinner: UIActivityIndicatorView!
+    
+    
+    // MARK: - Outlets:
+    var delegate: ImageTableViewCellDelegate?
+    
     
     // MARK: - Functions:
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapEdit(_:)))
+        addGestureRecognizer(tapGesture)
+        //tapGesture.delegate = ViewController()
+    }
+    
     // cleaning cell before reuse
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -41,4 +61,7 @@ class ImageTableViewCell: UITableViewCell {
         pictureImageView.image = image
     }
     
+    @objc private func tapEdit(_ sender: UITapGestureRecognizer) {
+        delegate?.cellTapped(by: sender)
+    }
 }
