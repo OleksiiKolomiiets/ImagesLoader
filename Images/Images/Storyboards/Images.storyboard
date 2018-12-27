@@ -131,14 +131,14 @@
                                     <constraint firstItem="j0g-xs-tP2" firstAttribute="centerX" secondItem="6cP-V6-eD9" secondAttribute="centerX" id="xsT-d7-0Jz"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="grouped" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H1M-TR-gbN">
+                            <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" allowsSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" springLoaded="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H1M-TR-gbN">
                                 <rect key="frame" x="0.0" y="348" width="375" height="381"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <color key="separatorColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="imageCell" id="Mez-D4-cma" customClass="ImageTableViewCell" customModule="Images___iOS_Application" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="55.333333333333343" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Mez-D4-cma" id="9vQ-eJ-ryI">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43.666666666666664"/>
@@ -242,6 +242,7 @@
                         <outlet property="collectionViewFlowLayout" destination="Jj3-ps-l3M" id="2mX-Pa-Uzq"/>
                         <outlet property="dropZoneView" destination="tdN-RT-arj" id="x0Z-B2-PLD"/>
                         <outlet property="headerView" destination="6cP-V6-eD9" id="ehB-qQ-3IM"/>
+                        <outlet property="headerViewHeightConstraint" destination="SGm-uJ-g5o" id="6Az-St-FaF"/>
                         <outlet property="proposeForDropLable" destination="GAs-cC-siT" id="aMG-GR-Y1S"/>
                         <outlet property="shadowView" destination="0un-16-oP2" id="XDG-eY-aRE"/>
                         <outlet property="tableView" destination="H1M-TR-gbN" id="LXr-hm-3HK"/>
@@ -253,9 +254,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bg_collection_view" width="1511" height="872"/>
-        <image name="flickr_logo" width="1200" height="363"/>
-        <image name="inbox" width="21" height="21"/>
-        <image name="space" width="360" height="640"/>
+        <image name="bg_collection_view" width="4533" height="2618"/>
+        <image name="flickr_logo" width="2400" height="726"/>
+        <image name="inbox" width="51.200000762939453" height="51.200000762939453"/>
+        <image name="space" width="1080" height="1920"/>
     </resources>
 </document>
