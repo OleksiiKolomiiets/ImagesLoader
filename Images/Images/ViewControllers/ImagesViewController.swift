@@ -47,6 +47,7 @@ class ImagesViewController: UIViewController {
     @IBOutlet weak var proposeForDropLable: UILabel!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var headerViewHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var dropZoneView: UIView! {
         didSet {
@@ -64,7 +65,12 @@ class ImagesViewController: UIViewController {
     private var removeImagesActionStarts = false
     private var indexOfCellBeforeDragging = 0
     private var removingLongPressGesture: UILongPressGestureRecognizer!
+    
     private var selectedCellPath: IndexPath!
+    private var tappedLocation: CGPoint!
+    
+    private var lastTableViewContentOffset: CGFloat = 0
+    private var isScrollForced = false
     private var hasNetworkProblems = false
     private var isDragSessionWillBegin: Bool! {
         didSet {
@@ -364,6 +370,18 @@ extension ImagesViewController: ShadowViewDelegate {
 // MARK: - ImageTableViewCellDelegate:
 
 extension ImagesViewController: ImageTableViewCellDelegate {
+    
+    private func showAnimatingShadowFor(frame: CGRect) {
+        
+        let tapCellFrameInShadowView = tableView.convert(frame, to: shadowView)
+        let shadowAnimationRect = getShadowAnimationRect(for: tappedLocation, in: tapCellFrameInShadowView)
+        
+        self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = false }
+        
+        shadowView.isHidden = false
+        shadowView.showShadow(for: shadowAnimationRect, animated: true)
+    }
+    
     func cellTapped(by sender: UITapGestureRecognizer) {
         let tapLocationInTableView = sender.location(in: tableView)
         
@@ -371,21 +389,43 @@ extension ImagesViewController: ImageTableViewCellDelegate {
         
         selectedCellPath = indexPath
         
-        let tapCellFrame = tableView.rectForRow(at:indexPath)
-        let isTappedOnCoveredCell = !tableView.bounds.contains(tapCellFrame)
+        let tapCellFrameInTableView = tableView.rectForRow(at: indexPath)
+        let cellsRect = getCellsRect(of: tableView)
         
+        tappedLocation = sender.location(in: self.view)
+        let isTappedOnCoveredCell = !cellsRect.contains(tapCellFrameInTableView)
         if isTappedOnCoveredCell {
-            tableView.scrollRectToVisible(tapCellFrame, animated: false)
+            tableView.scrollToRow(at: indexPath, at: UITableView.ScrollPosition.none, animated: true)
+            isScrollForced = true
+        } else {
+            showAnimatingShadowFor(frame:tapCellFrameInTableView)
         }
+    }
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        if scrollView == tableView,
+            isScrollForced {
+            
+            isScrollForced = false
+            let tapCellFrameInTableView  = tableView.rectForRow(at: selectedCellPath)
+            
+            showAnimatingShadowFor(frame:tapCellFrameInTableView)
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == tableView {
+//            print(scrollView.decelerationRate)
+        }
+    }
+    
+    
+    private func getCellsRect(of tableView: UITableView) -> CGRect {
+        let headerHeight = ImagesViewControllerSettings.kTVHeightForHeader
+        let cellsOrigin  = CGPoint(x: tableView.bounds.origin.x, y: tableView.bounds.origin.y + headerHeight)
+        let cellsSize    = CGSize (width: tableView.bounds.width, height: tableView.bounds.height - headerHeight)
         
-        let tapCellFrameInShadowView = tableView.convert(tapCellFrame, to: shadowView)
-        let tapLocationInRootView = sender.location(in: view)
-        let shadowAnimationRect = getShadowAnimationRect(for: tapLocationInRootView, in: tapCellFrameInShadowView)
-        
-        self.tabBarController?.tabBar.items?.forEach() { $0.isEnabled = false }
-        
-        shadowView.isHidden = false
-        shadowView.showShadow(for: shadowAnimationRect, animated: true)
+        return CGRect(origin: cellsOrigin, size: cellsSize)
     }
     
     private func getShadowAnimationRect(for point: CGPoint, in container: CGRect) -> CGRect {
@@ -512,8 +552,18 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
 
         if scrollView == collectionView {
             indexOfCellBeforeDragging = indexOfMajorCell()
+        } else {
+            if lastTableViewContentOffset < scrollView.contentOffset.y {
+                print("up")
+                headerViewHeightConstraint.constant = 250
+            } else if lastTableViewContentOffset > scrollView.contentOffset.y {
+                print("down")
+            } else {
+                print("stay")
+            }
         }
     }
+   
 
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
 
@@ -552,6 +602,12 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
             } else {
                 let indexPath = IndexPath(row: indexOfMajorCell, section: 0)
                 collectionViewFlowLayout.collectionView!.scrollToItem(at: indexPath, at: .left, animated: true)
+            }
+        } else {
+            if scrollView.contentOffset.y < 0 {
+                lastTableViewContentOffset = 0
+            } else {
+                lastTableViewContentOffset = scrollView.contentOffset.y
             }
         }
     }
