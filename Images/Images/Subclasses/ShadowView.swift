@@ -12,21 +12,63 @@ protocol ShadowViewDelegate: class {
     func shadowView(_ shadowView: ShadowView, didUserTapOnHighlightedFrame: Bool)
 }
 
-class ShadowView: UIView {
+fileprivate class ShadowViewSettings {
+    static var kAnimationKey = "Shadow"
+}
+
+class ShadowView: UIView, CAAnimationDelegate {
     
     // MARK: - Variables:
+    
     public weak var delegate: ShadowViewDelegate!
     
+    
     private let shadowLayer = CAShapeLayer()
+    
     private var isOpenShadow = false
+    
+    private var isAnimationDidStop = true
+    
     private var touchGesture: UITapGestureRecognizer!
+    
     private var highlightedFrame: CGRect!
-    private var isTapedOnFrame: Bool!
-    private var  duration: Double {
+    private var isTapedOnFrame = false
+    
+    private var duration: Double {
        return isOpenShadow ? 0.5 : 0.2
     }
     
+    private var animationLength: CGFloat {
+        return CGFloat(abs(superview!.frame.height - highlightedFrame.origin.x))
+    }
+    
+    private var highlightedFrameCirclePath: UIBezierPath {
+        let radius = min(highlightedFrame.size.height, highlightedFrame.size.width) * 0.9 / 2
+        let centr = CGPoint(x: highlightedFrame.midX, y: highlightedFrame.midY)
+        return UIBezierPath(arcCenter: centr, radius: radius, startAngle: CGFloat(0), endAngle:CGFloat(Double.pi * 2), clockwise: true)
+    }
+    
+    
+    // MARK: - Actions:
+    
+    @objc private func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {
+        if isAnimationDidStop {
+            let tappedLocation = gestureRecognizer.location(in: self)
+            isTapedOnFrame = highlightedFrameCirclePath.contains(tappedLocation)
+        } else {
+            cancelAnimationFor(layer)
+        }
+        
+        shadowLayer.removeAllAnimations()
+        layer.mask = nil
+        
+        // Signalizing delegate that view was pressed
+        delegate.shadowView(self, didUserTapOnHighlightedFrame: isTapedOnFrame)
+    }
+    
+    
     // MARK: - Functions:
+    
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -39,26 +81,11 @@ class ShadowView: UIView {
         touchGesture.numberOfTapsRequired = 1
         addGestureRecognizer(touchGesture)
     }
-    
-    @objc private func viewPressed(_ gestureRecognizer: UITapGestureRecognizer) {        
-        shadowLayer.removeAllAnimations()
-        layer.mask = nil
-        let radius = min(highlightedFrame.size.height, highlightedFrame.size.width) * 0.9 / 2
-        let centr = CGPoint(x: highlightedFrame.midX, y: highlightedFrame.midY)
-        
-        let tappedLocation = gestureRecognizer.location(in: self)
-        let highlightedFrameCirclePath = UIBezierPath(arcCenter: centr,
-                                                     radius: radius,
-                                                     startAngle: CGFloat(0),
-                                                     endAngle:CGFloat(Double.pi * 2),
-                                                     clockwise: true)
-        isTapedOnFrame = highlightedFrameCirclePath.contains(tappedLocation)
-        // Signalizing delegate that view was tapped
-        delegate.shadowView(self, didUserTapOnHighlightedFrame: isTapedOnFrame)
-    }
-    
+   
     /// Showing shadow for selected frame
     public func showShadow(for frame: CGRect, animated: Bool) {
+        
+        touchGesture.isEnabled = true
         
         highlightedFrame = frame
         
@@ -74,14 +101,10 @@ class ShadowView: UIView {
         }
     }
     
-    private func setUpShadowLayer(_ shadowLayer: CAShapeLayer, with path: CGPath, inside layer: CALayer) {
-        // Setting animation layer
-        shadowLayer.fillRule = .evenOdd
-        shadowLayer.path = path
-        layer.mask = shadowLayer
-    }
-    
+    /// Dismissing shadow for highlighted frame
     public func dismissShadow(animated: Bool, finished: @escaping () -> Void) {
+        
+        touchGesture.isEnabled = false
         
         isOpenShadow = false
         
@@ -98,6 +121,26 @@ class ShadowView: UIView {
         } else {
             finished()
         }
+    }
+    
+    /// Canceling shadow animation
+    private func cancelAnimationFor(_ layer: CALayer) {
+        
+        guard let shadowAnimation = layer.mask?.animation(forKey: ShadowViewSettings.kAnimationKey) as? CABasicAnimation else { return }
+        
+        let currentTime: CFTimeInterval = layer.convertTime(CACurrentMediaTime(), from: nil)
+        layer.beginTime = currentTime
+        
+        let timeSinceCancellation = CGFloat(currentTime - shadowAnimation.beginTime)
+        let animationDuration = CGFloat(shadowAnimation.duration)
+        let shadowAnimationVelocity = getVelocityOfAnimation(by: animationDuration)
+        
+        let passedLengthBeforeCancelation = shadowAnimationVelocity * timeSinceCancellation
+        
+        let increasingLength = animationLength - passedLengthBeforeCancelation
+        
+        highlightedFrame = getIncreasedRect(using: increasingLength)
+        
     }
     
     private func getCirclePath(by frame: CGRect? = nil, inverse: Bool = false) -> UIBezierPath {
@@ -125,6 +168,13 @@ class ShadowView: UIView {
         return path
     }
     
+    private func setUpShadowLayer(_ shadowLayer: CAShapeLayer, with path: CGPath, inside layer: CALayer) {
+        // Setting animation layer
+        shadowLayer.fillRule = .evenOdd
+        shadowLayer.path = path
+        layer.mask = shadowLayer
+    }
+    
     private func setUpAnimation(from: CGPath, to: CGPath, duration: Double) {
         
         let animate = CABasicAnimation(keyPath: "path")
@@ -134,21 +184,36 @@ class ShadowView: UIView {
         animate.duration  = duration
         animate.delegate  = self
         animate.repeatCount = 0
+        animate.beginTime = layer.convertTime(CACurrentMediaTime(), from: nil)
         
-        shadowLayer.add(animate, forKey: "Shadow for selected frame")
-        
+        shadowLayer.add(animate, forKey: ShadowViewSettings.kAnimationKey)
     }
     
-}
-
-extension ShadowView: CAAnimationDelegate {
+    // Rectangle for cancelation
+    private func getIncreasedRect(using distance: CGFloat ) -> CGRect {
+        let width  = highlightedFrame.width    + CGFloat(2) * distance
+        let height = highlightedFrame.height   + CGFloat(2) * distance
+        let rectX  = highlightedFrame.origin.x - distance
+        let rectY  = highlightedFrame.origin.y - distance
+        
+        let size  = CGSize(width: width, height: height)
+        let point = CGPoint(x: rectX, y: rectY)
+        
+        return CGRect(origin: point, size: size)
+    }
     
-    // MARK: - Animation delegate:
+    private func getVelocityOfAnimation(by duration: CGFloat) -> CGFloat {
+        return animationLength / duration
+    }
+    
+    
+    // MARK: - CAAnimationDelegate:
+    
     func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        touchGesture.isEnabled = true
+        isAnimationDidStop = true
     }
     
     func animationDidStart(_ anim: CAAnimation) {
-        touchGesture.isEnabled = false
+        isAnimationDidStop = false
     }
 }
