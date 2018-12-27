@@ -32,7 +32,7 @@ class SearchPhotoViewController: UIViewController, UITextFieldDelegate, MKMapVie
         FlickrKitHelper.loadPolygonLocation(for: text, perPage: Int.random(in: 5 ... 10)) { imagesData in
             guard let loadedData = imagesData else { return }
            
-            self.mapView.setUpMapView(with: loadedData)
+            self.mapView.setupMapView(with: loadedData)
         }
     }
     

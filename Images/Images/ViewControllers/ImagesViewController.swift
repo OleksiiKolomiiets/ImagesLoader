@@ -78,13 +78,7 @@ class ImagesViewController: UIViewController {
             dropZoneView.isHidden = !isDragSessionWillBegin
         }
     }
-    private var collectionViewThrownedImageURLs: [URL]? {
-        didSet {
-            guard let imageURLs = collectionViewThrownedImageURLs else { return }
-            collectionView.reloadData()
-            removeImagesActionStarts = !imageURLs.isEmpty
-        }
-    }
+    private var collectionViewThrownedImageURLs: [URL]?
 
     private var randomTags: [String] {
 
@@ -103,7 +97,7 @@ class ImagesViewController: UIViewController {
     // MARK: Actions:
 
     // Method to switch remove action:
-    @objc private func longTap(_ gesture: UIGestureRecognizer){
+    @objc private func longTap(_ gesture: UIGestureRecognizer) {
 
         switch gesture.state {
 
@@ -141,14 +135,7 @@ class ImagesViewController: UIViewController {
     // Remove elements from collection view method:
     @IBAction private func removeButtonTouch(_ sender: UIButton) {
 
-        let hitPoint = sender.convert(CGPoint.zero, to: collectionView)
-        let hitIndex = collectionView.indexPathForItem(at: hitPoint)!
-
-        // remove the image and refresh the collection view
-        collectionView.performBatchUpdates({
-            collectionView.deleteItems(at: [hitIndex])
-            collectionViewThrownedImageURLs?.remove(at: hitIndex.row)
-        })
+       
     }
 
 
@@ -199,6 +186,9 @@ class ImagesViewController: UIViewController {
         // ending timer work when user go to anothe screen
 
         stopReloadTimer()
+        
+        stopAnimateVisibleCellsIfAnimating(for: collectionView)
+        
     }
 
 
@@ -336,6 +326,18 @@ class ImagesViewController: UIViewController {
 
         return imageDataSource![row]
     }
+    
+    private func stopAnimateVisibleCellsIfAnimating(for collectionView: UICollectionView) {
+        if removeImagesActionStarts {
+            removeImagesActionStarts = false
+            collectionView.visibleCells.forEach { collectionViewCell in
+                if let cell = collectionViewCell as? ImageCollectionViewCell {
+                    cell.stopAnimateCellRemoving()
+                }
+            }
+        }
+    }
+    
 
 
 }
@@ -626,6 +628,22 @@ extension ImagesViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     // MARK: UICollectionViewDataSource:
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if removeImagesActionStarts {
+            let cellToDelete = collectionView.cellForItem(at: indexPath) as! ImageCollectionViewCell
+            cellToDelete.stopAnimateCellRemoving()
+            // remove the image and refresh the collection view
+            UIView.animate(withDuration: 0.5, delay: 0.1, options: .curveEaseIn, animations: {
+                cellToDelete.alpha = 0.5
+            }) { [weak self] _ in
+                collectionView.performBatchUpdates({
+                    collectionView.deleteItems(at: [indexPath])
+                    self?.collectionViewThrownedImageURLs?.remove(at: indexPath.row)
+                })
+            }
+        }
+    }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return collectionViewThrownedImageURLs?.count ?? 0
@@ -674,6 +692,10 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
 
         var indexPathes = [IndexPath]()
         let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(row: 0, section: 0)
+        
+        removingLongPressGesture.state = .ended
+        
+        stopAnimateVisibleCellsIfAnimating(for: collectionView)
 
         coordinator.session.loadObjects(ofClass: NSString.self) { (nsstrings) in
 
@@ -697,8 +719,6 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
 
                 collectionView.performBatchUpdates({
                     self.collectionViewThrownedImageURLs = array
-                    self.removeImagesActionStarts = false
-
                     collectionView.insertItems(at: indexPathes)
                 })
             }
@@ -743,7 +763,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
 
         guard let tabBarViewControllers = self.tabBarController?.viewControllers else { return }
 
-        setUpFavoriteImagesViewController(with: droppedItems, in: tabBarViewControllers)
+        setupFavoriteImagesViewController(with: droppedItems, in: tabBarViewControllers)
 
         /*
          Freez
@@ -753,7 +773,7 @@ extension ImagesViewController: UIDropInteractionDelegate, UICollectionViewDropD
     }
 
     /// Functionality for adding favorite images
-    private func setUpFavoriteImagesViewController(with droppedItems: [NSItemProviderReading], in tabBarViewControllers: [UIViewController]) {
+    private func setupFavoriteImagesViewController(with droppedItems: [NSItemProviderReading], in tabBarViewControllers: [UIViewController]) {
         var dataArray = [Data]()
         for droppedItem in droppedItems {
              dataArray.append(getData(from: droppedItem))

@@ -93,7 +93,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     
     // MARK: - Functions:
     
-    private func setUpImageView(_ imageView: UIImageView, with image: UIImage?) {
+    private func setupImageView(_ imageView: UIImageView, with image: UIImage?) {
         imageView.image = image
         imageView.sizeToFit()
         centerImageView(imageView, in: imageView.superview as! UIScrollView)
@@ -102,9 +102,9 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
         }, completion: nil)
     }
     
-    private func setUpScrolView(_ scrollView: UIScrollView, with image: UIImage?) {
+    private func setupScrolView(_ scrollView: UIScrollView, with image: UIImage?) {
         guard let image = image else { return }
-        setUpMinMaxZoomScale(for: scrollView, dependingOnSizeOf: image)
+        setupMinMaxZoomScale(for: scrollView, dependingOnSizeOf: image)
         scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
     }
     
@@ -125,7 +125,7 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     }
     
     // Calculating minimum and maximum zoom scale for scroll view according to image sizes
-    private func setUpMinMaxZoomScale(for scrollView: UIScrollView, dependingOnSizeOf image: UIImage) {
+    private func setupMinMaxZoomScale(for scrollView: UIScrollView, dependingOnSizeOf image: UIImage) {
         
         // calculating minimum and maximum zoom scale for scroll view
         let width = image.size.width
@@ -145,15 +145,15 @@ class ImageDetailViewController: UIViewController, UIScrollViewDelegate {
     // Fetching image to display
     private func fetchImage() {
         if let cachedImage = ImageLoadHelper.getImageFromCache(by: imageData.urlLarge1024) {
-            self.setUpImageView(self.imageView, with: cachedImage)
-            self.setUpScrolView(self.scrollView, with: cachedImage)
+            self.setupImageView(self.imageView, with: cachedImage)
+            self.setupScrolView(self.scrollView, with: cachedImage)
         } else {
             spinner.startAnimating()
             ImageLoadHelper.loadImage(by: imageData.urlLarge1024) { [weak self] loadedImage in
                 guard let strongSelf = self else { return }
                 strongSelf.spinner.stopAnimating()
-                strongSelf.setUpImageView(strongSelf.imageView, with: loadedImage)
-                strongSelf.setUpScrolView(strongSelf.scrollView, with: loadedImage)
+                strongSelf.setupImageView(strongSelf.imageView, with: loadedImage)
+                strongSelf.setupScrolView(strongSelf.scrollView, with: loadedImage)
             }
         }
     }
