@@ -16,7 +16,10 @@ struct ImageGeoData: Codable {
 }
 
 extension ImageGeoData {
-    init( _ country: String, _ latitude: Double,  _ longitude: Double,  _ region:String ) {
+    init( _ country: String,
+          _ latitude: Double,
+          _ longitude: Double,
+          _ region:String ) {
         self.country = country
         self.latitude = latitude
         self.longitude = longitude
